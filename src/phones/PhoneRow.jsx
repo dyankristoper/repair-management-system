@@ -1,7 +1,7 @@
 import { useDeletePhone } from "./useDeletePhone";
 import { useCreatePhone } from "./useCreatePhone";
-import { HiPencil, HiSquare2Stack } from "react-icons/hi2";
-import { CiViewList } from "react-icons/ci";
+import { HiEye, HiPencil, HiSquare2Stack } from "react-icons/hi2";
+// import { CiViewList } from "react-icons/ci";
 import { MdDeleteForever } from "react-icons/md";
 
 import styled from "styled-components";
@@ -97,7 +97,7 @@ function PhoneRow({ phone }) {
             </ModalWindow.Open>
 
             <ModalWindow.Open opens="view-details">
-              <Menus.Button icon={<CiViewList />}>View details</Menus.Button>
+              <Menus.Button icon={<HiEye />}>View details</Menus.Button>
             </ModalWindow.Open>
 
             <ModalWindow.Open opens="delete">

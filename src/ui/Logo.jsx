@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import LOGO from "../assets/PINES_MULTI_TELECOM.jpg";
 
 const StyledLogo = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const TitleLogo = styled.h1`
 function Logo() {
   return (
     <StyledLogo>
-      <Img src="/src/assets/PINES_MULTI_TELECOM.jpg" alt="Logo" />
+      <Img src={LOGO} alt="Logo" />
       <TitleLogo>Mobile Solutions</TitleLogo>
     </StyledLogo>
   );
