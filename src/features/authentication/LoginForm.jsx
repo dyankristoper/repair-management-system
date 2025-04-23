@@ -6,7 +6,7 @@ import { useLogin } from "./useLogin";
 import SpinnerMini from "../../ui/SpinnerMini";
 import Input from "../../ui/Input";
 import Heading from "../../ui/Heading";
-import Button from "../../ui/Button";
+import ButtonSecondary from "../../ui/ButtonSecondary";
 
 const StyledLoginForm = styled.div`
   width: 100%;
@@ -39,6 +39,10 @@ const LogoSection = styled.div`
       height: 100%;
     }
   }
+
+  @media (max-width: 546px) {
+    display: none;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -53,13 +57,21 @@ function LoginForm() {
   const [email, setEmail] = useState("adrian@example.com");
   const [password, setPassword] = useState("password123");
 
-  const { login, isLoggingIn } = useLogin();
+  const { login, isPending } = useLogin();
 
   function handleSubmit(e) {
     e.preventDefault();
     if (!email || !password) return;
 
-    login({ email, password });
+    login(
+      { email, password },
+      {
+        onSettled: () => {
+          setEmail("");
+          setPassword("");
+        },
+      }
+    );
   }
   return (
     <StyledLoginForm>
@@ -79,20 +91,25 @@ function LoginForm() {
             autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={isLoggingIn}
+            disabled={isPending}
           />
           <label htmlFor="password"></label>
           <Input
             type="password"
             id="password"
             value={password}
+            autoComplete="password"
             onChange={(e) => setPassword(e.target.value)}
-            disabled={isLoggingIn}
+            disabled={isPending}
           />
           <div>
-            <Button variation="primary" size="large" disabled={isLoggingIn}>
-              {!isLoggingIn ? "Log in" : <SpinnerMini />}
-            </Button>
+            <ButtonSecondary
+              // variation="primary"
+              size="large"
+              disabled={isPending}
+            >
+              {!isPending ? "Log in" : <SpinnerMini />}
+            </ButtonSecondary>
           </div>
         </StyledForm>
       </FormSection>

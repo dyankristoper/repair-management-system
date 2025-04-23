@@ -11,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 import User from "./ui/User";
 import Settings from "./ui/Settings";
 import Login from "./pages/Login";
+import ProtectedRoute from "./ui/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +28,13 @@ function App() {
       <GlobalStyles />
       <HashRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="bookings" element={<Assignee />} />
