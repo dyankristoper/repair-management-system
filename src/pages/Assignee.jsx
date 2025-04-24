@@ -1,13 +1,21 @@
+import styled from "styled-components";
 import Heading from "../ui/Heading";
+import RepairTechnicianOne from "../ui/RepairTechnicianOne";
+import RepairTechnicianTwo from "../ui/RepairTechnicianTwo";
 import Row from "../ui/Row";
 
-function Bookings() {
+const StyledAssignee = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+function Assignee() {
   return (
-    <Row type="horizontal">
-      <Heading as="h1">Assignee</Heading>
-      <p>TEST</p>
-    </Row>
+    <StyledAssignee>
+      <RepairTechnicianOne />
+      <RepairTechnicianTwo />
+    </StyledAssignee>
   );
 }
 
-export default Bookings;
+export default Assignee;

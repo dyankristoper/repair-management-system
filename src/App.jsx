@@ -8,10 +8,11 @@ import Phones from "./pages/Phones";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // import PageNotFound from "./pages/PageNotFound";
 import { Toaster } from "react-hot-toast";
-import User from "./ui/User";
+
 import Settings from "./ui/Settings";
 import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import CreateUser from "./pages/CreateUser";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +40,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="bookings" element={<Assignee />} />
             <Route path="phones" element={<Phones />} />
-            <Route path="user" element={<User />} />
+            <Route path="createUser" element={<CreateUser />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 

@@ -86,7 +86,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="Address" error={errors?.address?.message}>
         <Input
           type="text"
@@ -97,7 +96,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="Contact number" error={errors?.contactNumber?.message}>
         <Input
           type="text"
@@ -113,7 +111,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="Phone model" error={errors?.phoneModel?.message}>
         <Input
           type="text"
@@ -125,7 +122,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="IMEI" error={errors?.imei?.message}>
         <Input
           type="text"
@@ -136,7 +132,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="Phone condition" error={errors?.phoneCondition?.message}>
         <Textarea
           type="text"
@@ -147,7 +142,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="Cost" error={errors?.cost?.message}>
         <Input
           type="text"
@@ -158,7 +152,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
-
       <FormRow label="Assignee" error={errors?.assignee?.message}>
         <select
           id="assignee"
@@ -182,6 +175,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           })}
         />
       </FormRow>
+
       <FormRow>
         <Button
           variation="secondary"
