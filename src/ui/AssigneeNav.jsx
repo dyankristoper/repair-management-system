@@ -4,6 +4,7 @@ import { HiOutlineCalendarDays } from "react-icons/hi2";
 import styled from "styled-components";
 import StyledNavLink from "./StyledNavLink";
 import { useSearchParams } from "react-router-dom";
+import SelectAssignee from "../assignee/SelectAssignee";
 
 const TechnicianOptions = styled.div`
   display: flex;
@@ -14,32 +15,34 @@ function AssigneeNav() {
   const [showOptions, setShowOptions] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const sortBy = searchParams.get("assignedTechnician");
 
-  const sortBy = searchParams.get("assignedTechnician") || "";
-
-  function handleClick(e) {
+  function handleClick(value) {
     const newParams = new URLSearchParams(searchParams);
-    newParams.set("assignedTechnician", e.target.value);
-
+    newParams.set("assignedTechnician", value);
     setSearchParams(newParams);
   }
+
+  const options = [
+    { value: "Adrian", label: "Adrian" },
+    { value: "Jhay-ar", label: "Jhay-ar" },
+  ];
 
   return (
     <li onClick={() => setShowOptions(!showOptions)}>
       <StyledNavLink to="/assignee">
         <HiOutlineCalendarDays />
         <span>Assignee</span>
-        {showOptions ? <MdArrowDropDown /> : <MdArrowDropUp />}
+        {showOptions ? <MdArrowDropUp /> : <MdArrowDropDown />}
       </StyledNavLink>
 
       {showOptions && (
         <TechnicianOptions>
-          <button onClick={handleClick} value="adrian">
-            {`${sortBy}Adrian`}
-          </button>
-          <button onClick={handleClick} value="jhay-ar">
-            {`${sortBy}Jhay-ar`}
-          </button>
+          <SelectAssignee
+            options={options}
+            selectedValue={sortBy}
+            onSelect={handleClick} // 🔹 Correcting function name
+          />
         </TechnicianOptions>
       )}
     </li>
