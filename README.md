@@ -1,12 +1,7 @@
-# React + Vite
+*** Repair Management System ***
+This ongoing project applies my growing knowledge of React, React Query for state management, Supabase for backend services, and styled-components for styling. While development is still in progress, mobile responsiveness has yet to be fully implemented.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+*** Credits ***
+This project’s design is inspired by Jonas Schmedtmann, an instructor on www.Udemy.com. 
+I do not claim full ownership of the original design, as it incorporates elements from his teachings.
+However, I’ve made several modifications and enhancements, including unique data flow optimizations that distinguish this implementation
