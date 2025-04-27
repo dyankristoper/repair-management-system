@@ -1,14 +1,26 @@
-import { useNavigate } from "react-router-dom";
 import ButtonOperation from "../../ui/ButtonOperation";
 import { MdAccountCircle } from "react-icons/md";
+import ModalWindow from "../../ui/ModalWindow";
+import UpdateUserDataForm from "./UpdateUserDataForm";
+import UpdatePasswordForm from "./UpdatePasswordForm";
 
 function Account() {
-  const navigate = useNavigate();
   return (
-    <ButtonOperation>
-      <p>Account</p>
-      <MdAccountCircle size={20} onClick={() => navigate("/account")} />
-    </ButtonOperation>
+    <ModalWindow>
+      <ModalWindow.Open opens="update-account">
+        <ButtonOperation>
+          <p>Account</p>
+          <MdAccountCircle size={20} />
+        </ButtonOperation>
+      </ModalWindow.Open>
+
+      <ModalWindow.Window name="update-account">
+        <div>
+          <UpdateUserDataForm />
+          <UpdatePasswordForm />
+        </div>
+      </ModalWindow.Window>
+    </ModalWindow>
   );
 }
 

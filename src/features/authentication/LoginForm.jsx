@@ -55,7 +55,7 @@ const StyledForm = styled.form`
 
 function LoginForm() {
   const [email, setEmail] = useState("adrian@example.com");
-  const [password, setPassword] = useState("password123");
+  const [password, setPassword] = useState("speaker123");
 
   const { login, isPending } = useLogin();
 
