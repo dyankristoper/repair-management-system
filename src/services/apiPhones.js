@@ -89,3 +89,7 @@ export async function deletePhone(id) {
 
   return data;
 }
+
+// export async function getAssignee(assignee) {
+//   const { data, error } = await supabase.from("phones");
+// }
