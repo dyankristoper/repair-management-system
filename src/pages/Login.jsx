@@ -1,19 +1,32 @@
-import styled from "styled-components";
+import { forwardRef } from "react";
 import LoginForm from "../features/authentication/LoginForm";
+import { LoginPage } from "../ui/StyledLogin";
+import { useRevealSection } from "../hooks/useRevealSection";
 
-const StyledLogin = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
+const Login = forwardRef((props, ref) => {
+  const { ref: revealRef, isVisible } = useRevealSection();
 
-function Login() {
   return (
-    <StyledLogin>
+    <LoginPage
+      ref={(element) => {
+        if (ref) ref.current = element;
+        revealRef.current = element;
+      }}
+      isVisible={isVisible}
+    >
       <LoginForm />
-    </StyledLogin>
+    </LoginPage>
   );
-}
+});
+
+// function Login() {
+//   return (
+//     <LoginPage>
+//       <LoginForm />
+//     </LoginPage>
+//   );
+// }
+
+Login.displayName = "Login";
 
 export default Login;
