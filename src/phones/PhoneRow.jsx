@@ -1,7 +1,6 @@
 import { useDeletePhone } from "./useDeletePhone";
 import { useCreatePhone } from "./useCreatePhone";
 import { HiEye, HiPencil, HiSquare2Stack } from "react-icons/hi2";
-// import { CiViewList } from "react-icons/ci";
 import { MdDeleteForever } from "react-icons/md";
 
 import styled from "styled-components";

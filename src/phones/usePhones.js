@@ -22,7 +22,7 @@ export function usePhones() {
       : { field: "assignee", value: sortByRaw };
 
   const assignedTo =
-    !assignedRaw || assignedRaw === ""
+    !assignedRaw || assignedRaw === "all"
       ? null
       : { field: "assignee", value: assignedRaw };
 

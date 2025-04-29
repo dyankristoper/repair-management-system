@@ -41,7 +41,7 @@ function AssigneeNav() {
           <SelectAssignee
             options={options}
             selectedValue={sortBy}
-            onSelect={handleClick} // 🔹 Correcting function name
+            onSelect={handleClick}
           />
         </TechnicianOptions>
       )}

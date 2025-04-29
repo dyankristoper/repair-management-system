@@ -4,7 +4,7 @@ export const RevealSection = styled.section`
   transition: transform 1s, opacity 1s;
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
   transform: ${({ isVisible }) =>
-    isVisible ? "translateY(0)" : "translateY(8rem)"};
+    isVisible ? "translateX(0)" : "translateX(8rem)"};
 `;
 
 export const LoginPage = styled(RevealSection)`

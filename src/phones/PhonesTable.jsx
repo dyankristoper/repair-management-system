@@ -1,5 +1,4 @@
 import { usePhones } from "./usePhones";
-// import styled from "styled-components";
 import Spinner from "../ui/Spinnner";
 import PhoneRow from "./PhoneRow";
 import Menus from "../ui/Menus";
