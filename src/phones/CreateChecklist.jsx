@@ -64,7 +64,7 @@ function CreateChecklist({ handleCheckboxChange, register }) {
         </div>
 
         <div>
-          <label htmlFor="s-pen">w/ spen</label>
+          <label htmlFor="spen">w/ spen</label>
           <input
             type="checkbox"
             id="spen"
@@ -88,42 +88,42 @@ function CreateChecklist({ handleCheckboxChange, register }) {
       <CheckList>
         <p>Physical condition</p>
         <div>
-          <label htmlFor="broken-screen">broken screen</label>
+          <label htmlFor="brokenScreen">broken screen</label>
           <input
             type="checkbox"
-            id="broken-screen"
-            name="broken-screen"
-            {...register("broken screen")}
+            id="brokenScreen"
+            name="brokenScreen"
+            {...register("brokenScreen")}
             onChange={handleCheckboxChange}
           />
         </div>
         <div>
-          <label htmlFor="bulged-battery">bulged battery</label>
+          <label htmlFor="bulgedBattery">bulged battery</label>
           <input
             type="checkbox"
-            id="bulged-battery"
-            name="bulged-battery"
-            {...register("bulged battery")}
+            id="bulgedBattery"
+            name="bulgedBattery"
+            {...register("bulgedBattery")}
             onChange={handleCheckboxChange}
           />
         </div>
         <div>
-          <label htmlFor="broken-chargingpin">broken chargingpin</label>
+          <label htmlFor="brokenChargingpin">broken chargingpin</label>
           <input
             type="checkbox"
-            id="broken-chargingpin"
-            name="broken-chargingpin"
-            {...register("broken chargingpin")}
+            id="brokenChargingpin"
+            name="brokenChargingpin"
+            {...register("brokenChargingpin")}
             onChange={handleCheckboxChange}
           />
         </div>
         <div>
-          <label htmlFor="broken-backcover">broken backcover</label>
+          <label htmlFor="brokenBackcover">broken backcover</label>
           <input
             type="checkbox"
-            id="broken-backcover"
-            name="broken-backcover"
-            {...register("broken backcover")}
+            id="brokenBackcover"
+            name="brokenBackcover"
+            {...register("brokenBackcover")}
             onChange={handleCheckboxChange}
           />
         </div>

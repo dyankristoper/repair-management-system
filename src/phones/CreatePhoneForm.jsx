@@ -44,8 +44,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
     : { simtray: false, simcard: false };
 
   const { register, handleSubmit, reset, formState, setValue } = useForm({
-    defaultValues: isEditSession ? editValues : {},
-    defaultCheckValues,
+    defaultValues: isEditSession ? editValues && defaultCheckValues : {},
   });
 
   const { errors } = formState;
