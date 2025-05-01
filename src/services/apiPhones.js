@@ -93,3 +93,15 @@ export async function deletePhone(id) {
 // export async function getAssignee(assignee) {
 //   const { data, error } = await supabase.from("phones");
 // }
+
+export async function getPendingRepairs() {
+  const { data, error } = await supabase.from("phones").select("completed"); // Fetch all fields or specify the ones you need
+  // Filter where completed is false
+
+  if (error) {
+    console.error(error);
+    throw new Error("Pending repairs could not get loaded");
+  }
+
+  return data;
+}
