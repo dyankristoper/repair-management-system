@@ -24,8 +24,8 @@ function PhonetableOperation() {
       <SortBy
         options={[
           { value: "all", label: "Assigned to all" },
-          { value: "Adrian", label: "Assigned to Adrian" },
-          { value: "Jhay-ar", label: "Assigned to Jhay-ar" },
+          { value: "Tech-001", label: "Assigned to Tech-001" },
+          { value: "Tech-002", label: "Assigned to Tech-002" },
         ]}
       />
     </StyledTableOperations>

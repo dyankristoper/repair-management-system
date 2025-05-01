@@ -24,8 +24,8 @@ function AssigneeNav() {
   }
 
   const options = [
-    { value: "Adrian", label: "Adrian" },
-    { value: "Jhay-ar", label: "Jhay-ar" },
+    { value: "Tech-001", label: "Tech-001" },
+    { value: "Tech-002", label: "Tech-002" },
   ];
 
   return (

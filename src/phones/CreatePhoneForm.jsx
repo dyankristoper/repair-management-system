@@ -180,8 +180,8 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             })}
           >
             <option>Select technician</option>
-            <option value="Adrian">Adrian</option>
-            <option value="Jhay-ar">Jhay-ar</option>
+            <option value="Tech-001">Tech-001</option>
+            <option value="Tech-002">Tech-002</option>
           </select>
         </FormRow>
         <FormRow>
