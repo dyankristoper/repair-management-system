@@ -5,11 +5,11 @@ import PhonetableOperation from "../phones/PhonetableOperation";
 import { theme } from "../styles/theme";
 import styled, { ThemeProvider } from "styled-components";
 import ProgressCircleComponent from "../ui/ProgressCircle";
+import AssignedRepairs from "../assignee/AssignedRepairs";
 
 const StyledAssignee = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 `;
@@ -19,6 +19,8 @@ function Assignee() {
       <ThemeProvider theme={theme}>
         <ProgressCircleComponent />
       </ThemeProvider>
+
+      <AssignedRepairs />
     </StyledAssignee>
   );
 }

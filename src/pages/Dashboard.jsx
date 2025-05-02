@@ -1,12 +1,21 @@
+import styled from "styled-components";
+import DashboardContents from "../ui/DashboardContents";
 import Heading from "../ui/Heading";
-import Row from "../ui/Row";
+
+const StyledDashboard = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 75rem;
+`;
 
 function Dashboard() {
   return (
-    <Row type="horizontal">
+    <StyledDashboard>
       <Heading as="h1">Dashboard</Heading>
       <p>TEST</p>
-    </Row>
+
+      <DashboardContents />
+    </StyledDashboard>
   );
 }
 

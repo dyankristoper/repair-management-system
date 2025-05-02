@@ -5,6 +5,7 @@ import Stat from "./Stat";
 import { GiFinishLine } from "react-icons/gi";
 import { MdPendingActions } from "react-icons/md";
 import { FaBarsProgress } from "react-icons/fa6";
+import Spinner from "./Spinnner";
 // import { useTasks } from "../context/TaskContext";
 // import { calcPercentage } from "../helpers/calcPercentage";
 
@@ -14,15 +15,14 @@ import { FaBarsProgress } from "react-icons/fa6";
 const StyledProgress = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 100%;
-  max-width: 580px;
-  height: 380px;
+  height: 170px;
 `;
 const Wrapper = styled.div`
   position: relative;
-  width: 21rem;
-  height: 25rem;
+  width: 16rem;
+  height: 16rem;
   border-radius: 8px;
   padding: 0.8em;
   background-color: var(--color-grey-50);
@@ -72,8 +72,9 @@ const InfoContainer = styled.div`
 
 const StatContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 2em;
+  width: 100%;
+  max-width: 40rem;
+  gap: 0.5em;
 `;
 
 const Percentage = styled.span`
@@ -88,12 +89,10 @@ const StatusText = styled.span`
 `;
 
 function ProgressCircleComponent() {
-  const { pendingRepairs } = usePendingRepairs();
+  const { pendingRepairs, isPending } = usePendingRepairs();
 
   const { completionPercentage, progressStrokeDasharray } =
     calcPercentage(pendingRepairs);
-
-  console.log(pendingRepairs);
 
   //i tried to use nullish coalescing rather than optional chaining
   const completed = (pendingRepairs ?? []).filter(
@@ -103,6 +102,8 @@ function ProgressCircleComponent() {
   const pending = (pendingRepairs ?? []).filter(
     (pending) => !pending.completed
   ).length;
+
+  if (isPending) return <Spinner />;
 
   return (
     <StyledProgress>
@@ -122,18 +123,8 @@ function ProgressCircleComponent() {
       </Wrapper>
 
       <StatContainer>
-        <Stat
-          title="Completed"
-          color="blue"
-          icon={<GiFinishLine />}
-          value={completed}
-        />
-        <Stat
-          title="Pending"
-          color="blue"
-          icon={<MdPendingActions />}
-          value={pending}
-        />
+        <Stat title="Completed" value={completed} icon="🟢" />
+        <Stat title="Pending" value={pending} icon="🔴" />
       </StatContainer>
     </StyledProgress>
   );
