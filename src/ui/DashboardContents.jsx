@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import Chart from "./Chart";
+import Chart from "../dashboard/Chart";
+import PieChartComponent from "../dashboard/PieChartComponent";
 
 const StyledDashboardContent = styled.div`
   display: grid;
@@ -18,7 +19,6 @@ const PieChartWrapper = styled.div`
   grid-column: span 2 / span 2;
   grid-row: span 3 / span 3;
   grid-column-start: 4;
-  border: 1px solid black;
 `;
 const GraphWrapper = styled.div`
   grid-column: span 5 / span 5;
@@ -37,7 +37,9 @@ function DashboardContents() {
   return (
     <StyledDashboardContent>
       <TaskWrapper>Task</TaskWrapper>
-      <PieChartWrapper>Pie chart</PieChartWrapper>
+      <PieChartWrapper>
+        <PieChartComponent />
+      </PieChartWrapper>
       <GraphWrapper>
         <Chart />
       </GraphWrapper>
