@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LOGO from "../assets/PINES_MULTI_TELECOM.jpg";
+import LOGO from "../assets/PINES_MULTI_TELECOM.png";
 
 const StyledLogo = styled.div`
   display: flex;

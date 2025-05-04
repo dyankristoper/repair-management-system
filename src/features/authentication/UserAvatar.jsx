@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useUser } from "./useUser";
-import avatarSample from "../../assets/PINES_MULTI_TELECOM.jpg";
+import avatarSample from "../../assets/PINES_MULTI_TELECOM.png";
 
 const StyledUserAvatar = styled.div`
   display: flex;

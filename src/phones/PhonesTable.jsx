@@ -11,7 +11,7 @@ function PhonesTable() {
   if (isLoading) return <Spinner />;
   return (
     <Menus>
-      <Table columns="0.1fr 0.2fr 0.3fr 0.15fr 0.35fr 0.2fr 0.5fr">
+      <Table columns="0.12fr 0.2fr 0.35fr 0.15fr 0.35fr 0.2fr 0.5fr">
         <Table.Header role="row">
           <div></div>
           <div>image</div>

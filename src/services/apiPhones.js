@@ -116,3 +116,18 @@ export async function getAssignedRepairs() {
 
   return data;
 }
+
+export async function getAssigned(id) {
+  const { data, error } = await supabase
+    .from("phones")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Assigned not found");
+  }
+
+  return data;
+}
