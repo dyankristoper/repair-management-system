@@ -34,7 +34,9 @@ function AssignedDetails() {
       </LogoWrapper>
 
       <Grid assigned={assigned} />
-      <p onClick={() => navigate("/assignee")}>&larr; </p>
+      <button onClick={() => navigate("/assignee")} replace={true}>
+        &larr;{" "}
+      </button>
     </StyledAssigned>
   );
 }
