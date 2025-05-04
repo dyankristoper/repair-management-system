@@ -105,3 +105,14 @@ export async function getPendingRepairs() {
 
   return data;
 }
+
+export async function getAssignedRepairs() {
+  const { data, error } = await supabase.from("phones").select("*");
+
+  if (error) {
+    console.error(error);
+    throw new Error("Assigned repairs could not get loaded");
+  }
+
+  return data;
+}

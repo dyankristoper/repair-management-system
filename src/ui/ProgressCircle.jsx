@@ -89,7 +89,7 @@ const StatusText = styled.span`
 `;
 
 function ProgressCircleComponent() {
-  const { pendingRepairs, isPending } = usePendingRepairs();
+  const { pendingRepairs } = usePendingRepairs();
 
   const { completionPercentage, progressStrokeDasharray } =
     calcPercentage(pendingRepairs);
@@ -102,8 +102,6 @@ function ProgressCircleComponent() {
   const pending = (pendingRepairs ?? []).filter(
     (pending) => !pending.completed
   ).length;
-
-  if (isPending) return <Spinner />;
 
   return (
     <StyledProgress>

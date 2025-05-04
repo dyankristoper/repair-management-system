@@ -14,17 +14,17 @@ export function usePhones() {
 
   const sortByRaw = searchParams.get("sortByTechnician");
 
-  const assignedRaw = searchParams.get("assignedTechnician");
+  // const assignedRaw = searchParams.get("assignedTechnician");
 
   const sortBy =
     !sortByRaw || sortByRaw === "all"
       ? null
       : { field: "assignee", value: sortByRaw };
 
-  const assignedTo =
-    !assignedRaw || assignedRaw === "all"
-      ? null
-      : { field: "assignee", value: assignedRaw };
+  // const assignedTo =
+  //   !assignedRaw || assignedRaw === ""
+  //     ? null
+  //     : { field: "assignee", value: assignedRaw };
 
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
 
@@ -34,8 +34,8 @@ export function usePhones() {
 
     error,
   } = useQuery({
-    queryKey: ["phones", filter, sortBy, assignedTo, page],
-    queryFn: () => getPhones({ filter, sortBy, assignedTo, page }),
+    queryKey: ["phones", filter, sortBy, page],
+    queryFn: () => getPhones({ filter, sortBy, page }),
   });
 
   return { isLoading, phones, error, count };
