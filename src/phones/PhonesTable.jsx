@@ -4,11 +4,12 @@ import PhoneRow from "./PhoneRow";
 import Menus from "../ui/Menus";
 import Table from "../ui/Table";
 import Pagination from "../ui/Pagination";
+import Loader from "../ui/Loader";
 
 function PhonesTable() {
   const { isLoading, phones, count } = usePhones();
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Loader />;
   return (
     <Menus>
       <Table columns="0.12fr 0.2fr 0.35fr 0.15fr 0.35fr 0.2fr 0.5fr">

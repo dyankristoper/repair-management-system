@@ -13,6 +13,15 @@ const StyledGrid = styled.div`
 const BoxOne = styled.div`
   grid-column: span 3 / span 3;
   grid-row: span 3 / span 3;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    font-size: 14px;
+    margin-right: 0.5em;
+  }
 `;
 
 const BoxTwo = styled.div`
@@ -20,6 +29,14 @@ const BoxTwo = styled.div`
   grid-row: span 3 / span 3;
   grid-column-start: 1;
   grid-row-start: 4;
+  padding: 1.5em;
+  background-color: var(--color-red-100);
+  border-radius: 8px;
+
+  p {
+    font-weight: 600;
+    color: var(--color-grey-700);
+  }
 `;
 
 const BoxThree = styled.div`
@@ -31,10 +48,12 @@ const BoxThree = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1em;
+  border-radius: 8px;
+  background-color: var(--color-grey-50);
 
   div {
     width: 100%;
-    max-width: 120px;
   }
 
   img {
@@ -52,6 +71,7 @@ function Grid({ assigned }) {
     phoneCondition,
     created_at,
     image,
+    assignee,
   } = assigned ?? {};
   return (
     <StyledGrid>
@@ -69,12 +89,17 @@ function Grid({ assigned }) {
           <span>Contact number:</span>
           {contactNumber}
         </p>
+        <p>
+          <span>Assigned tech:</span>
+          {assignee}
+        </p>
       </BoxOne>
       <BoxTwo>
         <p>{phoneModel}</p>
         <p>{imei}</p>
         <p>{phoneCondition}</p>
       </BoxTwo>
+
       <BoxThree>
         <div>
           <img src={image} alt={`Image sample of ${phoneModel}`} />

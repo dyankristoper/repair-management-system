@@ -1,8 +1,8 @@
-import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
-import Spinner from "./Spinnner";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import styled from "styled-components";
+import Loader from "./Loader";
 
 const Fullpage = styled.div`
   height: 100vh;
@@ -29,7 +29,7 @@ function ProtectedRoute({ children }) {
   if (isLoading)
     return (
       <Fullpage>
-        <Spinner />
+        <Loader />
       </Fullpage>
     );
 

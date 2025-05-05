@@ -1,23 +1,18 @@
+import { useAssignee } from "./useAssignee";
 import styled from "styled-components";
-// import { usePhones } from "../phones/usePhones";
 import AssignedRow from "./AssignedRow";
 import Menus from "../ui/Menus";
 import Table from "../ui/Table";
-import Spinner from "../ui/Spinnner";
-import { Pagination } from "@mui/material";
-import { useAssignee } from "./useAssignee";
+import Loader from "../ui/Loader";
 
 const StyledAssignedRepairs = styled.div`
   width: 100%;
-  /* border: 1px solid black; */
 `;
 
 function AssignedRepairs() {
   const { isPending, technician } = useAssignee();
 
-  console.log(technician);
-
-  if (isPending) return <Spinner />;
+  if (isPending) return <Loader />;
   return (
     <StyledAssignedRepairs>
       <Menus>
@@ -37,10 +32,6 @@ function AssignedRepairs() {
           />
         </Table>
       </Menus>
-
-      {/* <Table.Footer>
-        <Pagination count={count} />
-      </Table.Footer> */}
     </StyledAssignedRepairs>
   );
 }

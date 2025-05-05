@@ -1,4 +1,10 @@
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+
+const TechnicianOptions = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const StyledButtonGroup = styled.div`
   display: flex;
@@ -18,21 +24,30 @@ const Button = styled.button`
   }
 `;
 
-function SelectAssignee({ options, selectedValue, onSelect, ...props }) {
+function SelectAssignee() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const filterField = "status";
+  const options = [
+    { value: "Tech-001", label: "Tech-001" },
+    { value: "Tech-002", label: "Tech-002" },
+  ];
+  // const currentFilter = searchParams.get(filterField) || options.at(0).value;
+
+  function handleClick(value) {
+    searchParams.set(filterField, value);
+    setSearchParams(searchParams);
+  }
   return (
-    <StyledButtonGroup {...props}>
-      {options.map((option) => (
-        <Button
-          key={option.value}
-          onClick={() => onSelect(option.value)}
-          style={{
-            backgroundColor: selectedValue === option.value ? "#ccc" : "#fff",
-          }}
-        >
-          {option.label}
-        </Button>
-      ))}
-    </StyledButtonGroup>
+    <TechnicianOptions>
+      <StyledButtonGroup>
+        {options.map((option) => (
+          <Button key={option.value} onClick={() => handleClick(option.value)}>
+            {option.label}
+          </Button>
+        ))}
+      </StyledButtonGroup>
+    </TechnicianOptions>
   );
 }
 

@@ -1,17 +1,18 @@
-import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { useAssigned } from "./useAssigned";
-import Spinner from "../ui/Spinnner";
 import Logo from "../assets/PINES_MULTI_TELECOM.png";
+import styled from "styled-components";
 
 import Grid from "./Grid";
-import { useNavigate } from "react-router-dom";
+import Loader from "../ui/Loader";
 
 const StyledAssigned = styled.div`
   width: 100%;
   max-width: 640px;
   height: 100%;
-  border: 1px solid black;
+  border-radius: 8px;
   padding: 1em 2em;
+  background-color: var(--color-grey-50);
 `;
 
 const LogoWrapper = styled.div`
@@ -20,11 +21,17 @@ const LogoWrapper = styled.div`
   justify-content: space-between;
 `;
 
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+`;
+
 function AssignedDetails() {
   const { assigned, isPending } = useAssigned();
   const navigate = useNavigate();
 
-  if (isPending) return <Spinner />;
+  if (isPending) return <Loader />;
 
   return (
     <StyledAssigned>
@@ -33,10 +40,14 @@ function AssignedDetails() {
         <p>Job order #</p>
       </LogoWrapper>
 
-      <Grid assigned={assigned} />
-      <button onClick={() => navigate("/assignee")} replace={true}>
-        &larr;{" "}
-      </button>
+      <Grid assigned={assigned} isPending={isPending} />
+
+      <ButtonGroup>
+        <button onClick={() => navigate("/assignee")} replace={true}>
+          &larr;back
+        </button>
+        <button>update</button>
+      </ButtonGroup>
     </StyledAssigned>
   );
 }

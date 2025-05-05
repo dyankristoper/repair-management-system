@@ -19,14 +19,6 @@ const Login = forwardRef((props, ref) => {
   );
 });
 
-// function Login() {
-//   return (
-//     <LoginPage>
-//       <LoginForm />
-//     </LoginPage>
-//   );
-// }
-
 Login.displayName = "Login";
 
 export default Login;

@@ -90,10 +90,6 @@ export async function deletePhone(id) {
   return data;
 }
 
-// export async function getAssignee(assignee) {
-//   const { data, error } = await supabase.from("phones");
-// }
-
 export async function getPendingRepairs() {
   const { data, error } = await supabase.from("phones").select("completed"); // Fetch all fields or specify the ones you need
   // Filter where completed is false
@@ -106,14 +102,17 @@ export async function getPendingRepairs() {
   return data;
 }
 
-export async function getAssignedRepairs() {
-  const { data, error } = await supabase.from("phones").select("*");
+export async function getAssignedRepairs({ filter }) {
+  let query = supabase.from("phones").select("*");
+
+  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("Assigned repairs could not get loaded");
   }
-
   return data;
 }
 

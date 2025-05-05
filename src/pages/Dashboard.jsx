@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import DashboardContents from "../ui/DashboardContents";
-import Heading from "../ui/Heading";
 
 const StyledDashboard = styled.div`
   display: flex;
@@ -11,9 +10,6 @@ const StyledDashboard = styled.div`
 function Dashboard() {
   return (
     <StyledDashboard>
-      <Heading as="h1">Dashboard</Heading>
-      <p>TEST</p>
-
       <DashboardContents />
     </StyledDashboard>
   );

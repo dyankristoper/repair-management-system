@@ -6,25 +6,18 @@ import { GiFinishLine } from "react-icons/gi";
 import { MdPendingActions } from "react-icons/md";
 import { FaBarsProgress } from "react-icons/fa6";
 import Spinner from "./Spinnner";
-// import { useTasks } from "../context/TaskContext";
-// import { calcPercentage } from "../helpers/calcPercentage";
 
-// theme.js
-
-// Styled Components
 const StyledProgress = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   width: 100%;
-  height: 170px;
 `;
 const Wrapper = styled.div`
   position: relative;
   width: 16rem;
   height: 16rem;
-  border-radius: 8px;
-  padding: 0.8em;
+  border-radius: 50%;
   background-color: var(--color-grey-50);
 `;
 
@@ -73,7 +66,7 @@ const InfoContainer = styled.div`
 const StatContainer = styled.div`
   display: flex;
   width: 100%;
-  max-width: 40rem;
+  max-width: 85rem;
   gap: 0.5em;
 `;
 
@@ -94,12 +87,12 @@ function ProgressCircleComponent() {
   const { completionPercentage, progressStrokeDasharray } =
     calcPercentage(pendingRepairs);
 
-  //i tried to use nullish coalescing rather than optional chaining
-  const completed = (pendingRepairs ?? []).filter(
+  // tried to use nullish coalescing rather than optional chaining because sometimes the data is undefined or null;
+  const completedCount = (pendingRepairs ?? []).filter(
     (pending) => pending.completed
   ).length;
 
-  const pending = (pendingRepairs ?? []).filter(
+  const pendingCount = (pendingRepairs ?? []).filter(
     (pending) => !pending.completed
   ).length;
 
@@ -121,8 +114,8 @@ function ProgressCircleComponent() {
       </Wrapper>
 
       <StatContainer>
-        <Stat title="Completed" value={completed} icon="🟢" />
-        <Stat title="Pending" value={pending} icon="🔴" />
+        <Stat title="Completed" value={completedCount} icon="🟢" />
+        <Stat title="Pending" value={pendingCount} icon="🔴" />
       </StatContainer>
     </StyledProgress>
   );

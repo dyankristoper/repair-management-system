@@ -1,32 +1,12 @@
 import { useState } from "react";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
-import styled from "styled-components";
+// import { useSearchParams } from "react-router-dom";
 import StyledNavLink from "./StyledNavLink";
-import { useSearchParams } from "react-router-dom";
 import SelectAssignee from "../assignee/SelectAssignee";
-
-const TechnicianOptions = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 function AssigneeNav() {
   const [showOptions, setShowOptions] = useState(false);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const sortBy = searchParams.get("assignedTechnician");
-
-  function handleClick(value) {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("assignedTechnician", value);
-    setSearchParams(newParams);
-  }
-
-  const options = [
-    { value: "Tech-001", label: "Tech-001" },
-    { value: "Tech-002", label: "Tech-002" },
-  ];
 
   return (
     <li onClick={() => setShowOptions(!showOptions)}>
@@ -36,15 +16,7 @@ function AssigneeNav() {
         {showOptions ? <MdArrowDropUp /> : <MdArrowDropDown />}
       </StyledNavLink>
 
-      {showOptions && (
-        <TechnicianOptions>
-          <SelectAssignee
-            options={options}
-            selectedValue={sortBy}
-            onSelect={handleClick}
-          />
-        </TechnicianOptions>
-      )}
+      {showOptions && <SelectAssignee />}
     </li>
   );
 }
