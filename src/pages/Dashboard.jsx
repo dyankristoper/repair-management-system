@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import DashboardContents from "../ui/DashboardContents";
+import DashboardContents from "../dashboard/DashboardContents";
 
 const StyledDashboard = styled.div`
   display: flex;

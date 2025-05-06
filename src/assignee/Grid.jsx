@@ -7,7 +7,7 @@ const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  gap: 8px;
+  gap: 20px;
 `;
 
 const BoxOne = styled.div`
@@ -72,6 +72,7 @@ function Grid({ assigned }) {
     created_at,
     image,
     assignee,
+    waitingForConfirmation,
   } = assigned ?? {};
   return (
     <StyledGrid>
@@ -92,6 +93,9 @@ function Grid({ assigned }) {
         <p>
           <span>Assigned tech:</span>
           {assignee}
+        </p>
+        <p>
+          {waitingForConfirmation === true ? "Waiting for Confirmation" : ""}
         </p>
       </BoxOne>
       <BoxTwo>

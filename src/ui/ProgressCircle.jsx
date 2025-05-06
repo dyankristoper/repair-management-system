@@ -96,6 +96,10 @@ function ProgressCircleComponent() {
     (pending) => !pending.completed
   ).length;
 
+  const confirmationCount = (pendingRepairs ?? []).filter(
+    (pending) => pending.waitingForConfirmation
+  ).length;
+
   return (
     <StyledProgress>
       <Wrapper>
@@ -116,6 +120,7 @@ function ProgressCircleComponent() {
       <StatContainer>
         <Stat title="Completed" value={completedCount} icon="🟢" />
         <Stat title="Pending" value={pendingCount} icon="🔴" />
+        <Stat title="for confirmation" value={confirmationCount} icon="✅" />
       </StatContainer>
     </StyledProgress>
   );

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Chart from "../dashboard/Chart";
-import PieChartComponent from "../dashboard/PieChartComponent";
+import Chart from "./Chart";
+import PieChartComponent from "./PieChartComponent";
 
 const StyledDashboardContent = styled.div`
   display: grid;
@@ -43,7 +43,6 @@ function DashboardContents() {
       <GraphWrapper>
         <Chart />
       </GraphWrapper>
-      {/* <ExtraInfoWrapper>Extra info</ExtraInfoWrapper> */}
     </StyledDashboardContent>
   );
 }

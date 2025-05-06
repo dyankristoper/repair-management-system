@@ -91,7 +91,9 @@ export async function deletePhone(id) {
 }
 
 export async function getPendingRepairs() {
-  const { data, error } = await supabase.from("phones").select("completed"); // Fetch all fields or specify the ones you need
+  const { data, error } = await supabase
+    .from("phones")
+    .select("completed, waitingForConfirmation"); // Fetch all fields or specify the ones you need
   // Filter where completed is false
 
   if (error) {

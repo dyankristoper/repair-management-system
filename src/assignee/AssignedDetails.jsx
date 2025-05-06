@@ -5,14 +5,20 @@ import styled from "styled-components";
 
 import Grid from "./Grid";
 import Loader from "../ui/Loader";
+import Button from "../ui/Button";
+import ModalWindow from "../ui/ModalWindow";
+import UpdatePhoneForm from "./UpdatePhoneForm";
 
 const StyledAssigned = styled.div`
   width: 100%;
   max-width: 640px;
-  height: 100%;
+  height: 500px;
   border-radius: 8px;
   padding: 1em 2em;
   background-color: var(--color-grey-50);
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 `;
 
 const LogoWrapper = styled.div`
@@ -43,10 +49,23 @@ function AssignedDetails() {
       <Grid assigned={assigned} isPending={isPending} />
 
       <ButtonGroup>
-        <button onClick={() => navigate("/assignee")} replace={true}>
+        <Button
+          variation="tertiary"
+          onClick={() => navigate("/assignee")}
+          replace={true}
+        >
           &larr;back
-        </button>
-        <button>update</button>
+        </Button>
+
+        <ModalWindow>
+          <ModalWindow.Open opens="update-form">
+            <Button variation="quaternary">update</Button>
+          </ModalWindow.Open>
+
+          <ModalWindow.Window name="update-form">
+            <UpdatePhoneForm assignedToUpdate={assigned} />
+          </ModalWindow.Window>
+        </ModalWindow>
       </ButtonGroup>
     </StyledAssigned>
   );
