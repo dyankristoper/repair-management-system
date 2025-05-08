@@ -1,3 +1,4 @@
+import { getToday } from "../helpers/getToday";
 import { PAGE_SIZE } from "../utilities/constants";
 import supabase, { supabaseUrl } from "./supabase";
 
@@ -26,8 +27,6 @@ export async function getPhones({ filter, sortBy, page }) {
 }
 
 export async function createEditPhone(newPhone, id) {
-  console.log(newPhone, id);
-
   const hasImagePath = newPhone.image?.startsWith?.(supabaseUrl);
 
   const imageName = `${Math.random()}-${newPhone.image.name}`.replaceAll(
@@ -128,6 +127,21 @@ export async function getAssigned(id) {
   if (error) {
     console.error(error);
     throw new Error("Assigned not found");
+  }
+
+  return data;
+}
+
+export async function getSalesAfterDate(date) {
+  const { data, error } = await supabase
+    .from("phones")
+    .select("created_at,cost,success,failed,serviceFee")
+    .gte("created_at", date)
+    .lte("created_at", getToday({ end: true }));
+
+  if (error) {
+    console.error(error);
+    throw new Error("Phones could not get loaded");
   }
 
   return data;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Tag from "./Tag";
-import { formatCustomTimestamp } from "../helpers/formatTime";
+import { formatTimestamp } from "../helpers/formatTime";
 
 const StyledPhoneDetails = styled.div`
   width: 60rem;
@@ -116,7 +116,7 @@ function ViewPhoneDetails({ phoneDetails }) {
       </ImageAndStatus>
       <Details>
         <div>
-          <h1>#{formatCustomTimestamp(created_at)}</h1>
+          <h1>{formatTimestamp(created_at)}</h1>
         </div>
         <Box>
           <p>

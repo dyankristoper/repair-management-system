@@ -40,8 +40,25 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         ...editValues,
         simtray: editValues.simtray ?? false,
         simcard: editValues.simcard ?? false,
+        memoryCard: editValues.memoryCard ?? false,
+        spen: editValues.spen ?? false,
+        charger: editValues.charger ?? false,
+        brokenScreen: editValues.brokenScreen ?? false,
+        bulgedBattery: editValues.bulgedBattery ?? false,
+        brokenChargingpin: editValues.brokenChargingpin ?? false,
+        brokenBackcover: editValues.brokenBackcover ?? false,
       }
-    : { simtray: false, simcard: false };
+    : {
+        simtray: false,
+        simcard: false,
+        memoryCard: false,
+        spen: false,
+        charger: false,
+        brokenScreen: false,
+        bulgedBattery: false,
+        brokenChargingpin: false,
+        brokenBackcover: false,
+      };
 
   const { register, handleSubmit, reset, formState, setValue } = useForm({
     defaultValues: isEditSession ? editValues && defaultCheckValues : {},

@@ -127,7 +127,7 @@ function CreateChecklist({ handleCheckboxChange, register }) {
             onChange={handleCheckboxChange}
           />
         </div>
-        <div>
+        {/* <div>
           <label html="others">others</label>
           <input
             type="checkbox"
@@ -136,7 +136,7 @@ function CreateChecklist({ handleCheckboxChange, register }) {
             {...register("others")}
             onChange={handleCheckboxChange}
           />
-        </div>
+        </div> */}
 
         {/* <label htmlFor="remarks">remarks</label>
         <input

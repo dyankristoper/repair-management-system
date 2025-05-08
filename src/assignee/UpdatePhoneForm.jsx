@@ -2,13 +2,52 @@ import { useForm } from "react-hook-form";
 import { useCreatePhone } from "../phones/useCreatePhone";
 import { useEditPhone } from "../phones/useEditPhone";
 import styled from "styled-components";
+import Button from "../ui/Button";
+
+const StyledUpdatePhoneForm = styled.div`
+  width: 100%;
+  max-width: 380px;
+`;
 
 const UpdateForm = styled.form`
-  border: 1px solid black;
   width: 100%;
-  max-width: 340px;
   display: flex;
   flex-direction: column;
+  gap: 0.5em;
+`;
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 0.2em;
+
+  &:hover {
+    background-color: var(--color-grey-100);
+  }
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+  div {
+    border-bottom: 1px solid var(--color-grey-200);
+    padding: 0.8rem;
+  }
+`;
+
+const TextArea = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  textarea {
+    width: 100%;
+    height: 140px;
+  }
 `;
 
 function UpdatePhoneForm({ assignedToUpdate = {} }) {
@@ -17,6 +56,8 @@ function UpdatePhoneForm({ assignedToUpdate = {} }) {
       setValue(e.target.name, e.target.checked);
     }
   };
+
+  const { phoneModel, imei } = assignedToUpdate;
   const { id: editId, ...editValues } = assignedToUpdate ?? [];
 
   const isEditSession = Boolean(editId);
@@ -36,7 +77,7 @@ function UpdatePhoneForm({ assignedToUpdate = {} }) {
         waitingForConfirmation: false,
       };
 
-  const { register, handleSubmit, reset, formState, setValue } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: isEditSession ? editValues && defaultCheckValues : {},
   });
   const { isCreating, createPhone } = useCreatePhone();
@@ -59,62 +100,82 @@ function UpdatePhoneForm({ assignedToUpdate = {} }) {
       createPhone({
         onSuccess: () => {
           reset();
-          //   onCloseModal?.();
         },
       });
   }
 
   return (
-    <UpdateForm onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="success">Success</label>
-        <input
-          name="success"
-          id="success"
-          type="checkbox"
-          {...register("success")}
-          onChange={handleCheckboxChange}
-        />
-      </div>
+    <StyledUpdatePhoneForm>
+      <Header>
+        <h1>update details for job order #</h1>
+        <div>
+          <h3>{phoneModel}</h3>
+          <p>{imei}</p>
+        </div>
+      </Header>
+      <UpdateForm onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+          <label htmlFor="success">Success</label>
+          <input
+            name="success"
+            id="success"
+            type="checkbox"
+            {...register("success")}
+            onChange={handleCheckboxChange}
+            disabled={isCreating || isEditing}
+          />
+        </Row>
 
-      <div>
-        <label htmlFor="failed">Failed</label>
-        <input
-          name="failed"
-          id="failed"
-          type="checkbox"
-          {...register("failed")}
-          onChange={handleCheckboxChange}
-        />
-      </div>
+        <Row>
+          <label htmlFor="failed">Failed</label>
+          <input
+            name="failed"
+            id="failed"
+            type="checkbox"
+            {...register("failed")}
+            onChange={handleCheckboxChange}
+            disabled={isCreating || isEditing}
+          />
+        </Row>
 
-      <div>
-        <label htmlFor="completed">Completed</label>
-        <input
-          name="completed"
-          id="completed"
-          type="checkbox"
-          {...register("completed")}
-          onChange={handleCheckboxChange}
-        />
-      </div>
+        <Row>
+          <label htmlFor="waitingForConfirmation">
+            Waiting for confirmation
+          </label>
+          <input
+            name="waitingForConfirmation"
+            id="waitingForConfirmation"
+            type="checkbox"
+            {...register("waitingForConfirmation")}
+            onChange={handleCheckboxChange}
+            disabled={isCreating || isEditing}
+          />
+        </Row>
+        <Row>
+          <label htmlFor="success">Completed</label>
+          <input
+            name="completed"
+            id="completed"
+            type="checkbox"
+            {...register("completed")}
+            onChange={handleCheckboxChange}
+            disabled={isCreating || isEditing}
+          />
+        </Row>
 
-      <div>
-        <label htmlFor="waitingForConfirmation">Waiting for confirmation</label>
-        <input
-          name="waitingForConfirmation"
-          id="waitingForConfirmation"
-          type="checkbox"
-          {...register("waitingForConfirmation")}
-          onChange={handleCheckboxChange}
-        />
-      </div>
+        <TextArea>
+          <label htmlFor="remarks">Remarks:</label>
+          <textarea
+            id="remarks"
+            type="text"
+            {...register("remarks")}
+            disabled={isCreating || isEditing}
+          />
+        </TextArea>
 
-      <div>
-        <label htmlFor="remarks">Remarks</label>
-        <input id="remarks" type="text" {...register("remarks")} />
-      </div>
-    </UpdateForm>
+        <Button variation="quaternary">Done</Button>
+      </UpdateForm>
+    </StyledUpdatePhoneForm>
   );
 }
 

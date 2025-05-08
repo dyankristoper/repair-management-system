@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import DashboardContents from "../dashboard/DashboardContents";
+import DashboardFilter from "../dashboard/DashboardFilter";
 
 const StyledDashboard = styled.div`
   display: flex;
@@ -10,6 +11,7 @@ const StyledDashboard = styled.div`
 function Dashboard() {
   return (
     <StyledDashboard>
+      <DashboardFilter />
       <DashboardContents />
     </StyledDashboard>
   );

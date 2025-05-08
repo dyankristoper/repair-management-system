@@ -34,17 +34,17 @@ function PieChartComponent() {
 
   const startDataLight = [
     {
-      duration: "completed",
+      duration: "completed🎉",
       value: completedCount,
       color: "#445bef",
     },
     {
-      duration: "pending",
+      duration: "pending⏳",
       value: pendingCount,
       color: "#f97316",
     },
     {
-      duration: "waiting for confirmation",
+      duration: "waiting for confirmation😪",
       value: confirmationCount,
       color: "#84cc16",
     },
@@ -52,17 +52,17 @@ function PieChartComponent() {
 
   const startDataDark = [
     {
-      duration: "completed",
+      duration: "completed🎉",
       value: completedCount,
       color: "#3e53db",
     },
     {
-      duration: "pending",
+      duration: "pending⏳",
       value: pendingCount,
       color: "#c2410c",
     },
     {
-      duration: "waiting for confirmation",
+      duration: "waiting for confirmation😪",
       value: confirmationCount,
       color: "#77b914",
     },
@@ -96,7 +96,7 @@ function PieChartComponent() {
           <Legend
             verticalAlign="middle"
             align="right"
-            width="28%"
+            width="30%"
             layout="vertical"
             iconSize={12}
             iconType="circle"
