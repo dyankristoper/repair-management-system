@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import CreateUser from "./pages/CreateUser";
 import Assigned from "./pages/Assigned";
+import PageNotFound from "./ui/PageNotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,7 +51,7 @@ function App() {
             </Route>
 
             <Route path="login" element={<Login />} />
-            {/* <Route path="*" element={<PageNotFound />} /> */}
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </HashRouter>
 

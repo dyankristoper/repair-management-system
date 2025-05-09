@@ -24,6 +24,10 @@ const StyledFormContainer = styled.div`
   display: flex;
   gap: 1em;
 `;
+const StyledSelect = styled.select`
+  background-color: var(--color-grey-100);
+`;
+
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const setTechnician = useState("Select technician");
 
@@ -189,7 +193,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           />
         </FormRow>
         <FormRow label="Assignee" error={errors?.assignee?.message}>
-          <select
+          <StyledSelect
             id="assignee"
             onChange={(e) => setTechnician(e.target.value)}
             {...register("assignee", {
@@ -199,7 +203,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             <option>Select technician</option>
             <option value="Tech-001">Tech-001</option>
             <option value="Tech-002">Tech-002</option>
-          </select>
+          </StyledSelect>
         </FormRow>
         <FormRow>
           <label>Image</label>

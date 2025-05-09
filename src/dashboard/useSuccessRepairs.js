@@ -17,5 +17,5 @@ export function useSuccessRepairs() {
     queryKey: ["phones", `last-${numDays}`],
   });
 
-  return { isPending, phones };
+  return { isPending, phones, numDays };
 }

@@ -77,8 +77,9 @@ function Row({ children }) {
   return <StyledRow columns={columns}>{children}</StyledRow>;
 }
 
-function Body({ data, render }) {
-  if (!(data ?? []).length) return <Empty>No data to show</Empty>;
+function Body({ data, render, resourceName }) {
+  if (!(data ?? []).length)
+    return <Empty resource={resourceName}>No data to show</Empty>;
 
   return <StyledBody>{data.map(render)}</StyledBody>;
 }

@@ -1,5 +1,12 @@
+import styled from "styled-components";
 import { formatCurrency } from "../helpers/formatCurrency";
 import Stat from "../ui/Stat";
+
+const StyledDashboardStats = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+`;
 
 function DashboardStats({ phones }) {
   const numPhones = (phones ?? []).length;
@@ -8,10 +15,10 @@ function DashboardStats({ phones }) {
     .reduce((acc, cur) => acc + cur.cost, 0);
 
   return (
-    <>
+    <StyledDashboardStats>
       <Stat title="Phones" value={numPhones} />
       <Stat title="Sales" value={formatCurrency(sales)} />
-    </>
+    </StyledDashboardStats>
   );
 }
 
