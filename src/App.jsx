@@ -2,21 +2,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 import { Toaster } from "react-hot-toast";
+
 import AppLayout from "./ui/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import GlobalStyles from "./styles/GlobalStyles";
 import Assignee from "./pages/Assignee";
 import Phones from "./pages/Phones";
-// import PageNotFound from "./pages/PageNotFound";
 
 import Settings from "./ui/Settings";
 import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import CreateUser from "./pages/CreateUser";
 import Assigned from "./pages/Assigned";
-import PageNotFound from "./ui/PageNotFound";
+import PageNotFound from "./pages/PageNotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
