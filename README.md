@@ -1,7 +1,20 @@
-*** Repair Management System ***
-This ongoing project applies my growing knowledge of React, React Query for state management, Supabase for backend services, and styled-components for styling. While development is still in progress, mobile responsiveness has yet to be fully implemented.
+Repair Management System
+Project Features
+- User Authentication
+   *Secure login for authenticated users.
+   *Users can update credentials and add new users.
+- Task Management
+   *Create, duplicate, delete, and update tasks seamlessly.
+   *Ensures efficient task handling for all users.
+- Adaptive Theme (Light & Dark Mode)
+   *Automatically detects system preferences and adjusts the UI accordingly.
+   *Enhances user experience with a visually comfortable interface.
+- Task Filtering & Sorting
+   *Intuitive table operations for filtering and sorting tasks.
+   *Enables users to quickly find and manage relevant tasks.
+- Pagination for Seamless Navigation
+   *Allows users to navigate across multiple pages effortlessly.
+   *Enhances accessibility for large datasets.
 
-*** Credits ***
-This project’s design is inspired by Jonas Schmedtmann, an instructor on www.Udemy.com. 
-I do not claim full ownership of the original design, as it incorporates elements from his teachings.
-However, I’ve made several modifications and enhancements, including unique data flow optimizations that distinguish this implementation
+
+
