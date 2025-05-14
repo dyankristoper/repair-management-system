@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Logo from "../../ui/Logo";
+import LogoComponent from "../../ui/Logo";
 import BackgroundImage from "../../assets/background-image.jpg";
 import { useState } from "react";
 import { useLogin } from "./useLogin";
@@ -77,7 +77,7 @@ function LoginForm() {
     <StyledLoginForm>
       <FormSection>
         <div>
-          <Logo />
+          <LogoComponent />
         </div>
         <div>
           <Heading as="h4">Please sign in to your account</Heading>
