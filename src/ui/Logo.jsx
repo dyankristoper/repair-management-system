@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LOGO from "../assets/PINES_MULTI_TELECOM.png";
+import { Logo } from '../utilities/constants';
 
 const StyledLogo = styled.div`
   display: flex;
@@ -18,13 +18,13 @@ const TitleLogo = styled.h1`
   font-size: 1.5rem;
 `;
 
-function Logo() {
+function LogoComponent() {
   return (
     <StyledLogo>
-      <Img src={LOGO} alt="Logo" />
+      <Img src={Logo} alt="Logo" />
       <TitleLogo>Mobile Solutions</TitleLogo>
     </StyledLogo>
   );
 }
 
-export default Logo;
+export default LogoComponent;
