@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAssigned } from "./useAssigned";
-import Logo from "../assets/PINES_MULTI_TELECOM.png";
+import { Logo } from '../utilities/constants';
 import styled from "styled-components";
 
 import Grid from "./Grid";
