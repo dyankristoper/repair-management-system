@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useUser } from "./useUser";
-import avatarSample from "../../assets/PINES_MULTI_TELECOM.png";
+import { Logo } from '../../utilities/constants'
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -27,12 +27,12 @@ const Avatar = styled.img`
 `;
 
 function UserAvatar() {
-  // const { user } = useUser();
-  // const { fullName, avatar } = user.user_metadata;
+  const { user } = useUser();
+  const { fullName, avatar } = user.user_metadata;
   return (
     <StyledUserAvatar>
-      {/* <Avatar src={avatar || avatarSample} alt={`Avatar of ${fullName}`} />
-      <span>{fullName}</span> */}
+      <Avatar src={avatar || Logo} alt={`Avatar of ${fullName}`} />
+      <span>{fullName}</span>
     </StyledUserAvatar>
   );
 }

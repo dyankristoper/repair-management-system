@@ -43,6 +43,7 @@ const EditIconWrapper = styled.div`
   }
 `;
 
+
 function Logo() {
   const { settings } = useSettings();
   const { company_logo, company_name } = settings ?? {};
@@ -66,8 +67,9 @@ function Logo() {
           </EditIconWrapper>
         )}
       </TitleLogo>
+
     </StyledLogo>
   );
 }
 
-export default Logo;
+export default LogoComponent;
