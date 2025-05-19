@@ -1,20 +1,19 @@
 import { RiUploadCloud2Fill } from "react-icons/ri";
-import { useCreateSettings } from "./useCreateSettings";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSettings } from "./useSettings";
-import { useEditSettings } from "./useEditSettings";
-import { useDeleteSettings } from "./useDeleteSettings";
+import { useUpdateSettings } from "./useUpdateSettings";
 
 import styled from "styled-components";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import FileInput from "../ui/FileInput";
 import Button from "../ui/Button";
-import PrimaryColorOptions from "./PrimaryColorOptions";
-import SecondaryColorOptions from "./SecondaryColorOptions";
 import ModalWindow from "../ui/ModalWindow";
 import ConfirmDelete from "../ui/ConfirmDelete";
+import ColorPicker from "./ColorPicker";
+import CompanySettings from "./CompanySettings";
+import onError from "../utilities/formError";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -76,54 +75,41 @@ const ButtonGroup = styled.div`
   margin-top: 1em;
 `;
 
-const EditIconWrapper = styled.div`
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-
-  &:hover::after {
-    content: "Edit";
-    position: absolute;
-    top: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--color-grey-700);
-    color: var(--color-grey-50);
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-  }
-`;
-
 function SettingsForm() {
   const location = useLocation();
   const settingsToEdit = location.state?.settings ?? {};
 
   const { settings } = useSettings();
-
   const { id: settingsId, company_logo } = settings ?? {};
 
+  const { id: editId, ...editValues } = settingsToEdit;
   const isEditSession =
     settingsToEdit && Object.keys(settingsToEdit).length > 0;
 
-  const { createSettings, isCreating } = useCreateSettings();
-
   const navigate = useNavigate();
 
-  const { id: editId, ...editValues } = settingsToEdit;
-
-  const { deleteSettings } = useDeleteSettings();
-
-  const { register, handleSubmit, watch, reset, formState } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
 
   const { errors } = formState;
 
-  const { editSettings, isEditing } = useEditSettings();
+  const { mutate: editSettings, isLoading: isEditing } = useUpdateSettings(
+    "edit",
+    "Settings successfully edited"
+  );
 
-  const isUpdating = isCreating || isEditing;
+  const { mutate: deleteSettings, isLoading: isDeleting } = useUpdateSettings(
+    "delete",
+    "Settings successfully deleted"
+  );
+
+  const { mutate: createSettings, isLoading: isCreating } = useUpdateSettings(
+    "create",
+    "Settings successfully created"
+  );
+
+  const isUpdating = isCreating || isEditing || isDeleting;
 
   function onSubmit(data) {
     const company_logo =
@@ -137,13 +123,13 @@ function SettingsForm() {
           newSettingsData: {
             ...data,
             company_logo,
-            primary_color: watch("primary_color"),
-            secondary_color: watch("secondary_color"),
           },
           id: editId,
         },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset(), navigate("/settings");
+          },
         }
       );
     else
@@ -151,105 +137,120 @@ function SettingsForm() {
         {
           ...data,
           company_logo,
-          primary_color: watch("primary_color"),
-          secondary_color: watch("secondary_color"),
         },
         {
-          onSuccess: () => {
-            reset();
-            navigate("/dashboard");
-          },
+          onSuccess: () => {},
         }
       );
   }
 
-  function onError(errors) {
-    console.log(errors);
-  }
+  onError(errors);
 
   return (
     <Wrapper>
-      <StyledSettingsForm onSubmit={handleSubmit(onSubmit, onError)}>
-        <ImageInputWrapper>
-          <h1>Upload Company Logo & Name</h1>
+      {!isEditSession && settings ? (
+        <CompanySettings settings={settings} />
+      ) : (
+        <StyledSettingsForm onSubmit={handleSubmit(onSubmit, onError)}>
+          <ImageInputWrapper>
+            <p>Upload Company Logo & Name</p>
 
-          {settings && Object.keys(settingsToEdit).length > 0 ? (
-            <img src={company_logo} alt="A sample logo of a company" />
-          ) : (
-            <RiUploadCloud2Fill />
-          )}
+            {Object.keys(settingsToEdit).length > 0 ? (
+              <img src={company_logo} alt="A sample logo of a company" />
+            ) : (
+              <RiUploadCloud2Fill />
+            )}
 
-          <p>Please choose a file to upload</p>
-          <FileInput
-            id="company_logo"
-            name="company_logo"
-            {...register("company_logo")}
-            accept="image/*"
-          />
-        </ImageInputWrapper>
-
-        <FormGroup>
-          <FormRow label="Company Name" error={errors?.company_name?.message}>
-            <Input
-              id="company_name"
-              name="company_name"
-              disabled={isUpdating}
-              {...register("company_name", {
-                required: "This field is required",
-              })}
+            <p>Please choose a file to upload</p>
+            <FileInput
+              id="company_logo"
+              name="company_logo"
+              {...register("company_logo")}
+              accept="image/*"
             />
-          </FormRow>
-          <FormRow
-            label="Company Alternative Name"
-            error={errors?.alternative_name?.message}
-          >
-            <Input
-              id="alternative_name"
-              name="altenative_name"
-              disabled={isUpdating}
-              {...register("alternative_name", {
-                required: "This field is required",
-              })}
-            />
-          </FormRow>
+          </ImageInputWrapper>
 
-          <PrimaryColorOptions register={register} watch={watch} />
-          <SecondaryColorOptions register={register} watch={watch} />
+          <FormGroup>
+            <FormRow label="Company Name" error={errors?.company_name?.message}>
+              <Input
+                id="company_name"
+                name="company_name"
+                disabled={isUpdating}
+                {...register("company_name", {
+                  required: "This field is required",
+                })}
+              />
+            </FormRow>
+            <FormRow
+              label="Company Alternative Name"
+              error={errors?.alternative_name?.message}
+            >
+              <Input
+                id="alternative_name"
+                name="altenative_name"
+                disabled={isUpdating}
+                {...register("alternative_name", {
+                  required: "This field is required",
+                })}
+              />
+            </FormRow>
 
-          <ButtonGroup>
-            <Button type="reset" disabled={isUpdating} variation="secondary">
-              Reset
-            </Button>
-            <Button type="submit" disabled={isUpdating} variation="primary">
-              {isEditSession && Object.keys(settingsToEdit).length > 0
-                ? "Confirm Edit"
-                : "Upload settings"}
-            </Button>
-          </ButtonGroup>
-        </FormGroup>
-      </StyledSettingsForm>
+            <FormRow label="Choose Primary Color Theme">
+              <ColorPicker
+                id={"primary_color"}
+                name={"primary_color"}
+                register={register}
+                columnName={"primary_color"}
+              />
+            </FormRow>
 
-      {settings && Object.keys(settings).length > 0 && (
-        <ModalWindow>
-          <ModalWindow.Open opens="delete">
-            <Button variation="danger" size="medium">
-              Delete Settings ?
-            </Button>
-          </ModalWindow.Open>
+            <FormRow label="Choose Secondary Color Theme">
+              <ColorPicker
+                id={"secondary_color"}
+                name={"secondary_color"}
+                register={register}
+                columnName={"secondary_color"}
+              />
+            </FormRow>
 
-          <ModalWindow.Window name="delete">
-            <ConfirmDelete
-              onConfirm={() => {
-                deleteSettings(settingsId, {
-                  onSuccess: () => {
-                    navigate("/dashboard", { state: {} });
-                  },
-                });
-              }}
-            />
-          </ModalWindow.Window>
-        </ModalWindow>
+            <ButtonGroup>
+              <Button variation="default" type="reset" disabled={isUpdating}>
+                Reset
+              </Button>
+              <Button variation="primary" type="submit" disabled={isUpdating}>
+                {isEditSession && Object.keys(settingsToEdit).length > 0
+                  ? "Confirm Edit"
+                  : "Upload settings"}
+              </Button>
+            </ButtonGroup>
+          </FormGroup>
+        </StyledSettingsForm>
       )}
+
+      <ButtonGroup>
+        {isEditSession && settings && (
+          <Button onClick={() => navigate("/settings")}>Cancel</Button>
+        )}
+        {Object.keys(settingsToEdit).length > 0 && (
+          <ModalWindow>
+            <ModalWindow.Open opens="delete">
+              <Button variation="danger">Delete Settings ?</Button>
+            </ModalWindow.Open>
+
+            <ModalWindow.Window name="delete">
+              <ConfirmDelete
+                onConfirm={() => {
+                  deleteSettings(settingsId, {
+                    onSuccess: () => {
+                      navigate("/settings", { state: {} });
+                    },
+                  });
+                }}
+              />
+            </ModalWindow.Window>
+          </ModalWindow>
+        )}
+      </ButtonGroup>
     </Wrapper>
   );
 }

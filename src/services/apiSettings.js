@@ -4,7 +4,7 @@ export async function getSettings() {
   const { data, error } = await supabase
     .from("company_settings")
     .select("*")
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(error);

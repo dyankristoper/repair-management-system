@@ -116,7 +116,7 @@ function ViewPhoneDetails({ phoneDetails }) {
       </ImageAndStatus>
       <Details>
         <div>
-          <h1>{formatTimestamp(created_at)}</h1>
+          <p>{formatTimestamp(created_at)}</p>
         </div>
         <Box>
           <p>

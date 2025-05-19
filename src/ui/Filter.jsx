@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { useSettings } from "../settings/useSettings";
 
 const StyledFilter = styled.div`
   border: 1px solid var(--color-grey-100);
-  /* background-color: var(--color-brand-600); */
   box-shadow: var(--shadow-sm);
   border-radius: var(--border-radius-sm);
   padding: 0.4rem;
@@ -13,15 +13,9 @@ const StyledFilter = styled.div`
 `;
 
 const FilterButton = styled.button`
-  background-color: var(--color-grey-0);
+  background-color: ${(props) =>
+    props.$active ? props.$colors.primary : "var(--color-grey-50)"};
   border: none;
-
-  ${(props) =>
-    props.active &&
-    css`
-      background-color: var(--color-brand-600);
-      color: var(--color-brand-50);
-    `}
 
   border-radius: var(--border-radius-sm);
   font-weight: 500;
@@ -29,14 +23,19 @@ const FilterButton = styled.button`
   /* To give the same height as select */
   padding: 0.44rem 0.8rem;
   transition: all 0.3s;
-
-  &:hover:not(:disabled) {
-    background-color: var(--color-brand-500);
-    color: var(--color-brand-50);
+  &:hover {
+    background-color: ${(props) => props.$colors.primary};
+    color: var(--color-grey-50);
   }
 `;
 
 function Filter({ filterField, options }) {
+  const { settings } = useSettings();
+  const { primary_color } = settings ?? {};
+
+  const colors = {
+    primary: primary_color || "var(--color-brand-600)",
+  };
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentFilter = searchParams.get(filterField) || options[0].value;
@@ -54,8 +53,9 @@ function Filter({ filterField, options }) {
         <FilterButton
           key={option.value}
           onClick={() => handleClick(option.value)}
-          active={option.value === currentFilter}
+          $active={option.value === currentFilter}
           disabled={option.value === currentFilter}
+          $colors={colors}
         >
           {option.label}
         </FilterButton>

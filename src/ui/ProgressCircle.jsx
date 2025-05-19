@@ -2,10 +2,7 @@ import styled from "styled-components";
 import { usePendingRepairs } from "../assignee/usePendingRepairs";
 import { calcPercentage } from "../helpers/calcPecrcentage";
 import Stat from "./Stat";
-import { GiFinishLine } from "react-icons/gi";
-import { MdPendingActions } from "react-icons/md";
 import { FaBarsProgress } from "react-icons/fa6";
-import Spinner from "./Spinnner";
 
 const StyledProgress = styled.div`
   display: flex;
@@ -42,7 +39,7 @@ const BackgroundCircle = styled(CircleBase)`
 
 const ProgressCircle = styled(CircleBase)`
   stroke: ${({ theme }) => theme.colors.blue600};
-  stroke-dasharray: ${({ dashArray }) => dashArray};
+  stroke-dasharray: ${({ dasharray }) => dasharray};
 `;
 
 const InfoContainer = styled.div`
@@ -105,7 +102,7 @@ function ProgressCircleComponent() {
       <Wrapper>
         <SVG viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
           <BackgroundCircle />
-          <ProgressCircle dashArray={progressStrokeDasharray} />
+          <ProgressCircle dasharray={progressStrokeDasharray} />
         </SVG>
 
         <InfoContainer>
