@@ -26,6 +26,7 @@ const TitleLogo = styled.div`
   }
 `;
 
+
 function Logo() {
   const { settings } = useSettings();
   const { company_logo, company_name } = settings ?? {};
@@ -37,8 +38,9 @@ function Logo() {
         <h1>{company_name || `Your company name`}</h1>
         {settings && Object.keys(settings).length > 0 && <EditIcon />}
       </TitleLogo>
+
     </StyledLogo>
   );
 }
 
-export default Logo;
+export default LogoComponent;
