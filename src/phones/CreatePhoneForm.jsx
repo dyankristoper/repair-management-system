@@ -10,6 +10,7 @@ import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import styled from "styled-components";
 import CreateChecklist from "./CreateChecklist";
+import onError from "../utilities/formError";
 
 const Textarea = styled.textarea`
   padding: 0.8rem 1.2rem;
@@ -101,12 +102,8 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           },
         }
       );
-
-    // console.log(data);
   }
-  function onError(errors) {
-    console.log(errors);
-  }
+  onError(errors);
   return (
     <StyledFormContainer>
       <Form

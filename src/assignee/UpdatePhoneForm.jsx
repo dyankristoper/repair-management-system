@@ -30,7 +30,7 @@ const Header = styled.div`
   flex-direction: column;
   gap: 0.5em;
 
-  h1 {
+  p {
     font-size: 1.8rem;
     font-weight: 500;
   }
