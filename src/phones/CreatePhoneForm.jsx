@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useCreatePhone } from "./useCreatePhone";
-import { useEditPhone } from "./useEditPhone";
+import { useUpdatePhone } from "./useUpdatePhone";
 import { useState } from "react";
 
 import Button from "../ui/Button";
@@ -45,7 +44,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         ...editValues,
         simtray: editValues.simtray ?? false,
         simcard: editValues.simcard ?? false,
-        memoryCard: editValues.memoryCard ?? false,
+        memorycard: editValues.memorycard ?? false,
         spen: editValues.spen ?? false,
         charger: editValues.charger ?? false,
         brokenScreen: editValues.brokenScreen ?? false,
@@ -56,7 +55,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
     : {
         simtray: false,
         simcard: false,
-        memoryCard: false,
+        memorycard: false,
         spen: false,
         charger: false,
         brokenScreen: false,
@@ -71,8 +70,15 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
 
   const { errors } = formState;
 
-  const { isCreating, createPhone } = useCreatePhone();
-  const { isEditing, editPhone } = useEditPhone();
+  const { mutate: createPhone, isLoading: isCreating } = useUpdatePhone(
+    "create",
+    "Phone Successfully created"
+  );
+
+  const { mutate: editPhone, isLoading: isEditing } = useUpdatePhone(
+    "edit",
+    "Phone Successfully edited"
+  );
 
   const isWorking = isCreating || isEditing;
 
@@ -102,7 +108,9 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           },
         }
       );
+    console.log(data);
   }
+
   onError(errors);
   return (
     <StyledFormContainer>
@@ -110,41 +118,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         onSubmit={handleSubmit(onSubmit, onError)}
         type={onCloseModal ? "modal" : "regular"}
       >
-        <FormRow label="Customer" error={errors?.customer?.message}>
-          <Input
-            type="text"
-            id="customer"
-            disabled={isWorking}
-            {...register("customer", "status", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="Address" error={errors?.address?.message}>
-          <Input
-            type="text"
-            id="address"
-            disabled={isWorking}
-            {...register("address", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="Contact number" error={errors?.contactNumber?.message}>
-          <Input
-            type="text"
-            id="contactNumber"
-            disabled={isWorking}
-            defaultValue={`+${639}`}
-            {...register("contactNumber", {
-              required: "This field is required",
-              min: {
-                value: 9,
-                message: "Contact number must be valid",
-              },
-            })}
-          />
-        </FormRow>
         <FormRow label="Phone model" error={errors?.phoneModel?.message}>
           <Input
             type="text"

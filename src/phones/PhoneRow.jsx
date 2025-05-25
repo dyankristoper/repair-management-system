@@ -1,7 +1,6 @@
-import { useDeletePhone } from "./useDeletePhone";
-import { useCreatePhone } from "./useCreatePhone";
 import { HiEye, HiPencil, HiSquare2Stack } from "react-icons/hi2";
 import { MdDeleteForever } from "react-icons/md";
+import { useUpdatePhone } from "./useUpdatePhone";
 
 import styled from "styled-components";
 import CreatePhoneForm from "./CreatePhoneForm";
@@ -52,8 +51,15 @@ function PhoneRow({ phone }) {
     completed,
   } = phone;
 
-  const { isDeleting, deletePhone } = useDeletePhone();
-  const { createPhone } = useCreatePhone();
+  const { mutate: deletePhone, isLoading: isDeleting } = useUpdatePhone(
+    "delete",
+    "Phone successfully deleted"
+  );
+
+  const { mutate: createPhone } = useUpdatePhone(
+    "create",
+    "Phone successfully created"
+  );
 
   function handleDuplicate() {
     createPhone({
