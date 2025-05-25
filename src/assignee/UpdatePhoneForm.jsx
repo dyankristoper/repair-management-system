@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useCreatePhone } from "../phones/useCreatePhone";
-import { useEditPhone } from "../phones/useEditPhone";
+
 import styled from "styled-components";
 import Button from "../ui/Button";
+import { useUpdatePhone } from "../phones/useUpdatePhone";
 
 const StyledUpdatePhoneForm = styled.div`
   width: 100%;
@@ -80,8 +80,16 @@ function UpdatePhoneForm({ assignedToUpdate = {} }) {
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: isEditSession ? editValues && defaultCheckValues : {},
   });
-  const { isCreating, createPhone } = useCreatePhone();
-  const { isEditing, editPhone } = useEditPhone();
+
+  const { mutate: createPhone, isLoading: isCreating } = useUpdatePhone(
+    "create",
+    "Phone successfully created"
+  );
+
+  const { mutate: editPhone, isLoading: isEditing } = useUpdatePhone(
+    "edit",
+    "Phone successfully edited"
+  );
 
   function onSubmit(data) {
     if (isEditSession)

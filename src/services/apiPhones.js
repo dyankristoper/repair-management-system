@@ -38,38 +38,48 @@ export async function createEditPhone(newPhone, id) {
     ? newPhone.image
     : `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
 
-  //1. CREATE/Edit
   let query = supabase.from("job_orders");
+  let data, error;
 
-  //A. CREATE
-  if (!id) query = query.insert([{ ...newPhone, image: imagePath }]);
-
-  //Edit
-  if (id)
-    query = query
+  // CREATE
+  if (!id) {
+    const result = await query
+      .insert([{ ...newPhone, image: imagePath }])
+      .select()
+      .single();
+    data = result.data;
+    error = result.error;
+  }
+  // EDIT
+  else {
+    const result = await query
       .update({ ...newPhone, image: imagePath })
       .eq("id", id)
-      .select();
-
-  const { data, error } = await query.select().single();
-
-  if (error) {
-    throw new Error("Phone could not be created");
+      .select()
+      .single();
+    data = result.data;
+    error = result.error;
   }
 
-  //2. Uploading image
+  if (error) {
+    console.error("Database error:", error);
+    throw new Error(
+      `Phone could not be ${id ? "updated" : "created"}: ${error.message}`
+    );
+  }
+
+  // Upload image only if it's a new image
   if (hasImagePath) return data;
+
   const { error: storageError } = await supabase.storage
     .from("phone-images")
     .upload(imageName, newPhone.image);
 
-  // 3.Delete the phone if there is a problem
-
+  // Delete the phone if image upload fails
   if (storageError) {
     await supabase.from("job_orders").delete().eq("id", data.id);
-
     throw new Error(
-      "Phone image could not be created and the phone is deleted"
+      "Phone image could not be uploaded and the phone was deleted"
     );
   }
 
@@ -93,8 +103,7 @@ export async function deletePhone(id) {
 export async function getPendingRepairs() {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("completed, waitingForConfirmation"); // Fetch all fields or specify the ones you need
-  // Filter where completed is false
+    .select("completed, waitingForConfirmation");
 
   if (error) {
     console.error(error);

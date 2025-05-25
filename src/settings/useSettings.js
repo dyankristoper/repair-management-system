@@ -10,8 +10,6 @@ export function useSettings() {
     //uniquely indentify the data to query.needs to ba an array.
     queryFn: getSettings,
     queryKey: ["company_settings"],
-
-    //query function on fetching data.
   });
 
   return { isLoading, settings, error };
