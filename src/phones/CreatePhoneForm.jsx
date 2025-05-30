@@ -10,6 +10,7 @@ import Input from "../ui/Input";
 import styled from "styled-components";
 import CreateChecklist from "./CreateChecklist";
 import onError from "../utilities/formError";
+import CreateCustomerForm from "../customers/CreateCustomerForm";
 
 const Textarea = styled.textarea`
   padding: 0.8rem 1.2rem;
@@ -29,13 +30,17 @@ const StyledSelect = styled.select`
 `;
 
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
+  const [customerID, setCustomerID] = useState("");
+
   const setTechnician = useState("Select technician");
 
   const handleCheckboxChange = (e) => {
     setValue(e.target.name, e.target.checked);
   };
 
-  const { id: editId, ...editValues } = phoneToEdit;
+  const { id: editId, ...editValues } = phoneToEdit ?? {};
+
+  const customerToEdit = editValues?.customers ?? {};
 
   const isEditSession = Boolean(editId);
 
@@ -83,6 +88,8 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
+    if (!customerID) return;
+
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession)
@@ -100,7 +107,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
       );
     else
       createPhone(
-        { ...data, image: image },
+        { ...data, image: image, customer_id: customerID },
         {
           onSuccess: () => {
             reset();
@@ -108,10 +115,10 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           },
         }
       );
-    console.log(data);
   }
 
-  onError(errors);
+  onError(errors.message);
+
   return (
     <StyledFormContainer>
       <Form
@@ -203,6 +210,10 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
       <CreateChecklist
         register={register}
         handleChange={handleCheckboxChange}
+      />
+      <CreateCustomerForm
+        setCustomerID={setCustomerID}
+        customerToEdit={customerToEdit}
       />
     </StyledFormContainer>
   );

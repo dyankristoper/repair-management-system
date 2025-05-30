@@ -83,11 +83,8 @@ function ViewPhoneDetails({ phoneDetails }) {
   const {
     created_at,
     image,
-    customer,
-    contactNumber,
     phoneModel,
     imei,
-    address,
     phoneCondition,
     assignee,
     completed,
@@ -99,7 +96,9 @@ function ViewPhoneDetails({ phoneDetails }) {
     brokenScreen,
     bulgedBattery,
     brokenChargingpin,
-  } = phoneDetails;
+  } = phoneDetails ?? {};
+
+  const { name, address, phoneNumber } = phoneDetails?.customers ?? {};
 
   return (
     <StyledPhoneDetails>
@@ -120,11 +119,11 @@ function ViewPhoneDetails({ phoneDetails }) {
         </div>
         <Box>
           <p>
-            <span>Customer:</span> {customer}
+            <span>Customer:</span> {name}
           </p>
           <p>
             <span>Contact number: +</span>
-            {contactNumber}
+            {phoneNumber}
           </p>
         </Box>
         <Box>

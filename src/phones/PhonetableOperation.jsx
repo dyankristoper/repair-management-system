@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import SearchBar from "../ui/SearchBar";
 import Filter from "../ui/Filter";
 import SortBy from "../ui/SortBy";
 

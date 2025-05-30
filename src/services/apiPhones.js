@@ -3,7 +3,11 @@ import { PAGE_SIZE } from "../utilities/constants";
 import supabase, { supabaseUrl } from "./supabase";
 
 export async function getPhones({ filter, sortBy, page }) {
-  let query = supabase.from("job_orders").select("*", { count: "exact" });
+  let query = supabase
+    .from("job_orders")
+    .select("*,customers(id,name,email,address,phoneNumber)", {
+      count: "exact",
+    });
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
 
@@ -44,7 +48,9 @@ export async function createEditPhone(newPhone, id) {
   // CREATE
   if (!id) {
     const result = await query
-      .insert([{ ...newPhone, image: imagePath }])
+      .insert([
+        { ...newPhone, image: imagePath, customer_id: newPhone.customer_id },
+      ])
       .select()
       .single();
     data = result.data;
