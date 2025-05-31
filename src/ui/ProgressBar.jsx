@@ -14,30 +14,28 @@ const ProgressContainer = styled.div`
   justify-content: space-between;
 
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 
-  ::before {
-    content: ""; /* Mandatory with ::before */
-    background-color: var(--line-border-empty);
+  :before {
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
-    width: 100%;
+    height: 5px;
+    width: ${(props) => (props.step / 3) * 100}%;
     z-index: -1;
+    transition: width 0.4s ease;
   }
 `;
 
 const Progress = styled.div`
+  background-color: var(--line-border-fill);
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 0;
   transform: translateY(-50%);
-  height: 4px;
-  width: ${(props) => (props.step - 1) * (100 / 2)}%;
-  background-color: var(--line-border-fill);
-
+  height: 5px;
+  width: ${(props) => (props.step / 3) * 100}%;
   z-index: -1;
   transition: width 0.4s ease;
 `;
@@ -51,6 +49,7 @@ const Circle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 2rem;
   border: 3px solid var(--line-border-empty);
   transition: 0.4s ease;
 
@@ -88,14 +87,35 @@ const StyledButton = styled.button`
   }
 `;
 
+const CircleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 18rem;
+
+  p {
+    color: var(--line-border-fill);
+  }
+`;
+
 function ProgressBar({ prevStep, nextStep, step }) {
   return (
     <StyledContainer>
-      <ProgressContainer>
-        <Progress />
-        <Circle active={step >= 1}>1</Circle>
-        <Circle active={step >= 2}>2</Circle>
-        <Circle active={step >= 3}>3</Circle>
+      <ProgressContainer step={step}>
+        <Progress step={step}></Progress>
+        <CircleContainer>
+          <Circle active={step >= 1}>1</Circle>
+          {step === 1 && <p>Customer Information</p>}
+        </CircleContainer>
+        <CircleContainer>
+          <Circle active={step >= 2}>2</Circle>
+          {step === 2 && <p>Phone Details</p>}
+        </CircleContainer>
+        <CircleContainer>
+          <Circle active={step >= 3}>3</Circle>
+          {step === 3 && <p>Phone Checklist</p>}
+        </CircleContainer>
       </ProgressContainer>
 
       <ButtonGroup>

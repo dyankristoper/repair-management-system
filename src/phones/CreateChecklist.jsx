@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledCheckList = styled.form`
   width: 100%;
   max-width: 80rem;
+  height: 40rem;
 
   display: flex;
   align-items: center;
