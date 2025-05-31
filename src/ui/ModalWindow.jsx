@@ -46,10 +46,6 @@ const CloseButton = styled.button`
   border-radius: 50%;
   border: none;
   margin: 0.2em;
-
-  &:active {
-    border: 3px solid var(--color-red-600);
-  }
 `;
 
 const ModalWindowContext = createContext();

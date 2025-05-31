@@ -11,6 +11,16 @@ import styled from "styled-components";
 import CreateChecklist from "./CreateChecklist";
 import onError from "../utilities/formError";
 import CreateCustomerForm from "../customers/CreateCustomerForm";
+import ProgressBar from "../ui/ProgressBar";
+
+const StyledFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+`;
+const StyledSelect = styled.select`
+  background-color: var(--color-grey-100);
+`;
 
 const Textarea = styled.textarea`
   padding: 0.8rem 1.2rem;
@@ -21,16 +31,14 @@ const Textarea = styled.textarea`
   width: 100%;
   height: 8rem;
 `;
-const StyledFormContainer = styled.div`
-  display: flex;
-  gap: 1em;
-`;
-const StyledSelect = styled.select`
-  background-color: var(--color-grey-100);
-`;
 
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const [customerID, setCustomerID] = useState("");
+
+  const [step, setStep] = useState(1);
+
+  const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 3));
+  const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
 
   const setTechnician = useState("Select technician");
 
@@ -121,100 +129,108 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
 
   return (
     <StyledFormContainer>
-      <Form
-        onSubmit={handleSubmit(onSubmit, onError)}
-        type={onCloseModal ? "modal" : "regular"}
-      >
-        <FormRow label="Phone model" error={errors?.phoneModel?.message}>
-          <Input
-            type="text"
-            id="phoneModel"
-            disabled={isWorking}
-            defaultValue="SM-"
-            {...register("phoneModel", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="IMEI" error={errors?.imei?.message}>
-          <Input
-            type="text"
-            id="imei"
-            disabled={isWorking}
-            {...register("imei", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow
-          label="Phone condition"
-          error={errors?.phoneCondition?.message}
+      <ProgressBar step={step} prevStep={prevStep} nextStep={nextStep} />
+      {step === 1 && (
+        <CreateCustomerForm
+          setCustomerID={setCustomerID}
+          customerToEdit={customerToEdit}
+        />
+      )}
+
+      {step === 2 && (
+        <Form
+          onSubmit={handleSubmit(onSubmit, onError)}
+          type={onCloseModal ? "modal" : "regular"}
         >
-          <Textarea
-            type="text"
-            id="phoneCondition"
-            disabled={isWorking}
-            {...register("phoneCondition", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="Cost" error={errors?.cost?.message}>
-          <Input
-            type="text"
-            id="cost"
-            disabled={isWorking}
-            {...register("cost", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="Assignee" error={errors?.assignee?.message}>
-          <StyledSelect
-            id="assignee"
-            onChange={(e) => setTechnician(e.target.value)}
-            {...register("assignee", {
-              required: "This field is required",
-            })}
+          <FormRow label="Phone model" error={errors?.phoneModel?.message}>
+            <Input
+              type="text"
+              id="phoneModel"
+              disabled={isWorking}
+              defaultValue="SM-"
+              {...register("phoneModel", {
+                required: "This field is required",
+              })}
+            />
+          </FormRow>
+          <FormRow label="IMEI" error={errors?.imei?.message}>
+            <Input
+              type="text"
+              id="imei"
+              disabled={isWorking}
+              {...register("imei", {
+                required: "This field is required",
+              })}
+            />
+          </FormRow>
+          <FormRow
+            label="Phone condition"
+            error={errors?.phoneCondition?.message}
           >
-            <option>Select technician</option>
-            <option value="Tech-001">Tech-001</option>
-            <option value="Tech-002">Tech-002</option>
-          </StyledSelect>
-        </FormRow>
-        <FormRow>
-          <label>Image</label>
-          <FileInput
-            id="image"
-            accept="image/*"
-            {...register("image", {
-              required: isEditSession ? false : "This field is required",
-            })}
-          />
-        </FormRow>
+            <Textarea
+              type="text"
+              id="phoneCondition"
+              disabled={isWorking}
+              {...register("phoneCondition", {
+                required: "This field is required",
+              })}
+            />
+          </FormRow>
+          <FormRow label="Cost" error={errors?.cost?.message}>
+            <Input
+              type="text"
+              id="cost"
+              disabled={isWorking}
+              {...register("cost", {
+                required: "This field is required",
+              })}
+            />
+          </FormRow>
+          <FormRow label="Assignee" error={errors?.assignee?.message}>
+            <StyledSelect
+              id="assignee"
+              onChange={(e) => setTechnician(e.target.value)}
+              {...register("assignee", {
+                required: "This field is required",
+              })}
+            >
+              <option>Select technician</option>
+              <option value="Tech-001">Tech-001</option>
+              <option value="Tech-002">Tech-002</option>
+            </StyledSelect>
+          </FormRow>
+          <FormRow>
+            <label>Image</label>
+            <FileInput
+              id="image"
+              accept="image/*"
+              {...register("image", {
+                required: isEditSession ? false : "This field is required",
+              })}
+            />
+          </FormRow>
 
-        <FormRow>
-          <Button
-            variation="secondary"
-            type="reset"
-            onClick={() => onCloseModal?.()}
-          >
-            Cancel
-          </Button>
-          <Button disabled={isCreating} variation="primary" size="small">
-            {isEditSession ? "Edit details" : "Add phone"}
-          </Button>
-        </FormRow>
-      </Form>
+          <FormRow>
+            <Button
+              variation="secondary"
+              type="reset"
+              onClick={() => onCloseModal?.()}
+            >
+              Cancel
+            </Button>
+            <Button disabled={isCreating} variation="primary" size="small">
+              {isEditSession ? "Edit details" : "Add phone"}
+            </Button>
+          </FormRow>
+        </Form>
+      )}
 
-      <CreateChecklist
-        register={register}
-        handleChange={handleCheckboxChange}
-      />
-      <CreateCustomerForm
-        setCustomerID={setCustomerID}
-        customerToEdit={customerToEdit}
-      />
+      {step === 3 && (
+        <CreateChecklist
+          register={register}
+          handleChange={handleCheckboxChange}
+        />
+      )}
     </StyledFormContainer>
   );
 }

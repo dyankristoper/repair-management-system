@@ -4,25 +4,35 @@ import { useUpdateCustomers } from "./useUpdateCustomers";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
+import styled from "styled-components";
+
+const StyledForm = styled.form`
+  width: 100%;
+  max-width: 80rem;
+`;
 
 function CreateCustomerForm({ setCustomerID, customerToEdit = {} }) {
   const { id: customerId, ...editValues } = customerToEdit;
 
   const isEditSession = Boolean(customerId);
 
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
 
-  const { mutate: createCustomer, isLoading } = useUpdateCustomers(
+  const { errors } = formState;
+
+  const { mutate: createCustomer, isLoading: isCreating } = useUpdateCustomers(
     "create",
     "Customer successfully created"
   );
 
-  const { mutate: editCustomer } = useUpdateCustomers(
+  const { mutate: editCustomer, isLoading: isEditing } = useUpdateCustomers(
     "edit",
     "Customer successfully edited"
   );
+
+  const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
     if (isEditSession)
@@ -48,47 +58,47 @@ function CreateCustomerForm({ setCustomerID, customerToEdit = {} }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Customer name">
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      <FormRow label="Customer name" error={errors?.name?.message}>
         <Input
           type="text"
           id="name"
           name="name"
-          disabled={isLoading}
+          disabled={isWorking}
           {...register("name", { required: "Customer name is required" })}
         />
       </FormRow>
-      <FormRow label="Email">
+      <FormRow label="Email" error={errors?.email?.message}>
         <Input
           type="email"
           id="email"
           name="email"
-          disabled={isLoading}
+          disabled={isWorking}
           {...register("email", { required: "Email is required" })}
         />
       </FormRow>
-      <FormRow label="Address">
+      <FormRow label="Address" error={errors?.address?.message}>
         <Input
           type="text"
           id="address"
           name="address"
-          disabled={isLoading}
-          {...register("address")}
+          disabled={isWorking}
+          {...register("address", { required: "Address is required" })}
         />
       </FormRow>
-      <FormRow label="Contact number">
+      <FormRow label="Contact number" error={errors?.phoneNumber?.message}>
         <Input
           type="tel"
           id="phoneNumber"
           name="phoneNumber"
-          disabled={isLoading}
+          disabled={isWorking}
           {...register("phoneNumber", { required: "Phone number is required" })}
         />
       </FormRow>
-      <Button disabled={isLoading} variation="primary" size="small">
-        {isEditSession ? "Edit details" : "Add phone"}
+      <Button disabled={isWorking} variation="primary" size="small">
+        {isEditSession ? "Edit details" : "Add customer"}
       </Button>
-    </form>
+    </StyledForm>
   );
 }
 

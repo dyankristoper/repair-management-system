@@ -1,16 +1,17 @@
 import styled from "styled-components";
 
-const StyledCheckList = styled.div`
+const StyledCheckList = styled.form`
   width: 100%;
+  max-width: 80rem;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 5rem;
   border-radius: 8px;
 `;
 
-const CheckList = styled.form`
+const CheckListForm = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,7 +30,7 @@ const CheckList = styled.form`
 function CreateChecklist({ handleCheckboxChange, register }) {
   return (
     <StyledCheckList>
-      <CheckList>
+      <CheckListForm>
         <p>Accesssories</p>
         <div>
           <label htmlFor="simtray">w/ simtray</label>
@@ -84,8 +85,8 @@ function CreateChecklist({ handleCheckboxChange, register }) {
             onChange={handleCheckboxChange}
           />
         </div>
-      </CheckList>
-      <CheckList>
+      </CheckListForm>
+      <CheckListForm>
         <p>Physical condition</p>
         <div>
           <label htmlFor="brokenScreen">broken screen</label>
@@ -146,7 +147,7 @@ function CreateChecklist({ handleCheckboxChange, register }) {
           {...register("remarks")}
           onChange={handleCheckboxChange}
         /> */}
-      </CheckList>
+      </CheckListForm>
     </StyledCheckList>
   );
 }
