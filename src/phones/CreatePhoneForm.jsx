@@ -209,6 +209,15 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
               })}
             />
           </FormRow>
+        </Form>
+      )}
+
+      {step === 3 && (
+        <>
+          <CreateChecklist
+            register={register}
+            handleChange={handleCheckboxChange}
+          />
 
           <FormRow>
             <Button
@@ -222,14 +231,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
               {isEditSession ? "Edit details" : "Add phone"}
             </Button>
           </FormRow>
-        </Form>
-      )}
-
-      {step === 3 && (
-        <CreateChecklist
-          register={register}
-          handleChange={handleCheckboxChange}
-        />
+        </>
       )}
     </StyledFormContainer>
   );
