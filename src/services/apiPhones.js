@@ -40,9 +40,8 @@ export async function createEditPhone(newPhone, id) {
     ? newPhone.image
     : `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
 
-  // Clean up phone data to remove relational data (like customers)
   const payload = { ...newPhone, image: imagePath };
-  delete payload.customers; // Ensure we don't send nested relational objects
+  delete payload.customers;
 
   const query = supabase.from("job_orders");
   let data, error;
@@ -59,7 +58,6 @@ export async function createEditPhone(newPhone, id) {
 
   if (error) throw new Error(error.message);
 
-  // Upload image if it's new
   if (!hasImagePath) {
     const { error: storageError } = await supabase.storage
       .from("phone-images")

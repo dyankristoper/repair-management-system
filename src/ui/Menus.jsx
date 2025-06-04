@@ -17,7 +17,7 @@ const Option = styled.li`
   position: relative;
 
   &:hover {
-    background-color: var(--color-grey-200);
+    background-color: var(--color-grey-50);
 
     &::after {
       content: "";
@@ -27,7 +27,7 @@ const Option = styled.li`
       transform: translateY(-50%);
       border-width: 0.7em;
       border-style: solid;
-      border-color: transparent var(--color-green-800) transparent transparent;
+      border-color: transparent var(--color-brand-700) transparent transparent;
     }
   }
 `;
@@ -58,14 +58,14 @@ const StyledToggle = styled.button`
 
   &:active,
   &:focus {
-    border: 1px solid var(--color-green-800);
+    border: 1px solid var(--color-grey-600);
     outline: none;
   }
 
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--color-green-700);
+    color: var(--color-grey-100);
   }
 `;
 
