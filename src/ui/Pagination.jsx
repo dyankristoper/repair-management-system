@@ -27,7 +27,8 @@ const Buttons = styled.div`
 const PaginationButton = styled.button`
   background-color: ${(props) =>
     props.$active ? "var(--color-grey-50)" : props.$colors.primary};
-  color: ${(props) => (props.$active ? " var(--color-grey-700)" : "inherit")};
+  color: ${(props) =>
+    props.$active ? "var(--color-grey-700)" : "var(--color-grey-0)"};
   border: none;
   border-radius: var(--border-radius-sm);
   font-weight: 500;
@@ -55,7 +56,7 @@ const PaginationButton = styled.button`
 
   &:hover:not(:disabled) {
     background-color: ${(props) => props.$colors.primary};
-    color: var(--color-brand-50);
+    color: white;
   }
 `;
 

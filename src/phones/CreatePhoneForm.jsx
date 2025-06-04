@@ -1,6 +1,7 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useUpdatePhone } from "./useUpdatePhone";
 import { useState } from "react";
+import CreatableSelect from "react-select/creatable";
 
 import Button from "../ui/Button";
 import FileInput from "../ui/FileInput";
@@ -12,11 +13,17 @@ import CreateChecklist from "./CreateChecklist";
 import onError from "../utilities/formError";
 import CreateCustomerForm from "../customers/CreateCustomerForm";
 import ProgressBar from "../ui/ProgressBar";
+import ViewPhoneDetails from "../ui/ViewPhoneDetails";
+import { phoneModelOptions } from "../utilities/modelList";
 
 const StyledFormContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 1em;
+  width: 1000px;
+  min-height: 58rem;
 `;
 const StyledSelect = styled.select`
   background-color: var(--color-grey-100);
@@ -32,10 +39,47 @@ const Textarea = styled.textarea`
   height: 8rem;
 `;
 
+const ButtonGroup = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const StyledButton = styled.button`
+  background-color: ${(props) =>
+    props.active ? "var(--line-border-fill)" : "var(--line-border-empty)"};
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 8px 30px;
+  margin: 5px;
+  font-size: 14px;
+  transform: ${(props) => (props.active ? "scale(0.98)" : "none")};
+  transition: 0.3s ease;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:disabled {
+    background-color: var(--line-border-empty);
+    cursor: not-allowed;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
-  const [customerID, setCustomerID] = useState("");
+  const [customerID, setCustomerID] = useState(null);
 
   const [step, setStep] = useState(1);
+
+  const [newPhoneData, setNewPhoneData] = useState(null);
 
   const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 3));
   const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
@@ -49,6 +93,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = phoneToEdit ?? {};
 
   const customerToEdit = editValues?.customers ?? {};
+  const customerToEditId = editValues?.customers?.id ?? {};
 
   const isEditSession = Boolean(editId);
 
@@ -77,9 +122,10 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         brokenBackcover: false,
       };
 
-  const { register, handleSubmit, reset, formState, setValue } = useForm({
-    defaultValues: isEditSession ? editValues && defaultCheckValues : {},
-  });
+  const { register, handleSubmit, reset, formState, setValue, control } =
+    useForm({
+      defaultValues: isEditSession ? editValues && defaultCheckValues : {},
+    });
 
   const { errors } = formState;
 
@@ -96,8 +142,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
-    if (!customerID) return;
-
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession)
@@ -106,20 +150,25 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           newPhoneData: {
             ...data,
             image,
+            customer_id: isEditSession ? customerToEditId : customerID,
           },
           id: editId,
         },
         {
-          onSuccess: () => reset(),
+          onSuccess: (updatedPhone) => {
+            setNewPhoneData(updatedPhone);
+            nextStep();
+          },
         }
       );
     else
       createPhone(
         { ...data, image: image, customer_id: customerID },
         {
-          onSuccess: () => {
+          onSuccess: (createdPhone) => {
+            setNewPhoneData(createdPhone);
             reset();
-            onCloseModal?.();
+            nextStep();
           },
         }
       );
@@ -134,6 +183,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         <CreateCustomerForm
           setCustomerID={setCustomerID}
           customerToEdit={customerToEdit}
+          nextStep={nextStep}
         />
       )}
 
@@ -142,82 +192,86 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           onSubmit={handleSubmit(onSubmit, onError)}
           type={onCloseModal ? "modal" : "regular"}
         >
-          <FormRow label="Phone model" error={errors?.phoneModel?.message}>
-            <Input
-              type="text"
-              id="phoneModel"
-              disabled={isWorking}
-              defaultValue="SM-"
-              {...register("phoneModel", {
-                required: "This field is required",
-              })}
-            />
-          </FormRow>
-          <FormRow label="IMEI" error={errors?.imei?.message}>
-            <Input
-              type="text"
-              id="imei"
-              disabled={isWorking}
-              {...register("imei", {
-                required: "This field is required",
-              })}
-            />
-          </FormRow>
-          <FormRow
-            label="Phone condition"
-            error={errors?.phoneCondition?.message}
-          >
-            <Textarea
-              type="text"
-              id="phoneCondition"
-              disabled={isWorking}
-              {...register("phoneCondition", {
-                required: "This field is required",
-              })}
-            />
-          </FormRow>
-          <FormRow label="Cost" error={errors?.cost?.message}>
-            <Input
-              type="text"
-              id="cost"
-              disabled={isWorking}
-              {...register("cost", {
-                required: "This field is required",
-              })}
-            />
-          </FormRow>
-          <FormRow label="Assignee" error={errors?.assignee?.message}>
-            <StyledSelect
-              id="assignee"
-              onChange={(e) => setTechnician(e.target.value)}
-              {...register("assignee", {
-                required: "This field is required",
-              })}
-            >
-              <option>Select technician</option>
-              <option value="Tech-001">Tech-001</option>
-              <option value="Tech-002">Tech-002</option>
-            </StyledSelect>
-          </FormRow>
-          <FormRow>
-            <label>Image</label>
-            <FileInput
-              id="image"
-              accept="image/*"
-              {...register("image", {
-                required: isEditSession ? false : "This field is required",
-              })}
-            />
-          </FormRow>
-        </Form>
-      )}
+          <Wrapper>
+            <div>
+              <FormRow label="Phone model" error={errors?.phoneModel?.message}>
+                <Controller
+                  control={control}
+                  name="phoneModel"
+                  rules={{ required: "This field is required" }}
+                  render={({ field }) => (
+                    <CreatableSelect
+                      isDisabled={isWorking}
+                      options={phoneModelOptions}
+                      onChange={(val) => field.onChange(val?.value)}
+                    />
+                  )}
+                />
+              </FormRow>
 
-      {step === 3 && (
-        <>
-          <CreateChecklist
-            register={register}
-            handleChange={handleCheckboxChange}
-          />
+              <FormRow label="IMEI" error={errors?.imei?.message}>
+                <Input
+                  type="text"
+                  id="imei"
+                  disabled={isWorking}
+                  {...register("imei", {
+                    required: "This field is required",
+                  })}
+                />
+              </FormRow>
+              <FormRow
+                label="Phone condition"
+                error={errors?.phoneCondition?.message}
+              >
+                <Textarea
+                  type="text"
+                  id="phoneCondition"
+                  disabled={isWorking}
+                  {...register("phoneCondition", {
+                    required: "This field is required",
+                  })}
+                />
+              </FormRow>
+              <FormRow label="Cost" error={errors?.cost?.message}>
+                <Input
+                  type="text"
+                  id="cost"
+                  defaultValue="Php"
+                  disabled={isWorking}
+                  {...register("cost", {
+                    required: "This field is required",
+                  })}
+                />
+              </FormRow>
+              <FormRow label="Assignee" error={errors?.assignee?.message}>
+                <StyledSelect
+                  id="assignee"
+                  onChange={(e) => setTechnician(e.target.value)}
+                  {...register("assignee", {
+                    required: "This field is required",
+                  })}
+                >
+                  <option>Select technician</option>
+                  <option value="Tech-001">Tech-001</option>
+                  <option value="Tech-002">Tech-002</option>
+                </StyledSelect>
+              </FormRow>
+              <FormRow>
+                <label>Image</label>
+                <FileInput
+                  id="image"
+                  accept="image/*"
+                  {...register("image", {
+                    required: isEditSession ? false : "This field is required",
+                  })}
+                />
+              </FormRow>
+            </div>
+            <CreateChecklist
+              register={register}
+              handleChange={handleCheckboxChange}
+            />
+          </Wrapper>
 
           <FormRow>
             <Button
@@ -231,8 +285,19 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
               {isEditSession ? "Edit details" : "Add phone"}
             </Button>
           </FormRow>
-        </>
+        </Form>
       )}
+
+      {step === 3 && <ViewPhoneDetails phoneDetails={newPhoneData} />}
+
+      <ButtonGroup>
+        <StyledButton onClick={prevStep} active={step > 1}>
+          Prev
+        </StyledButton>
+        <StyledButton onClick={nextStep} active={step < 3}>
+          Next
+        </StyledButton>
+      </ButtonGroup>
     </StyledFormContainer>
   );
 }

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -16,7 +17,7 @@ const ProgressContainer = styled.div`
   position: relative;
   margin-bottom: 15px;
 
-  :before {
+  &:before {
     position: absolute;
     top: 30%;
     left: 0;
@@ -33,7 +34,7 @@ const Progress = styled.div`
   position: absolute;
   top: 30%;
   left: 0;
-  transform: translateY(-50%);
+  transform: translateY(0%);
   height: 5px;
   width: ${(props) => (props.step / 3) * 100}%;
   z-index: -1;
@@ -57,36 +58,6 @@ const Circle = styled.div`
     props.active ? "var(--line-border-fill)" : "var(--line-border-empty)"};
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const StyledButton = styled.button`
-  background-color: ${(props) =>
-    props.active ? "var(--line-border-fill)" : "var(--line-border-empty)"};
-  color: #fff;
-  border: 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: inherit;
-  padding: 8px 30px;
-  margin: 5px;
-  font-size: 14px;
-  transform: ${(props) => (props.active ? "scale(0.98)" : "none")};
-  transition: 0.3s ease;
-
-  &:focus {
-    outline: 0;
-  }
-
-  &:disabled {
-    background-color: var(--line-border-empty);
-    cursor: not-allowed;
-  }
-`;
-
 const CircleContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -99,7 +70,7 @@ const CircleContainer = styled.div`
   }
 `;
 
-function ProgressBar({ prevStep, nextStep, step }) {
+function ProgressBar({ step }) {
   return (
     <StyledContainer>
       <ProgressContainer step={step}>
@@ -117,15 +88,6 @@ function ProgressBar({ prevStep, nextStep, step }) {
           {step === 3 && <p>Phone Checklist</p>}
         </CircleContainer>
       </ProgressContainer>
-
-      <ButtonGroup>
-        <StyledButton onClick={prevStep} active={step > 1}>
-          Prev
-        </StyledButton>
-        <StyledButton onClick={nextStep} active={step < 3}>
-          Next
-        </StyledButton>
-      </ButtonGroup>
     </StyledContainer>
   );
 }

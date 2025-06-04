@@ -9,14 +9,20 @@ import styled from "styled-components";
 const StyledForm = styled.form`
   width: 100%;
   max-width: 80rem;
+  height: 35rem;
 `;
 
-function CreateCustomerForm({ setCustomerID, customerToEdit = {} }) {
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: end;
+`;
+
+function CreateCustomerForm({ setCustomerID, customerToEdit = {}, nextStep }) {
   const { id: customerId, ...editValues } = customerToEdit;
 
   const isEditSession = Boolean(customerId);
 
-  const { register, handleSubmit, reset, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
 
@@ -35,26 +41,29 @@ function CreateCustomerForm({ setCustomerID, customerToEdit = {} }) {
   const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
-    if (isEditSession)
+    if (isEditSession) {
       editCustomer({
         newCustomerData: {
           ...data,
         },
         id: customerId,
       });
-    else
+      nextStep();
+    } else {
       createCustomer(
         { ...data },
         {
           onSuccess: (customerData) => {
             setCustomerID(customerData.id);
-            reset();
+            // reset();
           },
           onError: (error) => {
             console.error("Failed to create customer:", error);
           },
         }
       );
+      nextStep();
+    }
   }
 
   return (
@@ -95,9 +104,11 @@ function CreateCustomerForm({ setCustomerID, customerToEdit = {} }) {
           {...register("phoneNumber", { required: "Phone number is required" })}
         />
       </FormRow>
-      <Button disabled={isWorking} variation="primary" size="small">
-        {isEditSession ? "Edit details" : "Add customer"}
-      </Button>
+      <ButtonGroup>
+        <Button disabled={isWorking} variation="primary" size="small">
+          {isEditSession ? "Edit details" : "Add customer"}
+        </Button>
+      </ButtonGroup>
     </StyledForm>
   );
 }

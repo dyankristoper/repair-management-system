@@ -27,3 +27,4 @@ dist-ssr
 .env.example
 .env.staging
 .env.production
+.env.development

@@ -1,155 +1,122 @@
 import styled from "styled-components";
+import Input from "../ui/Input";
+import InputRow from "../ui/InputRow";
 
-const StyledCheckList = styled.form`
-  width: 100%;
-  max-width: 80rem;
-  height: 40rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5rem;
-  border-radius: 8px;
-`;
-
-const CheckListForm = styled.div`
+const StyledCheckListForm = styled.form`
+  width: 80rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2rem;
+  border-radius: 8px;
+`;
 
-  width: 28rem;
+const CheckListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 0.5rem;
-
-  div {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+  p {
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 0.5em;
   }
 `;
 
 function CreateChecklist({ handleCheckboxChange, register }) {
   return (
-    <StyledCheckList>
-      <CheckListForm>
+    <StyledCheckListForm>
+      <CheckListWrapper>
         <p>Accesssories</p>
-        <div>
-          <label htmlFor="simtray">w/ simtray</label>
-          <input
+        <InputRow label="w/ simtray">
+          <Input
             type="checkbox"
             id="simtray"
             name="simtray"
             {...register("simtray")}
             onChange={handleCheckboxChange}
           />
-        </div>
-        <div>
-          <label htmlFor="simcard">w/ simcard</label>
-          <input
+        </InputRow>
+        <InputRow label="w/ simcard">
+          <Input
             type="checkbox"
             id="simcard"
             name="simcard"
             {...register("simcard")}
             onChange={handleCheckboxChange}
           />
-        </div>
+        </InputRow>
 
-        <div>
-          <label htmlFor="memorycard">w/ memory card</label>
-          <input
+        <InputRow label="w/ memorycard">
+          <Input
             type="checkbox"
             id="memorycard"
             name="memorycard"
             {...register("memorycard")}
             onChange={handleCheckboxChange}
           />
-        </div>
+        </InputRow>
 
-        <div>
-          <label htmlFor="spen">w/ spen</label>
-          <input
+        <InputRow label="w/ spen">
+          <Input
             type="checkbox"
             id="spen"
             name="spen"
             {...register("spen")}
             onChange={handleCheckboxChange}
           />
-        </div>
+        </InputRow>
 
-        <div>
-          <label htmlFor="charger">w/ charger</label>
-          <input
+        <InputRow label="w/ charger">
+          <Input
             type="checkbox"
             id="charger"
             name="charger"
             {...register("charger")}
             onChange={handleCheckboxChange}
           />
-        </div>
-      </CheckListForm>
-      <CheckListForm>
+        </InputRow>
+      </CheckListWrapper>
+      <CheckListWrapper>
         <p>Physical condition</p>
-        <div>
-          <label htmlFor="brokenScreen">broken screen</label>
-          <input
+        <InputRow label="Broken Screen?">
+          <Input
             type="checkbox"
             id="brokenScreen"
             name="brokenScreen"
             {...register("brokenScreen")}
             onChange={handleCheckboxChange}
           />
-        </div>
-        <div>
-          <label htmlFor="bulgedBattery">bulged battery</label>
-          <input
+        </InputRow>
+        <InputRow label="Bulged Battery">
+          <Input
             type="checkbox"
             id="bulgedBattery"
             name="bulgedBattery"
             {...register("bulgedBattery")}
             onChange={handleCheckboxChange}
           />
-        </div>
-        <div>
-          <label htmlFor="brokenChargingpin">broken chargingpin</label>
-          <input
+        </InputRow>
+        <InputRow label="Broken Chargingpin?">
+          <Input
             type="checkbox"
             id="brokenChargingpin"
             name="brokenChargingpin"
             {...register("brokenChargingpin")}
             onChange={handleCheckboxChange}
           />
-        </div>
-        <div>
-          <label htmlFor="brokenBackcover">broken backcover</label>
-          <input
+        </InputRow>
+        <InputRow label="Broken Backcover?">
+          <Input
             type="checkbox"
             id="brokenBackcover"
             name="brokenBackcover"
             {...register("brokenBackcover")}
             onChange={handleCheckboxChange}
           />
-        </div>
-        {/* <div>
-          <label html="others">others</label>
-          <input
-            type="checkbox"
-            id="others"
-            name="others"
-            {...register("others")}
-            onChange={handleCheckboxChange}
-          />
-        </div> */}
-
-        {/* <label htmlFor="remarks">remarks</label>
-        <input
-          type="text"
-          id="remarks"
-          name="remarks"
-          {...register("remarks")}
-          onChange={handleCheckboxChange}
-        /> */}
-      </CheckListForm>
-    </StyledCheckList>
+        </InputRow>
+      </CheckListWrapper>
+    </StyledCheckListForm>
   );
 }
 

@@ -32,61 +32,43 @@ export async function getPhones({ filter, sortBy, page }) {
 
 export async function createEditPhone(newPhone, id) {
   const hasImagePath = newPhone.image?.startsWith?.(supabaseUrl);
-
   const imageName = `${Math.random()}-${newPhone.image.name}`.replaceAll(
     "/",
     ""
   );
-
   const imagePath = hasImagePath
     ? newPhone.image
     : `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
 
-  let query = supabase.from("job_orders");
+  // Clean up phone data to remove relational data (like customers)
+  const payload = { ...newPhone, image: imagePath };
+  delete payload.customers; // Ensure we don't send nested relational objects
+
+  const query = supabase.from("job_orders");
   let data, error;
 
-  // CREATE
   if (!id) {
-    const result = await query
-      .insert([
-        { ...newPhone, image: imagePath, customer_id: newPhone.customer_id },
-      ])
-      .select()
-      .single();
-    data = result.data;
-    error = result.error;
-  }
-  // EDIT
-  else {
-    const result = await query
-      .update({ ...newPhone, image: imagePath })
+    ({ data, error } = await query.insert([payload]).select().single());
+  } else {
+    ({ data, error } = await query
+      .update(payload)
       .eq("id", id)
       .select()
-      .single();
-    data = result.data;
-    error = result.error;
+      .single());
   }
 
-  if (error) {
-    console.error("Database error:", error);
-    throw new Error(
-      `Phone could not be ${id ? "updated" : "created"}: ${error.message}`
-    );
-  }
+  if (error) throw new Error(error.message);
 
-  // Upload image only if it's a new image
-  if (hasImagePath) return data;
+  // Upload image if it's new
+  if (!hasImagePath) {
+    const { error: storageError } = await supabase.storage
+      .from("phone-images")
+      .upload(imageName, newPhone.image);
 
-  const { error: storageError } = await supabase.storage
-    .from("phone-images")
-    .upload(imageName, newPhone.image);
-
-  // Delete the phone if image upload fails
-  if (storageError) {
-    await supabase.from("job_orders").delete().eq("id", data.id);
-    throw new Error(
-      "Phone image could not be uploaded and the phone was deleted"
-    );
+    if (storageError) {
+      await supabase.from("job_orders").delete().eq("id", data.id);
+      throw new Error("Image upload failed. Record deleted.");
+    }
   }
 
   return data;
