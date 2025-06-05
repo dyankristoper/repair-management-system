@@ -1,9 +1,10 @@
 import { getToday } from "../helpers/getToday";
 import { PAGE_SIZE } from "../utilities/constants";
 import supabase, { supabaseUrl } from "./supabase";
+import onError from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
-  let query = supabase.from("phones").select("*", { count: "exact" });
+  let query = supabase.from("job_orders").select("*", { count: "exact" });
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
 
@@ -19,8 +20,7 @@ export async function getPhones({ filter, sortBy, page }) {
   const { data, error, count } = await query;
 
   if (error) {
-    console.error(error);
-    throw new Error("Phone could not be loaded");
+    return await onError( error, 'Unable to fetch job order records.')
   }
 
   return { data, count };
@@ -38,95 +38,98 @@ export async function createEditPhone(newPhone, id) {
     ? newPhone.image
     : `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
 
-  //1. CREATE/Edit
-  let query = supabase.from("phones");
+  let query = supabase.from("job_orders");
+  let data, error;
 
-  //A. CREATE
-  if (!id) query = query.insert([{ ...newPhone, image: imagePath }]);
-
-  //Edit
-  if (id)
-    query = query
+  // CREATE
+  if (!id) {
+    const result = await query
+      .insert([{ ...newPhone, image: imagePath }])
+      .select()
+      .single();
+    data = result.data;
+    error = result.error;
+  }
+  // EDIT
+  else {
+    const result = await query
       .update({ ...newPhone, image: imagePath })
       .eq("id", id)
-      .select();
-
-  const { data, error } = await query.select().single();
-
-  if (error) {
-    throw new Error("Phone could not be created");
+      .select()
+      .single();
+    data = result.data;
+    error = result.error;
   }
 
-  //2. Uploading image
+  if (error) {
+    return await onError( error, `Phone could not be ${id ? "updated" : "created"}: ${error.message}` )
+  }
+
+  // Upload image only if it's a new image
   if (hasImagePath) return data;
+
   const { error: storageError } = await supabase.storage
     .from("phone-images")
     .upload(imageName, newPhone.image);
 
-  // 3.Delete the phone if there is a problem
-
+  // Delete the phone if image upload fails
   if (storageError) {
-    await supabase.from("phones").delete().eq("id", data.id);
+    await supabase.from("job_orders").delete().eq("id", data.id);
 
-    console.log(storageError);
-
-    throw new Error(
-      "Phone image could not be created and the phone is deleted"
-    );
+    return await onError(storageError, 'Phone image could not be uploaded and the phone was deleted')
   }
 
   return data;
 }
 
 export async function deletePhone(id) {
-  const { data, error } = await supabase.from("phones").delete().eq("id", id);
+  const { data, error } = await supabase
+    .from("job_orders")
+    .delete()
+    .eq("id", id)
+    .select();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Phone could not be loaded");
+  if (error || data.length === 0) {
+    return await onError( error, 'Unable to delete resource.')
   }
 
-  return data;
+  return;
 }
 
 export async function getPendingRepairs() {
   const { data, error } = await supabase
-    .from("phones")
-    .select("completed, waitingForConfirmation"); // Fetch all fields or specify the ones you need
-  // Filter where completed is false
+    .from("job_orders")
+    .in('status', ['completed', 'forConfirmation']);
 
   if (error) {
-    console.error(error);
-    throw new Error("Pending repairs could not get loaded");
+    return await onError( error, 'Unable to fetch pending repair resources.');
   }
 
   return data;
 }
 
 export async function getAssignedRepairs({ filter }) {
-  let query = supabase.from("phones").select("*");
+  let query = supabase.from("job_orders").select("*");
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
 
   const { data, error } = await query;
 
   if (error) {
-    console.error(error);
-    throw new Error("Assigned repairs could not get loaded");
+    return await onError( error, 'Unable to load assigned repairs.');
   }
   return data;
 }
 
 export async function getAssigned(id) {
   const { data, error } = await supabase
-    .from("phones")
+    .from("job_orders")
     .select("*")
     .eq("id", id)
     .single();
 
   if (error) {
-    console.error(error);
-    throw new Error("Assigned not found");
+    return await onError( error, 'Assigned not found.' );
   }
 
   return data;
@@ -134,14 +137,13 @@ export async function getAssigned(id) {
 
 export async function getSalesAfterDate(date) {
   const { data, error } = await supabase
-    .from("phones")
+    .from("job_orders")
     .select("created_at,cost,success,failed,serviceFee")
     .gte("created_at", date)
     .lte("created_at", getToday({ end: true }));
 
   if (error) {
-    console.error(error);
-    throw new Error("Phones could not get loaded");
+    return await onError( error, 'Unable to fetch sales after date.' );
   }
 
   return data;
