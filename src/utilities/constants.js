@@ -8,8 +8,14 @@ const LOG_TYPES = {
   error: 'error'
 }
 
+const jobOrderStatus = {
+  false : ['pending', 'blocked'],
+  true : ['completed']
+}
+
 export {
   Logo,
+  jobOrderStatus,
   PAGE_SIZE,
   LOG_TYPES
 }

@@ -99,7 +99,7 @@ export async function deletePhone(id) {
 export async function getPendingRepairs() {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("completed, waitingForConfirmation");
+    .in('status', ['completed', 'forConfirmation']);
 
   if (error) {
     return await onError( error, 'Unable to fetch pending repair resources.');
