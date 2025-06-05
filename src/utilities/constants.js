@@ -9,8 +9,8 @@ const LOG_TYPES = {
 }
 
 const jobOrderStatus = {
-  false : ['pending', 'blocked'],
-  true : ['completed']
+  false : ['pending', 'blocked', 'failed', 'forConfirmation'],
+  true : ['completed', 'success']
 }
 
 export {

@@ -70,11 +70,11 @@ function PhoneRow({ phone }) {
   const statusToTagName = ( status ) => {
     for (const key in jobOrderStatus) {
       if (jobOrderStatus[key].includes(status)) {
-        return key ? 'green' : 'red';
+        return key === 'true' ? 'green' : 'red';
       }
     }
 
-    return undefined;
+    return 'grey';
   };
 
   return (
