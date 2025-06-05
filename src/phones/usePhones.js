@@ -34,7 +34,7 @@ export function usePhones() {
 
     error,
   } = useQuery({
-    queryKey: ["phones", filter, sortBy, page],
+    queryKey: ["job_orders", filter, sortBy, page],
     queryFn: () => getPhones({ filter, sortBy, page }),
   });
 

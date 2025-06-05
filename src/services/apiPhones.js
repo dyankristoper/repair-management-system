@@ -75,7 +75,6 @@ export async function createEditPhone(newPhone, id) {
   // Delete the phone if image upload fails
   if (storageError) {
     await supabase.from("job_orders").delete().eq("id", data.id);
-
     return await onError(storageError, 'Phone image could not be uploaded and the phone was deleted')
   }
 
