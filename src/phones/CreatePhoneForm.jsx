@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useUpdatePhone } from "./useUpdatePhone";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { phoneModelOptions } from "../utilities/modelList";
 import { getDefaultCheckValues } from "../utilities/defaultCheckValues";
 
@@ -55,19 +55,11 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
     control,
     setError,
     clearErrors,
-    trigger,
     watch,
   } = useForm({
     defaultValues: isEditSession ? defaultCheckValues : {},
     mode: "onChange",
   });
-
-  const handleCheckboxChange = (e) => {
-    setValue(e.target.name, e.target.checked, {
-      shouldValidate: true,
-    });
-    trigger("checklistGroup");
-  };
 
   const checklistFields = useMemo(
     () => [
@@ -84,6 +76,24 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
     []
   );
 
+  const handleCheckboxChange = (e) => {
+    setValue(e.target.name, e.target.checked, {
+      shouldValidate: true,
+    });
+
+    const values = watch();
+    const isAnyChecked = checklistFields.some((field) => values[field]);
+
+    if (!isAnyChecked) {
+      setError("checklistGroup", {
+        type: "manual",
+        message: "At least one checkbox must be selected",
+      });
+    } else {
+      clearErrors("checklistGroup");
+    }
+  };
+
   const { mutate: createPhone, isLoading: isCreating } = useUpdatePhone(
     "create",
     "Phone details successfully created"
@@ -95,17 +105,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   );
 
   const isWorking = isCreating || isEditing;
-
-  useEffect(() => {
-    const subscription = watch((value) => {
-      const isAnyChecked = checklistFields.some((field) => value[field]);
-      if (isAnyChecked && errors.checklistGroup) {
-        clearErrors("checklistGroup");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [watch, checklistFields, clearErrors, errors.checklistGroup]);
 
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
