@@ -5,7 +5,7 @@ import supabase, { supabaseUrl } from "./supabase";
 export async function getPhones({ filter, sortBy, page }) {
   let query = supabase
     .from("job_orders")
-    .select("*,customers(id,name,email,address,phoneNumber)", {
+    .select("*,customers:customer_id(id,name,email,address,phoneNumber)", {
       count: "exact",
     });
 
@@ -31,34 +31,41 @@ export async function getPhones({ filter, sortBy, page }) {
 }
 
 export async function createEditPhone(newPhone, id) {
-  const hasImagePath = newPhone.image?.startsWith?.(supabaseUrl);
-  const imageName = `${Math.random()}-${newPhone.image.name}`.replaceAll(
-    "/",
-    ""
-  );
-  const imagePath = hasImagePath
-    ? newPhone.image
-    : `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
+  const hasImagePath =
+    typeof newPhone.image === "string" &&
+    newPhone.image.startsWith(supabaseUrl);
+
+  let imagePath = newPhone.image;
+  let imageName;
+
+  if (!hasImagePath && newPhone.image) {
+    imageName = `${Math.random()}-${newPhone.image.name}`.replaceAll("/", "");
+    imagePath = `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
+  }
 
   const payload = { ...newPhone, image: imagePath };
   delete payload.customers;
+  delete payload.imageName;
 
   const query = supabase.from("job_orders");
   let data, error;
 
   if (!id) {
-    ({ data, error } = await query.insert([payload]).select().single());
+    ({ data, error } = await query
+      .insert([payload])
+      .select("*, customers:customer_id(id, name, email, address, phoneNumber)")
+      .single());
   } else {
     ({ data, error } = await query
       .update(payload)
       .eq("id", id)
-      .select()
+      .select("*, customers:customer_id(id, name, email, address, phoneNumber)")
       .single());
   }
 
   if (error) throw new Error(error.message);
 
-  if (!hasImagePath) {
+  if (!hasImagePath && newPhone.image instanceof File) {
     const { error: storageError } = await supabase.storage
       .from("phone-images")
       .upload(imageName, newPhone.image);
@@ -89,7 +96,7 @@ export async function deletePhone(id) {
 export async function getPendingRepairs() {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("completed, waitingForConfirmation");
+    .select("isCompleted, waitingForConfirmation");
 
   if (error) {
     console.error(error);

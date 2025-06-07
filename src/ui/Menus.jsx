@@ -53,7 +53,7 @@ const StyledToggle = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background-color: var(--color-grey-100);
+    background-color: var(--color-grey-200);
   }
 
   &:active,
@@ -65,7 +65,7 @@ const StyledToggle = styled.button`
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--color-grey-100);
+    color: var(--color-grey-800);
   }
 `;
 

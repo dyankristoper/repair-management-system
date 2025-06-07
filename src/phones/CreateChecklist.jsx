@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Input from "../ui/Input";
 import InputRow from "../ui/InputRow";
 
-const StyledCheckListForm = styled.form`
+const StyledCheckListForm = styled.div`
   width: 80rem;
   display: flex;
   flex-direction: column;
@@ -15,19 +15,25 @@ const StyledCheckListForm = styled.form`
 const CheckListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
-  p {
+  padding: 0.2rem;
+  h3 {
     font-weight: 600;
     font-size: 1.8rem;
     margin-bottom: 0.5em;
   }
 `;
 
-function CreateChecklist({ handleCheckboxChange, register }) {
+const CheckListError = styled.p`
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-red-700);
+`;
+
+function CreateChecklist({ handleCheckboxChange, register, errors }) {
   return (
     <StyledCheckListForm>
       <CheckListWrapper>
-        <p>Accesssories</p>
+        <h3>Accesssories</h3>
         <InputRow label="w/ simtray">
           <Input
             type="checkbox"
@@ -76,9 +82,12 @@ function CreateChecklist({ handleCheckboxChange, register }) {
             onChange={handleCheckboxChange}
           />
         </InputRow>
+        {errors.checklistGroup && (
+          <CheckListError>{errors.checklistGroup.message}</CheckListError>
+        )}
       </CheckListWrapper>
       <CheckListWrapper>
-        <p>Physical condition</p>
+        <h3>Physical condition</h3>
         <InputRow label="Broken Screen?">
           <Input
             type="checkbox"
@@ -115,6 +124,10 @@ function CreateChecklist({ handleCheckboxChange, register }) {
             onChange={handleCheckboxChange}
           />
         </InputRow>
+
+        {errors.checklistGroup && (
+          <CheckListError>{errors.checklistGroup.message}</CheckListError>
+        )}
       </CheckListWrapper>
     </StyledCheckListForm>
   );

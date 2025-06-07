@@ -15,6 +15,8 @@ const StyledPagination = styled.div`
 const P = styled.p`
   font-size: 1.4rem;
   margin-left: 0.8rem;
+  display: flex;
+  gap: 1em;
 
   & span {
     font-weight: 600;
@@ -107,7 +109,7 @@ function Pagination({ count }) {
         Showing <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> to{" "}
         <span>
           {currentPage === pageCount ? count : currentPage * PAGE_SIZE}
-        </span>{" "}
+        </span>
         of
         <span>{count}</span> results
       </P>

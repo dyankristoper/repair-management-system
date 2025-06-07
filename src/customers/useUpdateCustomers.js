@@ -2,32 +2,35 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { createEditCustomer } from "../services/apiCustomers";
 
-export function useUpdateCustomers(mutationName, successMessage) {
+export function useUpdateCustomers(mode, successMessage) {
   const queryClient = useQueryClient();
 
-  let updateFunction;
-  let mode = mutationName;
-
-  if (mode === "edit") {
-    updateFunction = createEditCustomer;
-  }
-
-  if (mode === "create") {
-    updateFunction = createEditCustomer;
-  }
+  const mutationFn =
+    mode === "edit"
+      ? ({ newCustomerData, id }) => createEditCustomer(newCustomerData, id)
+      : createEditCustomer;
 
   const { mutate, isLoading } = useMutation({
-    mutationFn:
-      mode === "edit"
-        ? ({ newCustomerData, id }) => updateFunction(newCustomerData, id)
-        : updateFunction,
-    onSuccess: () => {
+    mutationFn,
+    onSuccess: (updatedCustomer, variables) => {
       toast.success(successMessage);
-      queryClient.invalidateQueries({
-        queryKey: ["customers"],
-      });
+
+      if (mode === "edit") {
+        queryClient.setQueryData(["customers"], (oldData) => {
+          if (!oldData?.data) return oldData;
+
+          return {
+            ...oldData,
+            data: oldData.data.map((customer) =>
+              customer.id === variables.id ? updatedCustomer : customer
+            ),
+          };
+        });
+      }
     },
+
     onError: (err) => toast.error(err.message),
   });
+
   return { mutate, isLoading };
 }

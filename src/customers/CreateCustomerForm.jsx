@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateCustomers } from "./useUpdateCustomers";
 
@@ -5,6 +6,7 @@ import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import styled from "styled-components";
+import toast from "react-hot-toast";
 
 const StyledForm = styled.form`
   width: 100%;
@@ -17,16 +19,22 @@ const ButtonGroup = styled.div`
   justify-content: end;
 `;
 
-function CreateCustomerForm({ setCustomerID, customerToEdit = {}, nextStep }) {
-  const { id: customerId, ...editValues } = customerToEdit;
-
-  const isEditSession = Boolean(customerId);
-
-  const { register, handleSubmit, formState } = useForm({
+function CreateCustomerForm({
+  setCustomerID,
+  nextStep,
+  selectedCustomerInfo,
+  editValues,
+  customerId,
+  isEditSession,
+}) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
-
-  const { errors } = formState;
 
   const { mutate: createCustomer, isLoading: isCreating } = useUpdateCustomers(
     "create",
@@ -40,6 +48,17 @@ function CreateCustomerForm({ setCustomerID, customerToEdit = {}, nextStep }) {
 
   const isWorking = isCreating || isEditing;
 
+  useEffect(() => {
+    if (!isEditSession && selectedCustomerInfo) {
+      reset({
+        name: selectedCustomerInfo.name || "",
+        address: selectedCustomerInfo.address || "",
+        email: "",
+        phoneNumber: "",
+      });
+    }
+  }, [selectedCustomerInfo, reset, isEditSession]);
+
   function onSubmit(data) {
     if (isEditSession) {
       editCustomer({
@@ -48,21 +67,19 @@ function CreateCustomerForm({ setCustomerID, customerToEdit = {}, nextStep }) {
         },
         id: customerId,
       });
-      nextStep();
     } else {
       createCustomer(
         { ...data },
         {
           onSuccess: (customerData) => {
             setCustomerID(customerData.id);
-            // reset();
+            nextStep();
           },
           onError: (error) => {
-            console.error("Failed to create customer:", error);
+            toast.error("Failed to create customer:", error);
           },
         }
       );
-      nextStep();
     }
   }
 
@@ -72,36 +89,32 @@ function CreateCustomerForm({ setCustomerID, customerToEdit = {}, nextStep }) {
         <Input
           type="text"
           id="name"
-          name="name"
-          disabled={isWorking}
           {...register("name", { required: "Customer name is required" })}
+          disabled={isWorking}
         />
       </FormRow>
       <FormRow label="Email" error={errors?.email?.message}>
         <Input
           type="email"
           id="email"
-          name="email"
+          {...register("email", { required: "Email Address is required" })}
           disabled={isWorking}
-          {...register("email", { required: "Email is required" })}
         />
       </FormRow>
       <FormRow label="Address" error={errors?.address?.message}>
         <Input
           type="text"
           id="address"
-          name="address"
-          disabled={isWorking}
           {...register("address", { required: "Address is required" })}
+          disabled={isWorking}
         />
       </FormRow>
       <FormRow label="Contact number" error={errors?.phoneNumber?.message}>
         <Input
           type="tel"
           id="phoneNumber"
-          name="phoneNumber"
-          disabled={isWorking}
           {...register("phoneNumber", { required: "Phone number is required" })}
+          disabled={isWorking}
         />
       </FormRow>
       <ButtonGroup>

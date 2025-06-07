@@ -70,23 +70,23 @@ const CircleContainer = styled.div`
   }
 `;
 
-function ProgressBar({ step }) {
+function ProgressBar({ step, isEditSession }) {
+  const stepLabels = [
+    isEditSession ? "Edit customer info" : "Create customer info",
+    isEditSession ? "Edit phone details" : "Create phone details",
+    isEditSession ? "Preview details" : "Preview details",
+  ];
+
   return (
     <StyledContainer>
       <ProgressContainer step={step}>
-        <Progress step={step}></Progress>
-        <CircleContainer>
-          <Circle active={step >= 1}>1</Circle>
-          {step === 1 && <p>Customer Information</p>}
-        </CircleContainer>
-        <CircleContainer>
-          <Circle active={step >= 2}>2</Circle>
-          {step === 2 && <p>Phone Details</p>}
-        </CircleContainer>
-        <CircleContainer>
-          <Circle active={step >= 3}>3</Circle>
-          {step === 3 && <p>Phone Checklist</p>}
-        </CircleContainer>
+        <Progress step={step} />
+        {stepLabels.map((label, index) => (
+          <CircleContainer key={index}>
+            <Circle active={step >= index + 1}>{index + 1}</Circle>
+            {step === index + 1 && <p>{label}</p>}
+          </CircleContainer>
+        ))}
       </ProgressContainer>
     </StyledContainer>
   );

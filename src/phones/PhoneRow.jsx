@@ -40,7 +40,7 @@ const Cost = styled.p`
   font-family: "Sono";
 `;
 
-function PhoneRow({ phone }) {
+function PhoneRow({ phoneDetails = {} }) {
   const {
     id: phoneId,
     image,
@@ -49,7 +49,7 @@ function PhoneRow({ phone }) {
     phoneCondition,
     cost,
     completed,
-  } = phone;
+  } = phoneDetails;
 
   const { mutate: deletePhone, isLoading: isDeleting } = useUpdatePhone(
     "delete",
@@ -112,11 +112,11 @@ function PhoneRow({ phone }) {
         </Menus.Menu>
 
         <ModalWindow.Window name="view-details">
-          <ViewPhoneDetails phoneDetails={phone} />
+          <ViewPhoneDetails phoneDetails={phoneDetails} />
         </ModalWindow.Window>
 
         <ModalWindow.Window name="edit">
-          <CreatePhoneForm phoneToEdit={phone} />
+          <CreatePhoneForm phoneToEdit={phoneDetails} />
         </ModalWindow.Window>
 
         <ModalWindow.Window name="delete">

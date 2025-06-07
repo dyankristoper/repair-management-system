@@ -1,20 +1,18 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useUpdatePhone } from "./useUpdatePhone";
-import { useState } from "react";
-import CreatableSelect from "react-select/creatable";
+import { useEffect, useMemo, useState } from "react";
+import { phoneModelOptions } from "../utilities/modelList";
+import { getDefaultCheckValues } from "../utilities/defaultCheckValues";
 
-import Button from "../ui/Button";
-import FileInput from "../ui/FileInput";
-import Form from "../ui/Form";
-import FormRow from "../ui/FormRow";
-import Input from "../ui/Input";
-import styled from "styled-components";
-import CreateChecklist from "./CreateChecklist";
 import onError from "../utilities/formError";
-import CreateCustomerForm from "../customers/CreateCustomerForm";
+import styled from "styled-components";
 import ProgressBar from "../ui/ProgressBar";
 import ViewPhoneDetails from "../ui/ViewPhoneDetails";
-import { phoneModelOptions } from "../utilities/modelList";
+import CustomerSelector from "../customers/CustomerSelector";
+import StepButton from "../ui/StepButton";
+import PhoneForm from "./PhoneForm";
+import Button from "../ui/Button";
+import toast from "react-hot-toast";
 
 const StyledFormContainer = styled.div`
   display: flex;
@@ -22,56 +20,7 @@ const StyledFormContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1em;
-  width: 1000px;
-  min-height: 58rem;
-`;
-const StyledSelect = styled.select`
-  background-color: var(--color-grey-100);
-`;
-
-const Textarea = styled.textarea`
-  padding: 0.8rem 1.2rem;
-  border: 1px solid var(--color-grey-300);
-  border-radius: 5px;
-  background-color: var(--color-grey-0);
-  box-shadow: var(--shadow-sm);
-  width: 100%;
-  height: 8rem;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const StyledButton = styled.button`
-  background-color: ${(props) =>
-    props.active ? "var(--line-border-fill)" : "var(--line-border-empty)"};
-  color: #fff;
-  border: 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: inherit;
-  padding: 8px 30px;
-  margin: 5px;
-  font-size: 14px;
-  transform: ${(props) => (props.active ? "scale(0.98)" : "none")};
-  transition: 0.3s ease;
-
-  &:focus {
-    outline: 0;
-  }
-
-  &:disabled {
-    background-color: var(--line-border-empty);
-    cursor: not-allowed;
-  }
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  width: 100%;
+  width: 1200px;
 `;
 
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
@@ -86,10 +35,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
 
   const setTechnician = useState("Select technician");
 
-  const handleCheckboxChange = (e) => {
-    setValue(e.target.name, e.target.checked);
-  };
-
   const { id: editId, ...editValues } = phoneToEdit ?? {};
 
   const customerToEdit = editValues?.customers ?? {};
@@ -98,51 +43,84 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const isEditSession = Boolean(editId);
 
   const defaultCheckValues = isEditSession
-    ? {
-        ...editValues,
-        simtray: editValues.simtray ?? false,
-        simcard: editValues.simcard ?? false,
-        memorycard: editValues.memorycard ?? false,
-        spen: editValues.spen ?? false,
-        charger: editValues.charger ?? false,
-        brokenScreen: editValues.brokenScreen ?? false,
-        bulgedBattery: editValues.bulgedBattery ?? false,
-        brokenChargingpin: editValues.brokenChargingpin ?? false,
-        brokenBackcover: editValues.brokenBackcover ?? false,
-      }
-    : {
-        simtray: false,
-        simcard: false,
-        memorycard: false,
-        spen: false,
-        charger: false,
-        brokenScreen: false,
-        bulgedBattery: false,
-        brokenChargingpin: false,
-        brokenBackcover: false,
-      };
+    ? getDefaultCheckValues(editValues)
+    : getDefaultCheckValues();
 
-  const { register, handleSubmit, reset, formState, setValue, control } =
-    useForm({
-      defaultValues: isEditSession ? editValues && defaultCheckValues : {},
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid, isSubmitting },
+    setValue,
+    control,
+    setError,
+    clearErrors,
+    trigger,
+    watch,
+  } = useForm({
+    defaultValues: isEditSession ? defaultCheckValues : {},
+    mode: "onChange",
+  });
+
+  const handleCheckboxChange = (e) => {
+    setValue(e.target.name, e.target.checked, {
+      shouldValidate: true,
     });
+    trigger("checklistGroup");
+  };
 
-  const { errors } = formState;
+  const checklistFields = useMemo(
+    () => [
+      "simtray",
+      "simcard",
+      "memorycard",
+      "spen",
+      "charger",
+      "brokenScreen",
+      "bulgedBattery",
+      "brokenChargingpin",
+      "brokenBackcover",
+    ],
+    []
+  );
 
   const { mutate: createPhone, isLoading: isCreating } = useUpdatePhone(
     "create",
-    "Phone Successfully created"
+    "Phone details successfully created"
   );
 
   const { mutate: editPhone, isLoading: isEditing } = useUpdatePhone(
     "edit",
-    "Phone Successfully edited"
+    "Phone details successfully edited"
   );
 
   const isWorking = isCreating || isEditing;
 
+  useEffect(() => {
+    const subscription = watch((value) => {
+      const isAnyChecked = checklistFields.some((field) => value[field]);
+      if (isAnyChecked && errors.checklistGroup) {
+        clearErrors("checklistGroup");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, checklistFields, clearErrors, errors.checklistGroup]);
+
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
+
+    const isAnyChecked = checklistFields.some((field) => data[field]);
+
+    if (!isAnyChecked) {
+      setError("checklistGroup", {
+        type: "manual",
+        message: "At least one checkbox must be selected",
+      });
+      return;
+    }
+
+    clearErrors("checklistGroup");
 
     if (isEditSession)
       editPhone(
@@ -157,7 +135,9 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         {
           onSuccess: (updatedPhone) => {
             setNewPhoneData(updatedPhone);
-            nextStep();
+          },
+          onError: (error) => {
+            toast.error("Failed to edit phone:", error);
           },
         }
       );
@@ -170,17 +150,23 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             reset();
             nextStep();
           },
+          onError: (error) => {
+            toast.error("Failed to create phone:", error);
+          },
         }
       );
   }
 
-  onError(errors.message);
-
   return (
     <StyledFormContainer>
-      <ProgressBar step={step} prevStep={prevStep} nextStep={nextStep} />
+      <ProgressBar
+        step={step}
+        prevStep={prevStep}
+        nextStep={nextStep}
+        isEditSession={isEditSession}
+      />
       {step === 1 && (
-        <CreateCustomerForm
+        <CustomerSelector
           setCustomerID={setCustomerID}
           customerToEdit={customerToEdit}
           nextStep={nextStep}
@@ -188,116 +174,52 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
       )}
 
       {step === 2 && (
-        <Form
-          onSubmit={handleSubmit(onSubmit, onError)}
-          type={onCloseModal ? "modal" : "regular"}
-        >
-          <Wrapper>
-            <div>
-              <FormRow label="Phone model" error={errors?.phoneModel?.message}>
-                <Controller
-                  control={control}
-                  name="phoneModel"
-                  rules={{ required: "This field is required" }}
-                  render={({ field }) => (
-                    <CreatableSelect
-                      isDisabled={isWorking}
-                      options={phoneModelOptions}
-                      onChange={(val) => field.onChange(val?.value)}
-                    />
-                  )}
-                />
-              </FormRow>
-
-              <FormRow label="IMEI" error={errors?.imei?.message}>
-                <Input
-                  type="text"
-                  id="imei"
-                  disabled={isWorking}
-                  {...register("imei", {
-                    required: "This field is required",
-                  })}
-                />
-              </FormRow>
-              <FormRow
-                label="Phone condition"
-                error={errors?.phoneCondition?.message}
-              >
-                <Textarea
-                  type="text"
-                  id="phoneCondition"
-                  disabled={isWorking}
-                  {...register("phoneCondition", {
-                    required: "This field is required",
-                  })}
-                />
-              </FormRow>
-              <FormRow label="Cost" error={errors?.cost?.message}>
-                <Input
-                  type="text"
-                  id="cost"
-                  defaultValue="Php"
-                  disabled={isWorking}
-                  {...register("cost", {
-                    required: "This field is required",
-                  })}
-                />
-              </FormRow>
-              <FormRow label="Assignee" error={errors?.assignee?.message}>
-                <StyledSelect
-                  id="assignee"
-                  onChange={(e) => setTechnician(e.target.value)}
-                  {...register("assignee", {
-                    required: "This field is required",
-                  })}
-                >
-                  <option>Select technician</option>
-                  <option value="Tech-001">Tech-001</option>
-                  <option value="Tech-002">Tech-002</option>
-                </StyledSelect>
-              </FormRow>
-              <FormRow>
-                <label>Image</label>
-                <FileInput
-                  id="image"
-                  accept="image/*"
-                  {...register("image", {
-                    required: isEditSession ? false : "This field is required",
-                  })}
-                />
-              </FormRow>
-            </div>
-            <CreateChecklist
-              register={register}
-              handleChange={handleCheckboxChange}
-            />
-          </Wrapper>
-
-          <FormRow>
-            <Button
-              variation="secondary"
-              type="reset"
-              onClick={() => onCloseModal?.()}
-            >
-              Cancel
-            </Button>
-            <Button disabled={isCreating} variation="primary" size="small">
-              {isEditSession ? "Edit details" : "Add phone"}
-            </Button>
-          </FormRow>
-        </Form>
+        <PhoneForm
+          onSubmit={onSubmit}
+          onError={onError}
+          onCloseModal={onCloseModal}
+          errors={errors}
+          isWorking={isWorking}
+          phoneModelOptions={phoneModelOptions}
+          handleSubmit={handleSubmit}
+          control={control}
+          register={register}
+          isEditSession={isEditSession}
+          handleCheckboxChange={handleCheckboxChange}
+          setTechnician={setTechnician}
+          isCreating={isCreating}
+          isValid={isValid}
+          isSubmitting={isSubmitting}
+          clearErrors={clearErrors}
+        />
       )}
 
-      {step === 3 && <ViewPhoneDetails phoneDetails={newPhoneData} />}
+      {step === 3 && (
+        <ViewPhoneDetails
+          phoneDetails={newPhoneData}
+          phoneToEdit={phoneToEdit}
+          customerToEdit={customerToEdit}
+          isEditSession={isEditSession}
+        />
+      )}
 
-      <ButtonGroup>
-        <StyledButton onClick={prevStep} active={step > 1}>
-          Prev
-        </StyledButton>
-        <StyledButton onClick={nextStep} active={step < 3}>
-          Next
-        </StyledButton>
-      </ButtonGroup>
+      {isEditSession && (
+        <StepButton nextStep={nextStep} prevStep={prevStep} step={step} />
+      )}
+
+      {step === 3 && !isEditSession && (
+        <Button
+          type="primary"
+          onClick={() => {
+            reset();
+            setNewPhoneData(null);
+            setStep(1);
+            setCustomerID(null);
+          }}
+        >
+          Create new
+        </Button>
+      )}
     </StyledFormContainer>
   );
 }
