@@ -53,8 +53,8 @@ function CreateCustomerForm({
       reset({
         name: selectedCustomerInfo.name || "",
         address: selectedCustomerInfo.address || "",
-        email: "",
-        phoneNumber: "",
+        email: selectedCustomerInfo.email || "",
+        phoneNumber: selectedCustomerInfo.phoneNumber || "",
       });
     }
   }, [selectedCustomerInfo, reset, isEditSession]);
