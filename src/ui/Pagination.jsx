@@ -3,6 +3,7 @@ import { IoMdArrowDropleft } from "react-icons/io";
 import { IoMdArrowDropright } from "react-icons/io";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../utilities/constants";
+import { useSettings } from "../settings/useSettings";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -22,12 +23,11 @@ const P = styled.p`
 
 const Buttons = styled.div`
   display: flex;
-  /* width: 100%; */
 `;
 const PaginationButton = styled.button`
   background-color: ${(props) =>
-    props.active ? " var(--color-green-800)" : "var(--color-grey-50)"};
-  color: ${(props) => (props.active ? " var(--color-grey-50)" : "inherit")};
+    props.$active ? "var(--color-grey-50)" : props.$colors.primary};
+  color: ${(props) => (props.$active ? " var(--color-grey-700)" : "inherit")};
   border: none;
   border-radius: var(--border-radius-sm);
   font-weight: 500;
@@ -54,12 +54,19 @@ const PaginationButton = styled.button`
   }
 
   &:hover:not(:disabled) {
-    background-color: var(--color-green-800);
+    background-color: ${(props) => props.$colors.primary};
     color: var(--color-brand-50);
   }
 `;
 
 function Pagination({ count }) {
+  const { settings } = useSettings();
+  const { primary_color } = settings ?? {};
+
+  const colors = {
+    primary: primary_color,
+  };
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = !searchParams.get("page")
@@ -85,7 +92,11 @@ function Pagination({ count }) {
   return (
     <StyledPagination>
       <Buttons>
-        <PaginationButton onClick={prevPage} active={currentPage === 1}>
+        <PaginationButton
+          onClick={prevPage}
+          $colors={colors}
+          $active={currentPage === 1}
+        >
           <IoMdArrowDropleft />
           <span>Previous</span>
         </PaginationButton>
@@ -101,7 +112,11 @@ function Pagination({ count }) {
       </P>
 
       <Buttons>
-        <PaginationButton onClick={nextPage} active={currentPage === pageCount}>
+        <PaginationButton
+          onClick={nextPage}
+          $colors={colors}
+          $active={currentPage === pageCount}
+        >
           <span>Next</span>
           <IoMdArrowDropright />
         </PaginationButton>

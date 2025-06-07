@@ -1,7 +1,6 @@
-import { useDeletePhone } from "./useDeletePhone";
-import { useCreatePhone } from "./useCreatePhone";
 import { HiEye, HiPencil, HiSquare2Stack } from "react-icons/hi2";
 import { MdDeleteForever } from "react-icons/md";
+import { useUpdatePhone } from "./useUpdatePhone";
 
 import styled from "styled-components";
 import CreatePhoneForm from "./CreatePhoneForm";
@@ -10,6 +9,8 @@ import ConfirmDelete from "../ui/ConfirmDelete";
 import ViewPhoneDetails from "../ui/ViewPhoneDetails";
 import Menus from "../ui/Menus";
 import Tag from "../ui/Tag";
+
+import { jobOrderStatus } from "../utilities/constants";
 
 const TableRow = styled.div`
   display: grid;
@@ -49,11 +50,18 @@ function PhoneRow({ phone }) {
     imei,
     phoneCondition,
     cost,
-    completed,
+    status,
   } = phone;
 
-  const { isDeleting, deletePhone } = useDeletePhone();
-  const { createPhone } = useCreatePhone();
+  const { mutate: deletePhone, isLoading: isDeleting } = useUpdatePhone(
+    "delete",
+    "Phone successfully deleted"
+  );
+
+  const { mutate: createPhone } = useUpdatePhone(
+    "create",
+    "Phone successfully created"
+  );
 
   function handleDuplicate() {
     createPhone({
@@ -65,9 +73,14 @@ function PhoneRow({ phone }) {
     });
   }
 
-  const statusToTagName = {
-    true: "green",
-    false: "red",
+  const statusToTagName = ( status ) => {
+    for (const key in jobOrderStatus) {
+      if (jobOrderStatus[key].includes(status)) {
+        return key === 'true' ? 'green' : 'red';
+      }
+    }
+
+    return 'grey';
   };
 
   return (
@@ -78,8 +91,8 @@ function PhoneRow({ phone }) {
       <p>{imei}</p>
       <p>{phoneCondition}</p>
       <Cost>{cost}</Cost>
-      <Tag type={statusToTagName[completed]}>
-        {completed === true ? "completed" : "ongoing"}
+      <Tag type={statusToTagName(status)}>
+        { status }
       </Tag>
 
       <ModalWindow>
