@@ -10,6 +10,8 @@ import ViewPhoneDetails from "../ui/ViewPhoneDetails";
 import Menus from "../ui/Menus";
 import Tag from "../ui/Tag";
 
+import { jobOrderStatus } from "../utilities/constants";
+
 const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.2fr 0.3fr 0.3fr 0.4fr 0.5fr 0.3fr 0.2fr 0.2fr 0.2fr;
@@ -48,8 +50,9 @@ function PhoneRow({ phoneDetails = {} }) {
     imei,
     phoneCondition,
     cost,
-    completed,
+    isCompleted,
   } = phoneDetails;
+
 
   const { mutate: deletePhone, isLoading: isDeleting } = useUpdatePhone(
     "delete",
@@ -71,9 +74,14 @@ function PhoneRow({ phoneDetails = {} }) {
     });
   }
 
-  const statusToTagName = {
-    true: "green",
-    false: "red",
+  const statusToTagName = ( status ) => {
+    for (const key in jobOrderStatus) {
+      if (jobOrderStatus[key].includes(status)) {
+        return key === 'true' ? 'green' : 'red';
+      }
+    }
+
+    return 'grey';
   };
 
   return (
@@ -84,8 +92,8 @@ function PhoneRow({ phoneDetails = {} }) {
       <p>{imei}</p>
       <p>{phoneCondition}</p>
       <Cost>{cost}</Cost>
-      <Tag type={statusToTagName[completed]}>
-        {completed === true ? "completed" : "ongoing"}
+      <Tag type={statusToTagName(status)}>
+        { status }
       </Tag>
 
       <ModalWindow>
