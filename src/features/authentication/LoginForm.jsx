@@ -80,7 +80,9 @@ function LoginForm() {
           <LogoComponent />
         </div>
         <div>
-          <Heading as="h4">Please sign in to your account</Heading>
+          <Heading 
+            className="text-bold"
+            as="h4">Please sign in to your account</Heading>
         </div>
 
         <StyledForm onSubmit={handleSubmit}>
