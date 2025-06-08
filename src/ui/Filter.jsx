@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
 import { useSettings } from "../settings/useSettings";
+import styled from "styled-components";
 
 const StyledFilter = styled.div`
   padding: 0.4rem;

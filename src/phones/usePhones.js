@@ -10,7 +10,7 @@ export function usePhones() {
   const filter =
     !filterValue || filterValue === "all"
       ? null
-      : { field: "completed", value: filterValue };
+      : { field: "status", value: filterValue };
 
   const sortByRaw = searchParams.get("sortByTechnician");
 
