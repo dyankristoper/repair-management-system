@@ -14,7 +14,7 @@ import { jobOrderStatus } from "../utilities/constants";
 
 const TableRow = styled.div`
   display: grid;
-  grid-template-columns: 0.2fr 0.3fr 0.3fr 0.4fr 0.5fr 0.3fr 0.2fr 0.2fr 0.2fr;
+  grid-template-columns: 0.4fr 0.35fr 0.4fr 0.5fr 0.3fr 0.2fr 0.2fr;
   column-gap: 1.5rem;
   align-items: center;
 
@@ -84,11 +84,14 @@ function PhoneRow({ phone }) {
 
   return (
     <TableRow>
-      <div></div>
-      <Img src={image} />
+      <div className="flex justify-center">
+        <Img src={image} />
+      </div>
       <p>{phoneModel}</p>
       <p>{imei}</p>
-      <p>{phoneCondition}</p>
+      <div className="flex wrap overflow-y-hidden max-h-40">
+        { phoneCondition }
+      </div>
       <Cost>{cost}</Cost>
       <Tag type={statusToTagName(status)}>
         { status }
