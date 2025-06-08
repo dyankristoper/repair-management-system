@@ -16,14 +16,15 @@ const Img = styled.img`
 `;
 
 const TitleLogo = styled.div`
-  letter-spacing: 3px;
+  letter-spacing: 1.2px;
   font-size: 1.2rem;
   position: relative;
   display: flex;
   align-items: center;
 
   h1 {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: medium;
   }
 `;
 
