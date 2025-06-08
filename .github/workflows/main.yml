@@ -24,21 +24,14 @@ jobs:
           PR_STATE="${{ github.event.pull_request.state }}"
 
           if [[ "$EVENT_TYPE" == "push" ]]; then
-            PAYLOAD=$(jq -n \
-              --arg content 
-                ":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})**" \ 
-                "Commit by **$COMMITTER**: [$COMMIT_MSG]($COMMIT_URL)" \
-                '{content: $content}')
+            CONTENT=":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})**\nCommit by **$COMMITTER**: [$COMMIT_MSG]($COMMIT_URL)"
           elif [[ "$EVENT_TYPE" == "pull_request" ]]; then
-            PAYLOAD=$(jq -n \
-              --arg content 
-                ":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})**" \ 
-                "**$PR_TITLE** by **$COMMITTER**" \ 
-                "<$PR_URL>" \
-                '{content: $content}')
+            CONTENT=":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})**\n**$PR_TITLE** by **$COMMITTER**\n<$PR_URL>"
           else
-            PAYLOAD=$(jq -n --arg content "Unhandled event type: $EVENT_TYPE" '{content: $content}')
+            CONTENT="Unhandled event type: $EVENT_TYPE"
           fi
+
+          PAYLOAD=$(jq -n --arg content "$CONTENT" '{content: $content}')
 
           curl -H "Content-Type: application/json" \
                -X POST \
