@@ -1,6 +1,7 @@
 import { getToday } from "../helpers/getToday";
 import { PAGE_SIZE } from "../utilities/constants";
 import supabase, { supabaseUrl } from "./supabase";
+import onError from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
   let query = supabase
@@ -23,13 +24,11 @@ export async function getPhones({ filter, sortBy, page }) {
   const { data, error, count } = await query;
 
   if (error) {
-    console.error(error);
-    throw new Error("Phone could not be loaded");
+    return await onError( error, 'Unable to fetch job order records.')
   }
 
   return { data, count };
 }
-
 export async function createEditPhone(newPhone, id) {
   const hasImagePath =
     typeof newPhone.image === "string" &&
@@ -83,14 +82,14 @@ export async function deletePhone(id) {
   const { data, error } = await supabase
     .from("job_orders")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .select();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Phone could not be loaded");
+  if (error || data.length === 0) {
+    return await onError( error, 'Unable to delete resource.')
   }
 
-  return data;
+  return;
 }
 
 export async function getPendingRepairs() {
@@ -98,9 +97,9 @@ export async function getPendingRepairs() {
     .from("job_orders")
     .select("isCompleted, waitingForConfirmation");
 
+
   if (error) {
-    console.error(error);
-    throw new Error("Pending repairs could not get loaded");
+    return await onError( error, 'Unable to fetch pending repair resources.');
   }
 
   return data;
@@ -114,8 +113,7 @@ export async function getAssignedRepairs({ filter }) {
   const { data, error } = await query;
 
   if (error) {
-    console.error(error);
-    throw new Error("Assigned repairs could not get loaded");
+    return await onError( error, 'Unable to load assigned repairs.');
   }
   return data;
 }
@@ -128,8 +126,7 @@ export async function getAssigned(id) {
     .single();
 
   if (error) {
-    console.error(error);
-    throw new Error("Assigned not found");
+    return await onError( error, 'Assigned not found.' );
   }
 
   return data;
@@ -143,8 +140,7 @@ export async function getSalesAfterDate(date) {
     .lte("created_at", getToday({ end: true }));
 
   if (error) {
-    console.error(error);
-    throw new Error("Phones could not get loaded");
+    return await onError( error, 'Unable to fetch sales after date.' );
   }
 
   return data;
