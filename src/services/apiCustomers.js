@@ -21,7 +21,7 @@ export async function createEditCustomer(newCustomer, id) {
       .eq("id", id)
       .select();
 
-  const { data, error } = await query.select().single();
+  const { data, error } = await query.select("*").single();
 
   if (error) {
     console.error(error);

@@ -48,7 +48,7 @@ function PhoneRow({ phoneDetails = {} }) {
     imei,
     phoneCondition,
     cost,
-    completed,
+    isCompleted,
   } = phoneDetails;
 
   const { mutate: deletePhone, isLoading: isDeleting } = useUpdatePhone(
@@ -84,8 +84,8 @@ function PhoneRow({ phoneDetails = {} }) {
       <p>{imei}</p>
       <p>{phoneCondition}</p>
       <Cost>{cost}</Cost>
-      <Tag type={statusToTagName[completed]}>
-        {completed === true ? "completed" : "ongoing"}
+      <Tag type={statusToTagName[isCompleted]}>
+        {isCompleted === true ? "completed" : "ongoing"}
       </Tag>
 
       <ModalWindow>

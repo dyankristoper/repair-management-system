@@ -26,6 +26,7 @@ function CreateCustomerForm({
   editValues,
   customerId,
   isEditSession,
+  customerToEdit,
 }) {
   const {
     register,
@@ -49,24 +50,45 @@ function CreateCustomerForm({
   const isWorking = isCreating || isEditing;
 
   useEffect(() => {
-    if (!isEditSession && selectedCustomerInfo) {
+    if (selectedCustomerInfo) {
       reset({
         name: selectedCustomerInfo.name || "",
         address: selectedCustomerInfo.address || "",
         email: selectedCustomerInfo.email || "",
         phoneNumber: selectedCustomerInfo.phoneNumber || "",
       });
+    } else if (isEditSession) {
+      reset({
+        name: customerToEdit.name || "",
+        address: customerToEdit.address || "",
+        email: customerToEdit.email || "",
+        phoneNumber: customerToEdit.phoneNumber || "",
+      });
+    } else {
+      reset({
+        name: "",
+        address: "",
+        email: "",
+        phoneNumber: "",
+      });
     }
-  }, [selectedCustomerInfo, reset, isEditSession]);
+  }, [selectedCustomerInfo, reset, isEditSession, customerToEdit]);
 
   function onSubmit(data) {
     if (isEditSession) {
-      editCustomer({
-        newCustomerData: {
-          ...data,
+      editCustomer(
+        {
+          newCustomerData: {
+            ...data,
+          },
+          id: customerId,
         },
-        id: customerId,
-      });
+        {
+          onSuccess: () => {
+            nextStep();
+          },
+        }
+      );
     } else {
       createCustomer(
         { ...data },

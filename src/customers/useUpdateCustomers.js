@@ -16,7 +16,7 @@ export function useUpdateCustomers(mode, successMessage) {
       toast.success(successMessage);
 
       if (mode === "edit") {
-        queryClient.setQueryData(["customers"], (oldData) => {
+        queryClient.invalidateQueries(["customers"], (oldData) => {
           if (!oldData?.data) return oldData;
 
           return {

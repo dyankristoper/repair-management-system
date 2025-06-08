@@ -47,22 +47,22 @@ function CustomerSelector({ setCustomerID, customerToEdit = {}, nextStep }) {
       {!isEditSession && (
         <StyledSelect options={customers} onChange={handleSelectionChange}>
           <option value="">-- Select a customer --</option>
+          <option value="new">+ Add new customer</option>
           {customers?.map((customer) => (
             <option key={customer.id} value={customer.id}>
               {customer.name} ({customer.phoneNumber})
             </option>
           ))}
-          <option value="new">+ Add new customer</option>
         </StyledSelect>
       )}
-
       <CreateCustomerForm
         setCustomerID={setCustomerID}
         selectedCustomerInfo={selectedCustomerInfo}
-        customerId={customerId}
-        editValues={editValues}
-        isEditSession={isEditSession}
+        customerId={selectedCustomerInfo?.id ?? customerId}
+        editValues={selectedCustomerInfo ?? editValues}
+        isEditSession={Boolean(selectedCustomerInfo?.id || customerId)}
         nextStep={nextStep}
+        customerToEdit={customerToEdit}
       />
     </Wrapper>
   );

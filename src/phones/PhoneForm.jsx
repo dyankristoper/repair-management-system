@@ -31,7 +31,6 @@ const Wrapper = styled.div`
 function PhoneForm({
   onSubmit,
   onError,
-  onCloseModal,
   errors,
   isWorking,
   phoneModelOptions,
@@ -48,10 +47,7 @@ function PhoneForm({
   clearErrors,
 }) {
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit, onError)}
-      type={onCloseModal ? "modal" : "regular"}
-    >
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type={"modal"}>
       <Wrapper>
         <div>
           <FormRow label="Phone model" error={errors?.phoneModel?.message}>
@@ -133,13 +129,6 @@ function PhoneForm({
       </Wrapper>
 
       <FormRow>
-        <Button
-          variation="secondary"
-          type="reset"
-          onClick={() => onCloseModal?.()}
-        >
-          Cancel
-        </Button>
         <Button
           disabled={!isValid || isCreating || isSubmitting}
           variation="primary"

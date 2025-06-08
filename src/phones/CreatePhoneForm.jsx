@@ -23,7 +23,7 @@ const StyledFormContainer = styled.div`
   width: 1200px;
 `;
 
-function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
+function CreatePhoneForm({ phoneToEdit = {} }) {
   const [customerID, setCustomerID] = useState(null);
 
   const [step, setStep] = useState(1);
@@ -134,6 +134,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         {
           onSuccess: (updatedPhone) => {
             setNewPhoneData(updatedPhone);
+            nextStep();
           },
           onError: (error) => {
             toast.error("Failed to edit phone:", error);
@@ -176,7 +177,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
         <PhoneForm
           onSubmit={onSubmit}
           onError={onError}
-          onCloseModal={onCloseModal}
           errors={errors}
           isWorking={isWorking}
           phoneModelOptions={phoneModelOptions}
