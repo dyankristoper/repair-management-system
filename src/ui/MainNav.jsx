@@ -7,6 +7,7 @@ import {
 import { CiMobile3 } from "react-icons/ci";
 import StyledNavLink from "./StyledNavLink";
 import AssigneeNav from "./AssigneeNav";
+import useUser from "../features/authentication/useUser";
 
 const NavList = styled.ul`
   display: flex;
@@ -15,6 +16,8 @@ const NavList = styled.ul`
 `;
 
 function MainNav() {
+  const { isAdmin } = useUser();
+
   return (
     <nav>
       <NavList>
@@ -33,18 +36,26 @@ function MainNav() {
             <span>Job Orders</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/createUser">
-            <HiOutlineUser />
-            <span>Users</span>
-          </StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/settings">
-            <HiOutlineCog6Tooth />
-            <span>Settings</span>
-          </StyledNavLink>
-        </li>
+
+        {
+          isAdmin && 
+          (
+            <>
+              <li>
+                <StyledNavLink to="/createUser">
+                  <HiOutlineUser />
+                  <span>Users</span>
+                </StyledNavLink>
+              </li>
+              <li>
+                <StyledNavLink to="/settings">
+                  <HiOutlineCog6Tooth />
+                  <span>Settings</span>
+                </StyledNavLink>
+              </li>
+            </>
+          )
+        }
       </NavList>
     </nav>
   );

@@ -1,5 +1,5 @@
 import { useSettings } from "../settings/useSettings";
-import { useUser } from "../features/authentication/useUser";
+import useUser from "../features/authentication/useUser";
 import styled from "styled-components";
 import EditIcon from "../ui/EditIcon";
 
@@ -30,7 +30,7 @@ const TitleLogo = styled.div`
 
 function Logo() {
   const { settings } = useSettings();
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, isAdmin } = useUser();
   const { company_logo, company_name } = settings ?? {};
 
   return (
@@ -41,7 +41,13 @@ function Logo() {
         alt="Your Company Logo Here" />
       <TitleLogo>
         <h1>{company_name || `Your company name`}</h1>
-        {isAuthenticated && settings && Object.keys(settings).length > 0 && <EditIcon />}
+        {
+          isAuthenticated && 
+          isAdmin && 
+          settings && 
+          Object.keys(settings).length > 0 && 
+          <EditIcon />
+        }
       </TitleLogo>
     </StyledLogo>
   );
