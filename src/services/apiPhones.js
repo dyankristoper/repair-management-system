@@ -4,7 +4,7 @@ import supabase, { supabaseUrl } from "./supabase";
 import onError from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
-  let query = supabase.from("job_orders").select("*", { count: "exact" });
+  let query = supabase.from("job_orders").select("*, customers(*)", { count: "exact" });
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
 
@@ -13,7 +13,6 @@ export async function getPhones({ filter, sortBy, page }) {
   if (page) {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
-    //.range()  a method from supabase
     query = query.range(from, to);
   }
 
