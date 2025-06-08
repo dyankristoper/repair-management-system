@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { useSettings } from "../settings/useSettings";
 
 const StyledFilter = styled.div`
-  border: 1px solid var(--color-grey-100);
-  box-shadow: var(--shadow-sm);
-  border-radius: var(--border-radius-sm);
   padding: 0.4rem;
   display: flex;
   justify-content: right;
@@ -13,8 +10,10 @@ const StyledFilter = styled.div`
 `;
 
 const FilterButton = styled.button`
+  color: ${(props) =>
+    props.$active ? "var(--color-grey-0)" : props.$colors.primary};  
   background-color: ${(props) =>
-    props.$active ? props.$colors.primary : "var(--color-grey-50)"};
+    props.$active ? props.$colors.primary : "var(--color-grey-0)"};
   border: none;
 
   border-radius: var(--border-radius-sm);

@@ -12,7 +12,7 @@ function AssigneeNav() {
     <li onClick={() => setShowOptions(!showOptions)}>
       <StyledNavLink to="/assignee">
         <HiOutlineCalendarDays />
-        <span>Assignee</span>
+        <span>Technicians</span>
         {showOptions ? <MdArrowDropUp /> : <MdArrowDropDown />}
       </StyledNavLink>
 

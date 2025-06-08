@@ -21,7 +21,7 @@ function MainNav() {
         <li>
           <StyledNavLink to="/dashboard">
             <HiOutlineHome />
-            <span>Home</span>
+            <span>Dashboard</span>
           </StyledNavLink>
         </li>
 
@@ -30,7 +30,7 @@ function MainNav() {
         <li>
           <StyledNavLink to="/phones">
             <CiMobile3 />
-            <span>Phones</span>
+            <span>Job Orders</span>
           </StyledNavLink>
         </li>
         <li>
