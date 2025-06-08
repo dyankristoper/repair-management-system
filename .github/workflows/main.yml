@@ -25,12 +25,17 @@ jobs:
 
           if [[ "$EVENT_TYPE" == "push" ]]; then
             PAYLOAD=$(jq -n \
-              --arg content ":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})** \n Commit by **$COMMITTER**: \n [$COMMIT_MSG]($COMMIT_URL)" \
-              '{content: $content}')
+              --arg content 
+                ":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})**" \ 
+                "Commit by **$COMMITTER**: [$COMMIT_MSG]($COMMIT_URL)" \
+                '{content: $content}')
           elif [[ "$EVENT_TYPE" == "pull_request" ]]; then
             PAYLOAD=$(jq -n \
-              --arg content ":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})** \n **$PR_TITLE** by **$COMMITTER** \n <$PR_URL>" \
-              '{content: $content}')
+              --arg content 
+                ":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})**" \ 
+                "**$PR_TITLE** by **$COMMITTER**" \ 
+                "<$PR_URL>" \
+                '{content: $content}')
           else
             PAYLOAD=$(jq -n --arg content "Unhandled event type: $EVENT_TYPE" '{content: $content}')
           fi
