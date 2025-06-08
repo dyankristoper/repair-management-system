@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Tag from "./Tag";
-import { formatTimestamp } from "../helpers/formatTime";
+import { formatTimestamp } from '../helpers/formatTime';
+import { statusToTagName } from '../utilities/helpers';
 
 const StyledPhoneDetails = styled.div`
   width: 60rem;
@@ -26,10 +27,6 @@ const ImageAndStatus = styled.div`
     font-size: 1.4rem;
   }
 `;
-const statusToTagName = {
-  true: "green",
-  false: "red",
-};
 
 const Image = styled.div`
   width: 100%;
@@ -99,92 +96,120 @@ function ViewPhoneDetails({ phoneDetails }) {
     brokenScreen,
     bulgedBattery,
     brokenChargingpin,
+    status
   } = phoneDetails;
 
   return (
-    <StyledPhoneDetails>
-      <ImageAndStatus>
+    <div className="flex">
+      <div className="h-100">
         <Image>
-          <img src={image} alt="a sample image" />
+          <img 
+            src={image} 
+            alt={`${phoneModel} with ${ phoneCondition }`} />
         </Image>
         <div>
-          <Tag type={statusToTagName[completed]}>
-            {completed === true ? "completed" : "ongoing"}
+          <Tag type={statusToTagName(status)}>
+            { status }
           </Tag>
-          <p>Assigned to: {assignee}</p>
         </div>
-      </ImageAndStatus>
-      <Details>
+      </div>
+      <div>
         <div>
-          <p>{formatTimestamp(created_at)}</p>
+          <h3>Checklist</h3>
+          <ul>
+            <li>{simtray === true ? "✅" : "❌"} Simtray</li>
+            <li>{simcard === true ? "✅" : "❌"} Simcard</li>
+            <li>{memorycard === true ? "✅" : "❌"} Memory Card</li>
+            <li>{spen === true ? "✅" : "❌"} Spen</li>
+            <li>{charger === true ? "✅" : "❌"} Charger</li>
+          </ul>
         </div>
-        <Box>
-          <p>
-            <span>Customer:</span> {customer}
-          </p>
-          <p>
-            <span>Contact number: +</span>
-            {contactNumber}
-          </p>
-        </Box>
-        <Box>
-          <p>
-            <span>Model:</span>
-            {phoneModel}
-          </p>
-          <p>
-            <span>Imei:</span>
-            {imei}
-          </p>
-        </Box>
-        <Box>
-          <p>
-            <span>Address:</span>
-            {address}
-          </p>
-          <p>
-            <span>Phone condition:</span>
-            {phoneCondition}
-          </p>
-        </Box>
-        <Table>
-          <thead>
-            <tr>
-              <th>Simtray</th>
-              <th>Simcard</th>
-              <th>Memorycard</th>
-              <th>Spen</th>
-              <th>Charger</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{simtray === true ? "✅" : "❌"}</td>
-              <td>{simcard === true ? "✅" : "❌"}</td>
-              <td>{memorycard === true ? "✅" : "❌"}</td>
-              <td>{spen === true ? "✅" : "❌"}</td>
-              <td>{charger === true ? "✅" : "❌"}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <Table>
-          <thead>
-            <tr>
-              <th>Broken Screen</th>
-              <th>Bulged Battery</th>
-              <th>Broken Chargingpin</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{brokenScreen === true ? "✅" : "❌"}</td>
-              <td>{bulgedBattery === true ? "✅" : "❌"}</td>
-              <td>{brokenChargingpin === true ? "✅" : "❌"}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Details>
-    </StyledPhoneDetails>
+
+      </div>
+    </div>
+    // <StyledPhoneDetails>
+    //   <ImageAndStatus>
+    //     <Image>
+    //       <img src={image} alt="a sample image" />
+    //     </Image>
+    //     <div>
+    //       <Tag type={statusToTagName[completed]}>
+    //         {completed === true ? "completed" : "ongoing"}
+    //       </Tag>
+    //       <p>Assigned to: {assignee}</p>
+    //     </div>
+    //   </ImageAndStatus>
+    //   <Details>
+    //     <div>
+    //       <p>{formatTimestamp(created_at)}</p>
+    //     </div>
+    //     <Box>
+    //       <p>
+    //         <span>Customer:</span> {customer}
+    //       </p>
+    //       <p>
+    //         <span>Contact number: +</span>
+    //         {contactNumber}
+    //       </p>
+    //     </Box>
+    //     <Box>
+    //       <p>
+    //         <span>Model:</span>
+    //         {phoneModel}
+    //       </p>
+    //       <p>
+    //         <span>Imei:</span>
+    //         {imei}
+    //       </p>
+    //     </Box>
+    //     <Box>
+    //       <p>
+    //         <span>Address:</span>
+    //         {address}
+    //       </p>
+    //       <p>
+    //         <span>Phone condition:</span>
+    //         {phoneCondition}
+    //       </p>
+    //     </Box>
+    //     <Table>
+    //       <thead>
+    //         <tr>
+    //           <th>Simtray</th>
+    //           <th>Simcard</th>
+    //           <th>Memorycard</th>
+    //           <th>Spen</th>
+    //           <th>Charger</th>
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         <tr>
+    //           <td>{simtray === true ? "✅" : "❌"}</td>
+    //           <td>{simcard === true ? "✅" : "❌"}</td>
+    //           <td>{memorycard === true ? "✅" : "❌"}</td>
+    //           <td>{spen === true ? "✅" : "❌"}</td>
+    //           <td>{charger === true ? "✅" : "❌"}</td>
+    //         </tr>
+    //       </tbody>
+    //     </Table>
+    //     <Table>
+    //       <thead>
+    //         <tr>
+    //           <th>Broken Screen</th>
+    //           <th>Bulged Battery</th>
+    //           <th>Broken Chargingpin</th>
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         <tr>
+    //           <td>{brokenScreen === true ? "✅" : "❌"}</td>
+    //           <td>{bulgedBattery === true ? "✅" : "❌"}</td>
+    //           <td>{brokenChargingpin === true ? "✅" : "❌"}</td>
+    //         </tr>
+    //       </tbody>
+    //     </Table>
+    //   </Details>
+    // </StyledPhoneDetails>
   );
 }
 

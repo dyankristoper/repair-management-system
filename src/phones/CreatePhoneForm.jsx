@@ -108,7 +108,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           },
         }
       );
-    console.log(data);
   }
 
   onError(errors);
