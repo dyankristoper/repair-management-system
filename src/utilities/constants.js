@@ -1,6 +1,6 @@
 import Logo from '/logo.png';
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 10;
 
 const LOG_TYPES = {
   default: 'default',

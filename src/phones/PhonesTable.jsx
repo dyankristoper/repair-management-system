@@ -30,7 +30,7 @@ function PhonesTable() {
         />
       </Table>
 
-      <Table.Footer>
+      <Table.Footer className="mt-auto">
         <Pagination count={count} />
       </Table.Footer>
     </Menus>

@@ -5,9 +5,7 @@ import SortBy from "../ui/SortBy";
 
 const StyledTableOperations = styled.div`
   display: flex;
-  justify-content: right;
   gap: 1.6rem;
-  width: 100%;
 `;
 
 function PhonetableOperation() {

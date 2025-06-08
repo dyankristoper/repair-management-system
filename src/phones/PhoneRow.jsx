@@ -18,18 +18,17 @@ const TableRow = styled.div`
   column-gap: 1.5rem;
   align-items: center;
 
-  padding: 1rem 1.5rem;
+  padding: 4rem 1.5rem;
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
   position: relative;
-  margin-top: 1em;
 `;
 
 const Img = styled.img`
   display: block;
   width: 6.4rem;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: auto 3/2;
   object-fit: cover;
   object-position: center;
   transform: scale(1.5) translateX(-7px);
