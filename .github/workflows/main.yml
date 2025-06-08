@@ -24,9 +24,12 @@ jobs:
           PR_STATE="${{ github.event.pull_request.state }}"
 
           if [[ "$EVENT_TYPE" == "push" ]]; then
-            CONTENT=":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})**\nCommit by **$COMMITTER**: [$COMMIT_MSG]($COMMIT_URL)"
+            CONTENT=":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})**
+                    Commit by **$COMMITTER**: [$COMMIT_MSG]($COMMIT_URL)"
           elif [[ "$EVENT_TYPE" == "pull_request" ]]; then
-            CONTENT=":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})**\n**$PR_TITLE** by **$COMMITTER**\n<$PR_URL>"
+            CONTENT=":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})**
+                      **$PR_TITLE** by **$COMMITTER**
+                      <$PR_URL>"
           else
             CONTENT="Unhandled event type: $EVENT_TYPE"
           fi
