@@ -42,7 +42,7 @@ const Cost = styled.p`
   font-family: "Sono";
 `;
 
-function PhoneRow({ phone }) {
+function PhoneRow({ phoneDetails = {} }) {
   const {
     id: phoneId,
     image,
@@ -50,8 +50,8 @@ function PhoneRow({ phone }) {
     imei,
     phoneCondition,
     cost,
-    status,
-  } = phone;
+    isCompleted,
+  } = phoneDetails;
 
   const { mutate: deletePhone, isLoading: isDeleting } = useUpdatePhone(
     "delete",
@@ -73,14 +73,14 @@ function PhoneRow({ phone }) {
     });
   }
 
-  const statusToTagName = ( status ) => {
+  const statusToTagName = (status) => {
     for (const key in jobOrderStatus) {
       if (jobOrderStatus[key].includes(status)) {
-        return key === 'true' ? 'green' : 'red';
+        return key === "true" ? "green" : "red";
       }
     }
 
-    return 'grey';
+    return "grey";
   };
 
   return (
@@ -91,8 +91,9 @@ function PhoneRow({ phone }) {
       <p>{imei}</p>
       <p>{phoneCondition}</p>
       <Cost>{cost}</Cost>
-      <Tag type={statusToTagName(status)}>
-        { status }
+
+      <Tag type={statusToTagName[isCompleted]}>
+        {isCompleted === true ? "completed" : "ongoing"}
       </Tag>
 
       <ModalWindow>
@@ -119,11 +120,11 @@ function PhoneRow({ phone }) {
         </Menus.Menu>
 
         <ModalWindow.Window name="view-details">
-          <ViewPhoneDetails phoneDetails={phone} />
+          <ViewPhoneDetails phoneDetails={phoneDetails} />
         </ModalWindow.Window>
 
         <ModalWindow.Window name="edit">
-          <CreatePhoneForm phoneToEdit={phone} />
+          <CreatePhoneForm phoneToEdit={phoneDetails} />
         </ModalWindow.Window>
 
         <ModalWindow.Window name="delete">

@@ -1,6 +1,7 @@
+import { formatTimestamp } from "../helpers/formatTime";
+
 import styled from "styled-components";
 import Tag from "./Tag";
-import { formatTimestamp } from "../helpers/formatTime";
 
 const StyledPhoneDetails = styled.div`
   width: 60rem;
@@ -79,15 +80,17 @@ const Table = styled.table`
   }
 `;
 
-function ViewPhoneDetails({ phoneDetails }) {
+function ViewPhoneDetails({
+  phoneDetails = {},
+  phoneToEdit = {},
+  customerToEdit = {},
+  isEditSession,
+}) {
   const {
     created_at,
     image,
-    customer,
-    contactNumber,
     phoneModel,
     imei,
-    address,
     phoneCondition,
     assignee,
     completed,
@@ -99,13 +102,22 @@ function ViewPhoneDetails({ phoneDetails }) {
     brokenScreen,
     bulgedBattery,
     brokenChargingpin,
-  } = phoneDetails;
+  } = phoneDetails ? phoneDetails : phoneToEdit;
+
+  const customerDetails = phoneDetails?.customers;
+
+  const { name, address, phoneNumber } = isEditSession
+    ? customerToEdit ?? {}
+    : customerDetails ?? {};
 
   return (
     <StyledPhoneDetails>
       <ImageAndStatus>
         <Image>
-          <img src={image} alt="a sample image" />
+          <img
+            src={image}
+            alt={`${phoneModel || "A Cellphone"} sample image `}
+          />
         </Image>
         <div>
           <Tag type={statusToTagName[completed]}>
@@ -120,11 +132,11 @@ function ViewPhoneDetails({ phoneDetails }) {
         </div>
         <Box>
           <p>
-            <span>Customer:</span> {customer}
+            <span>Customer:</span> {name}
           </p>
           <p>
             <span>Contact number: +</span>
-            {contactNumber}
+            {phoneNumber}
           </p>
         </Box>
         <Box>
