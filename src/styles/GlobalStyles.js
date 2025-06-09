@@ -57,6 +57,9 @@ const GlobalStyles = createGlobalStyle`
    --image-grayscale: 0;
   --image-opacity: 100%;
   }
+
+   --line-border-fill: #3498db;
+  --line-border-empty: #e0e0e0;
  
 
 
