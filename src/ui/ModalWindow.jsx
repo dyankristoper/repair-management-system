@@ -2,7 +2,6 @@ import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { RiCloseFill } from "react-icons/ri";
 import styled from "styled-components";
-import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   @keyframes popup {
@@ -36,6 +35,7 @@ const Overlay = styled.div`
   backdrop-filter: blur(4px);
   z-index: 1000;
   transition: all 0.5s;
+  overflow-y: scroll;
 `;
 
 const CloseButton = styled.button`
@@ -46,10 +46,6 @@ const CloseButton = styled.button`
   border-radius: 50%;
   border: none;
   margin: 0.2em;
-
-  &:active {
-    border: 3px solid var(--color-red-600);
-  }
 `;
 
 const ModalWindowContext = createContext();
@@ -76,13 +72,11 @@ function Open({ children, opens: opensWindowName }) {
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalWindowContext);
 
-  const ref = useOutsideClick(close);
-
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal ref={ref}>
+      <StyledModal>
         <CloseButton onClick={close}>
           <RiCloseFill />
         </CloseButton>

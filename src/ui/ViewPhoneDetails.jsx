@@ -1,3 +1,5 @@
+import { formatTimestamp } from "../helpers/formatTime";
+
 import styled from "styled-components";
 import Tag from "./Tag";
 import { formatTimestamp } from '../helpers/formatTime';
@@ -76,7 +78,12 @@ const Table = styled.table`
   }
 `;
 
-function ViewPhoneDetails({ phoneDetails }) {
+function ViewPhoneDetails({
+  phoneDetails = {},
+  phoneToEdit = {},
+  customerToEdit = {},
+  isEditSession,
+}) {
   const {
     created_at,
     image,

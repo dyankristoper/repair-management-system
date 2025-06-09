@@ -1,5 +1,5 @@
 import { usePhones } from "./usePhones";
-import Spinner from "../ui/Spinnner";
+
 import PhoneRow from "./PhoneRow";
 import Menus from "../ui/Menus";
 import Table from "../ui/Table";
@@ -25,7 +25,9 @@ function PhonesTable() {
 
         <Table.Body
           data={phones}
-          render={(phone) => <PhoneRow phone={phone} key={phone.id} />}
+          render={(phoneDetails) => (
+            <PhoneRow phoneDetails={phoneDetails} key={phoneDetails.id} />
+          )}
         />
       </Table>
 

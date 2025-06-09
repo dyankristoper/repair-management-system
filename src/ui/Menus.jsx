@@ -42,19 +42,19 @@ const StyledToggle = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background-color: var(--color-grey-100);
+    background-color: var(--color-grey-200);
   }
 
   &:active,
   &:focus {
-    border: 1px solid var(--color-green-800);
+    border: 1px solid var(--color-grey-600);
     outline: none;
   }
 
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--color-green-700);
+    color: var(--color-grey-800);
   }
 `;
 

@@ -14,17 +14,10 @@ export function usePhones() {
 
   const sortByRaw = searchParams.get("sortByTechnician");
 
-  // const assignedRaw = searchParams.get("assignedTechnician");
-
   const sortBy =
     !sortByRaw || sortByRaw === "all"
       ? null
       : { field: "assignee", value: sortByRaw };
-
-  // const assignedTo =
-  //   !assignedRaw || assignedRaw === ""
-  //     ? null
-  //     : { field: "assignee", value: assignedRaw };
 
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
 

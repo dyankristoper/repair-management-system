@@ -15,6 +15,8 @@ const StyledPagination = styled.div`
 const P = styled.p`
   font-size: 1.4rem;
   margin-left: 0.8rem;
+  display: flex;
+  gap: 1em;
 
   & span {
     font-weight: 600;
@@ -55,7 +57,7 @@ const PaginationButton = styled.button`
 
   &:hover:not(:disabled) {
     background-color: ${(props) => props.$colors.primary};
-    color: var(--color-brand-50);
+    color: white;
   }
 `;
 

@@ -3,28 +3,22 @@ import Switcher from "../ui/Switcher";
 
 import { jobOrderChecklist } from "../utilities/constants";
 
-const StyledCheckList = styled.div`
-  width: 100%;
-
+const StyledCheckListForm = styled.div`
+  width: 80rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
 `;
 
-const CheckList = styled.form`
+const CheckListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: 28rem;
-  padding: 0.5rem;
-
-  div {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+  padding: 0.2rem;
+  h3 {
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 0.5em;
   }
 `;
 

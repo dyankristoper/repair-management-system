@@ -2,13 +2,15 @@ import supabase, { supabaseUrl } from "./supabase";
 
 import { getToday } from "../helpers/getToday";
 import { PAGE_SIZE } from "../utilities/constants";
+
 import onError from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
-  let query = supabase.from("job_orders").select("*, customers(*)", { count: "exact" });
+  let query = supabase
+                .from("job_orders")
+                .select("*, customers(*)", { count: "exact" });
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
-
   if (sortBy) query = query[sortBy.method || "eq"](sortBy.field, sortBy.value);
 
   if (page) {
@@ -25,57 +27,52 @@ export async function getPhones({ filter, sortBy, page }) {
 
   return { data, count };
 }
-
 export async function createEditPhone(newPhone, id) {
-  const hasImagePath = newPhone.image?.startsWith?.(supabaseUrl);
+  const hasImagePath =
+    typeof newPhone.image === "string" &&
+    newPhone.image.startsWith(supabaseUrl);
 
-  const imageName = `${Math.random()}-${newPhone.image.name}`.replaceAll(
-    "/",
-    ""
-  );
+  let imagePath = newPhone.image;
+  let imageName;
 
-  const imagePath = hasImagePath
-    ? newPhone.image
-    : `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
+  if (!hasImagePath && newPhone.image) {
+    imageName = `${Math.random()}-${newPhone.image.name}`.replaceAll("/", "");
+    imagePath = `${supabaseUrl}/storage/v1/object/public/phone-images/${imageName}`;
+  }
 
-  let query = supabase.from("job_orders");
+  const payload = { ...newPhone, image: imagePath };
+  delete payload.customers;
+  delete payload.imageName;
+
+  const query = supabase.from("job_orders");
   let data, error;
 
-  // CREATE
   if (!id) {
-    const result = await query
-      .insert([{ ...newPhone, image: imagePath }])
-      .select()
-      .single();
-    data = result.data;
-    error = result.error;
-  }
-  // EDIT
-  else {
-    const result = await query
-      .update({ ...newPhone, image: imagePath })
+    ({ data, error } = await query
+      .insert([payload])
+      .select("*, customers:customer_id(id, name, email, address, phoneNumber)")
+      .single());
+  } else {
+    ({ data, error } = await query
+      .update(payload)
       .eq("id", id)
-      .select();
+      .select());
 
     data = result.data;
     error = result.error;
   }
 
-  if (error) {
-    return await onError( error, `Phone could not be ${id ? "updated" : "created"}: ${error.message}` )
-  }
+  if (error) throw new Error(error.message);
 
-  // Upload image only if it's a new image
-  if (hasImagePath) return data;
+  if (!hasImagePath && newPhone.image instanceof File) {
+    const { error: storageError } = await supabase.storage
+      .from("phone-images")
+      .upload(imageName, newPhone.image);
 
-  const { error: storageError } = await supabase.storage
-    .from("phone-images")
-    .upload(imageName, newPhone.image);
-
-  // Delete the phone if image upload fails
-  if (storageError) {
-    await supabase.from("job_orders").delete().eq("id", data.id);
-    return await onError(storageError, 'Phone image could not be uploaded and the phone was deleted')
+    if (storageError) {
+      await supabase.from("job_orders").delete().eq("id", data.id);
+      throw new Error("Image upload failed. Record deleted.");
+    }
   }
 
   return data;

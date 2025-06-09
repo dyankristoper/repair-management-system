@@ -15,13 +15,12 @@ const FilterButton = styled.button`
   background-color: ${(props) =>
     props.$active ? props.$colors.primary : "var(--color-grey-0)"};
   border: none;
-
   border-radius: var(--border-radius-sm);
   font-weight: 500;
   font-size: 1.4rem;
-  /* To give the same height as select */
   padding: 0.44rem 0.8rem;
   transition: all 0.3s;
+
   &:hover {
     background-color: ${(props) => props.$colors.primary};
     color: var(--color-grey-50);
@@ -37,7 +36,8 @@ function Filter({ filterField, options }) {
   };
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const currentFilter = searchParams.get(filterField) || options[0].value;
+  const currentFilter =
+    searchParams.get(filterField) ?? String(options[0].value);
 
   function handleClick(value) {
     searchParams.set(filterField, value);
@@ -52,8 +52,8 @@ function Filter({ filterField, options }) {
         <FilterButton
           key={option.value}
           onClick={() => handleClick(option.value)}
-          $active={option.value === currentFilter}
-          disabled={option.value === currentFilter}
+          $active={String(option.value) === currentFilter}
+          disabled={String(option.value) === currentFilter}
           $colors={colors}
         >
           {option.label}
