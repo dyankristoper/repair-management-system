@@ -27,7 +27,7 @@ const Buttons = styled.div`
 const PaginationButton = styled.button`
   background-color: ${(props) =>
     props.$active ? "var(--color-grey-50)" : props.$colors.primary};
-  color: ${(props) => (props.$active ? " var(--color-grey-700)" : "inherit")};
+  color: ${(props) => (props.$active ? "var(--color-grey-0)" : "white")};
   border: none;
   border-radius: var(--border-radius-sm);
   font-weight: 500;
@@ -107,7 +107,7 @@ function Pagination({ count }) {
         <span>
           {currentPage === pageCount ? count : currentPage * PAGE_SIZE}
         </span>{" "}
-        of
+        of{" "}
         <span>{count}</span> results
       </P>
 
