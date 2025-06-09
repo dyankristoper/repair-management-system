@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { usePendingRepairs } from "../assignee/usePendingRepairs";
+import { useAssignee } from "../assignee/useAssignee";
 import { calcPercentage } from "../helpers/calcPecrcentage";
 import { FaBarsProgress } from "react-icons/fa6";
 import Stat from "./Stat";
@@ -79,21 +79,20 @@ const StatusText = styled.span`
 `;
 
 function ProgressCircleComponent() {
-  const { pendingRepairs } = usePendingRepairs();
-
+  const { assignedRepairs } = useAssignee();
   const { completionPercentage, progressStrokeDasharray } =
-    calcPercentage(pendingRepairs);
+    calcPercentage(assignedRepairs);
 
   // tried to use nullish coalescing rather than optional chaining because sometimes the data is undefined or null;
-  const completedCount = (pendingRepairs ?? []).filter(
+  const completedCount = (assignedRepairs ?? []).filter(
     (pending) => pending.isCompleted
   ).length;
 
-  const pendingCount = (pendingRepairs ?? []).filter(
+  const pendingCount = (assignedRepairs ?? []).filter(
     (pending) => pending.status === 'pending'
   ).length;
 
-  const confirmationCount = (pendingRepairs ?? []).filter(
+  const confirmationCount = (assignedRepairs ?? []).filter(
     (pending) => pending.status === 'forConfirmation'
   ).length;
 
