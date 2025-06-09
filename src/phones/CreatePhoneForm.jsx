@@ -30,6 +30,7 @@ const StyledSelect = styled.select`
 
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const setTechnician = useState("Select technician");
+  console.log( phoneToEdit )
 
   const handleCheckboxChange = (e) => {
     setValue(e.target.name, e.target.checked);
@@ -113,11 +114,16 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   onError(errors);
   return (
     <StyledFormContainer>
+      <div className="w-full p-10">
+        <h3 className="font-medium text-4xl">
+          {`Job Order ${ editId }`}
+        </h3>
+      </div>
       <Form
         onSubmit={handleSubmit(onSubmit, onError)}
         type={onCloseModal ? "modal" : "regular"}
       >
-        <FormRow label="Phone model" error={errors?.phoneModel?.message}>
+        {/* <FormRow label="Phone model" error={errors?.phoneModel?.message}>
           <Input
             type="text"
             id="phoneModel"
@@ -196,7 +202,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           <Button disabled={isCreating} variation="primary" size="small">
             {isEditSession ? "Edit details" : "Add phone"}
           </Button>
-        </FormRow>
+        </FormRow> */}
       </Form>
 
       <CreateChecklist

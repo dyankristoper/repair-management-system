@@ -13,9 +13,53 @@ const jobOrderStatus = {
   true : ['completed', 'success']
 }
 
+const jobOrderChecklist = [
+  {
+    name: 'simtray',
+    label: 'Simtray',
+    type: 'accessories'
+  },
+  {
+    name: 'simcard',
+    label: 'Sim Card',
+    type: 'accessories'
+  },
+  {
+    name: 'memorycard',
+    label: 'Memory Card',
+    type: 'accessories'
+  },
+  {
+    name: 'spen',
+    label: 'Spen',
+    type: 'accessories'
+  },
+  {
+    name: 'charger',
+    label: 'Charger',
+    type: 'accessories'
+  },
+  {
+    name: 'bulgedBattery',
+    label: 'Bulged Battery',
+    type: 'condition'
+  },
+  {
+    name: 'brokenScreen',
+    label: 'Broken Screen',
+    type: 'condition'
+  },
+  {
+    name: 'brokenBackcover',
+    label: 'Broken Backcover',
+    type: 'condition'
+  }
+]
+
 export {
   Logo,
   jobOrderStatus,
+  jobOrderChecklist,
   PAGE_SIZE,
   LOG_TYPES
 }

@@ -10,4 +10,8 @@ const statusToTagName = ( status ) => {
   return 'grey';
 };
 
-export { statusToTagName }
+const displayPhoneDiagnosticStatus = (status) => {
+  return status ? "✅" : "❌";
+}
+
+export { statusToTagName, displayPhoneDiagnosticStatus }
