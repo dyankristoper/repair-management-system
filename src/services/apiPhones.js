@@ -110,7 +110,7 @@ export async function getTechnicians(){
 export async function getPendingRepairs() {
   const { data, error } = await supabase
     .from("job_orders")
-    .in('status', ['completed', 'forConfirmation']);
+    .select("*")  
 
   if (error) {
     return await onError( error, 'Unable to fetch pending repair resources.');

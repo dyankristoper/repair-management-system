@@ -33,7 +33,7 @@ function SelectAssignee() {
   const { technicians } = useAssignee();
 
   const filterField = "assignee";
-  const options = technicians && technicians.map((technician, techIndex) => ({
+  const options = technicians.length && technicians.map((technician, techIndex) => ({
     value: technician.id,
     label: technician.email
   }));
