@@ -128,7 +128,7 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
 
     clearErrors("checklistGroup");
 
-    if (isEditSession)
+    if (isEditSession){
       editPhone(
         {
           newPhoneData: {

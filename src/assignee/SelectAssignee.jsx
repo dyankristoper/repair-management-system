@@ -35,7 +35,7 @@ function SelectAssignee() {
   const filterField = "assignee";
   const options = technicians.length && technicians.map((technician, techIndex) => ({
     value: technician.id,
-    label: technician.email
+    label: technician.name || `Technician 00${techIndex}`
   }));
 
   function handleClick(value) {

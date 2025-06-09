@@ -1,5 +1,3 @@
-import { formatTimestamp } from "../helpers/formatTime";
-
 import styled from "styled-components";
 import Tag from "./Tag";
 import { formatTimestamp } from '../helpers/formatTime';
