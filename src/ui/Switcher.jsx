@@ -1,8 +1,7 @@
 const Switcher = ( props ) => {
   return (
     <input 
-      {...props}
-      defaultChecked 
+      {...props} 
       type="checkbox" 
       className="toggle" />
   )

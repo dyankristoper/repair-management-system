@@ -30,7 +30,6 @@ const StyledSelect = styled.select`
 
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const setTechnician = useState("Select technician");
-  console.log( phoneToEdit )
 
   const handleCheckboxChange = (e) => {
     setValue(e.target.name, e.target.checked);
@@ -84,13 +83,15 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
+    const { customers, ...rest } = data;
+
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
-    if (isEditSession)
+    if (isEditSession){
       editPhone(
         {
           newPhoneData: {
-            ...data,
+            ...rest,
             image,
           },
           id: editId,
@@ -99,6 +100,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           onSuccess: () => reset(),
         }
       );
+    }
     else
       createPhone(
         { ...data, image: image },
@@ -112,103 +114,117 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   }
 
   onError(errors);
+
   return (
-    <StyledFormContainer>
+    <StyledFormContainer className="flex-col">
       <div className="w-full p-10">
         <h3 className="font-medium text-4xl">
           {`Job Order ${ editId }`}
         </h3>
       </div>
-      <Form
-        onSubmit={handleSubmit(onSubmit, onError)}
-        type={onCloseModal ? "modal" : "regular"}
-      >
-        {/* <FormRow label="Phone model" error={errors?.phoneModel?.message}>
-          <Input
-            type="text"
-            id="phoneModel"
-            disabled={isWorking}
-            defaultValue="SM-"
-            {...register("phoneModel", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="IMEI" error={errors?.imei?.message}>
-          <Input
-            type="text"
-            id="imei"
-            disabled={isWorking}
-            {...register("imei", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow
-          label="Phone condition"
-          error={errors?.phoneCondition?.message}
+
+      <div className="flex">
+        <Form
+          onSubmit={handleSubmit(onSubmit, onError)}
+          type={onCloseModal ? "modal" : "regular"}
         >
-          <Textarea
-            type="text"
-            id="phoneCondition"
-            disabled={isWorking}
-            {...register("phoneCondition", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="Cost" error={errors?.cost?.message}>
-          <Input
-            type="text"
-            id="cost"
-            disabled={isWorking}
-            {...register("cost", {
-              required: "This field is required",
-            })}
-          />
-        </FormRow>
-        <FormRow label="Assignee" error={errors?.assignee?.message}>
-          <StyledSelect
-            id="assignee"
-            onChange={(e) => setTechnician(e.target.value)}
-            {...register("assignee", {
-              required: "This field is required",
-            })}
-          >
-            <option>Select technician</option>
-            <option value="Tech-001">Tech-001</option>
-            <option value="Tech-002">Tech-002</option>
-          </StyledSelect>
-        </FormRow>
-        <FormRow>
-          <label>Image</label>
-          <FileInput
-            id="image"
-            accept="image/*"
-            {...register("image", {
-              required: isEditSession ? false : "This field is required",
-            })}
-          />
-        </FormRow>
+          <div className="flex flex-col">
+            <FormRow label="Phone model" error={errors?.phoneModel?.message}>
+              <Input
+                type="text"
+                className="w-full"
+                id="phoneModel"
+                disabled={isWorking}
+                defaultValue="SM-"
+                {...register("phoneModel", {
+                  required: "This field is required",
+                })}
+              />
+            </FormRow>
 
-        <FormRow>
-          <Button
-            variation="secondary"
-            type="reset"
-            onClick={() => onCloseModal?.()}
-          >
-            Cancel
-          </Button>
-          <Button disabled={isCreating} variation="primary" size="small">
-            {isEditSession ? "Edit details" : "Add phone"}
-          </Button>
-        </FormRow> */}
-      </Form>
+            <FormRow label="IMEI" error={errors?.imei?.message}>
+              <Input
+                type="text"
+                id="imei"
+                disabled={isWorking}
+                {...register("imei", {
+                  required: "This field is required",
+                })}
+              />
+            </FormRow>
 
-      <CreateChecklist
-        register={register}
-        handleChange={handleCheckboxChange}
-      />
+            <FormRow
+              label="Phone condition"
+              error={errors?.phoneCondition?.message}
+            >
+              <Textarea
+                type="text"
+                id="phoneCondition"
+                disabled={isWorking}
+                {...register("phoneCondition", {
+                  required: "This field is required",
+                })}
+              />
+            </FormRow>
+
+            <FormRow label="Cost" error={errors?.cost?.message}>
+              <Input
+                type="text"
+                id="cost"
+                disabled={isWorking}
+                {...register("cost", {
+                  required: "This field is required",
+                })}
+              />
+            </FormRow>  
+
+            <FormRow label="Assignee" error={errors?.assignee?.message}>
+              <StyledSelect
+                id="assignee"
+                onChange={(e) => setTechnician(e.target.value)}
+                {...register("assignee", {
+                  required: "This field is required",
+                })}
+              >
+                <option>Select technician</option>
+                <option value="Tech-001">Tech-001</option>
+                <option value="Tech-002">Tech-002</option>
+              </StyledSelect>
+            </FormRow>                      
+
+            <FormRow label='Image'>
+              <FileInput
+                id="image"
+                accept="image/*"
+                {...register("image", {
+                  required: isEditSession ? false : "This field is required",
+                })}
+              />
+            </FormRow>
+
+            <FormRow>
+              <div className="mt-10 flex gap-4">
+                <Button
+                  variation="secondary"
+                  type="reset"
+                  onClick={() => onCloseModal?.()}
+                >
+                  Cancel
+                </Button>
+                <Button disabled={isCreating} variation="primary" size="small">
+                  {isEditSession ? "Update Details" : "Add Job Order"}
+                </Button>
+              </div>
+            </FormRow>
+          </div>
+         
+        </Form>
+
+        <CreateChecklist
+          register={register}
+          handleChange={handleCheckboxChange}
+        />
+      </div>
     </StyledFormContainer>
   );
 }

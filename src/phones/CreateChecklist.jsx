@@ -9,8 +9,7 @@ const StyledCheckList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 8px;
+  justify-content: flex-start;
 `;
 
 const CheckList = styled.form`
@@ -53,11 +52,11 @@ function CreateChecklist({ handleCheckboxChange, register }) {
   return (
     <StyledCheckList>
       <CheckList>
-        <h3 className="text-2xl">Accesssories</h3>
+        <h3 className="text-2xl mb-4">Accesssories</h3>
         { renderChecklist( register, handleCheckboxChange, 'accessories' ) }
       </CheckList>
       <CheckList>
-        <h3 className="text-2xl">Physical Condition</h3>
+        <h3 className="text-2xl mb-4">Physical Condition</h3>
         { renderChecklist( register, handleCheckboxChange, 'condition' ) }
       </CheckList>
     </StyledCheckList>

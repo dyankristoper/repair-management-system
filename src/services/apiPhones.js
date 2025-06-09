@@ -56,6 +56,7 @@ export async function createEditPhone(newPhone, id) {
       .eq("id", id)
       .select()
       .single();
+
     data = result.data;
     error = result.error;
   }
