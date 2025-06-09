@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAssignedRepairs } from "../services/apiPhones";
+import { getTechnicians } from "../services/apiPhones";
 import { useSearchParams } from "react-router-dom";
 
 export function useAssignee() {
@@ -12,13 +12,11 @@ export function useAssignee() {
       ? null
       : { field: "assignee", value: filterValue };
 
-  const { data: technician, isPending } = useQuery({
+  const { data: technicians, isPending } = useQuery({
     queryKey: ["technician", filter],
     queryFn: () =>
-      getAssignedRepairs({
-        filter,
-      }),
+      getTechnicians(),
   });
 
-  return { technician, isPending };
+  return { technicians, isPending };
 }

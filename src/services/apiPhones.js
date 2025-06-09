@@ -1,6 +1,7 @@
+import supabase, { supabaseUrl } from "./supabase";
+
 import { getToday } from "../helpers/getToday";
 import { PAGE_SIZE } from "../utilities/constants";
-import supabase, { supabaseUrl } from "./supabase";
 import onError from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
@@ -54,8 +55,7 @@ export async function createEditPhone(newPhone, id) {
     const result = await query
       .update({ ...newPhone, image: imagePath })
       .eq("id", id)
-      .select()
-      .single();
+      .select();
 
     data = result.data;
     error = result.error;
@@ -93,6 +93,18 @@ export async function deletePhone(id) {
   }
 
   return;
+}
+
+export async function getTechnicians(){
+  const { data, error } = await supabase
+    .from("user_profiles")
+    .select();
+
+  if (error || data.length === 0) {
+    return await onError( error, 'Unable to fetch list of technicians.')
+  }
+
+  return data;
 }
 
 export async function getPendingRepairs() {

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useUpdatePhone } from "./useUpdatePhone";
 import { useState } from "react";
 
 import Button from "../ui/Button";
@@ -10,6 +9,9 @@ import Input from "../ui/Input";
 import styled from "styled-components";
 import CreateChecklist from "./CreateChecklist";
 import onError from "../utilities/formError";
+
+import { useAssignee } from "../assignee/useAssignee";
+import { useUpdatePhone } from "./useUpdatePhone";
 
 const Textarea = styled.textarea`
   padding: 0.8rem 1.2rem;
@@ -29,7 +31,8 @@ const StyledSelect = styled.select`
 `;
 
 function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
-  const setTechnician = useState("Select technician");
+  const setTechnician = useState(null);
+  const { technicians } = useAssignee();
 
   const handleCheckboxChange = (e) => {
     setValue(e.target.name, e.target.checked);
@@ -83,7 +86,12 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
-    const { customers, ...rest } = data;
+    const { 
+      phoneModel,
+      imei,
+      phoneCondition,
+      cost, 
+      assignee } = data;
 
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
@@ -91,13 +99,16 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
       editPhone(
         {
           newPhoneData: {
-            ...rest,
+            ...{ phoneModel, phoneCondition, imei, cost, assignee },
             image,
           },
           id: editId,
         },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal();
+          }
         }
       );
     }
@@ -182,13 +193,17 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
               <StyledSelect
                 id="assignee"
                 onChange={(e) => setTechnician(e.target.value)}
-                {...register("assignee", {
-                  required: "This field is required",
-                })}
+                {
+                  ...register("assignee", {
+                    required: "This field is required",
+                  })
+                }
               >
-                <option>Select technician</option>
-                <option value="Tech-001">Tech-001</option>
-                <option value="Tech-002">Tech-002</option>
+                <option value={null}>Select technician</option>
+                {
+                  technicians &&
+                  technicians.map((technician) => <option value={ technician.id }>{ technician.email }</option>)
+                }
               </StyledSelect>
             </FormRow>                      
 
