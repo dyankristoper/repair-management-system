@@ -120,15 +120,18 @@ export async function getPendingRepairs() {
 }
 
 export async function getAssignedRepairs({ filter }) {
-  let query = supabase.from("job_orders").select("*");
+  let query = supabase
+                .from("job_orders")
+                .select("*")
+                .not("assignee", "is", null);
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
-
   const { data, error } = await query;
 
   if (error) {
     return await onError( error, 'Unable to load assigned repairs.');
   }
+
   return data;
 }
 

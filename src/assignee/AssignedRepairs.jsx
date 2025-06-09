@@ -10,9 +10,9 @@ const StyledAssignedRepairs = styled.div`
 `;
 
 function AssignedRepairs() {
-  const { isPending, technician } = useAssignee();
+  const { isLoading, assignedRepairs } = useAssignee();
 
-  if (isPending) return <Loader />;
+  if (isLoading) return <Loader />;
   return (
     <StyledAssignedRepairs>
       <Menus>
@@ -27,7 +27,7 @@ function AssignedRepairs() {
           </Table.Header>
 
           <Table.Body
-            data={technician ?? []}
+            data={assignedRepairs ?? []}
             render={(tech) => <AssignedRow key={tech.id} tech={tech} />}
           />
         </Table>

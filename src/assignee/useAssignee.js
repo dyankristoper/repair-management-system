@@ -1,22 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTechnicians } from "../services/apiPhones";
 import { useSearchParams } from "react-router-dom";
+import { getTechnicians, getAssignedRepairs } from "../services/apiPhones";
 
 export function useAssignee() {
   const [searchParams] = useSearchParams();
-
-  const filterValue = searchParams.get("status");
+  const filterValue = searchParams.get("assignee");
 
   const filter =
     !filterValue || filterValue === "all"
       ? null
       : { field: "assignee", value: filterValue };
 
-  const { data: technicians, isPending } = useQuery({
-    queryKey: ["technician", filter],
-    queryFn: () =>
-      getTechnicians(),
+  const { data: assignedRepairs, isPending: isRepairsLoading, error: repairsError } = useQuery({
+    queryKey: ["assignedRepairs", filter],
+    queryFn: () => getAssignedRepairs({ filter }),
   });
 
-  return { technicians, isPending };
+  const { data: technicians, isPending: isTechniciansLoading, error: techniciansError } = useQuery({
+    queryKey: ["technicians"],
+    queryFn: getTechnicians,
+  });
+
+  return {
+    assignedRepairs,
+    technicians,
+    isLoading: isRepairsLoading || isTechniciansLoading,
+    error: repairsError || techniciansError,
+  };
 }
