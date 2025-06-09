@@ -31,7 +31,7 @@ function MainNav() {
         <AssigneeNav />
 
         <li>
-          <StyledNavLink to="/phones">
+          <StyledNavLink to="/job-orders">
             <CiMobile3 />
             <span>Job Orders</span>
           </StyledNavLink>
