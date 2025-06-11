@@ -139,12 +139,12 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           id: editId,
         },
         {
-          onSuccess: (updatedPhone) => {
+          onSuccess: ([updatedPhone]) => {
             setNewPhoneData(updatedPhone);
             nextStep();
           },
           onError: (error) => {
-            toast.error("Failed to edit phone:", error);
+            toast.error(`Failed to edit phone: ${error}`);
           },
         }
       );
