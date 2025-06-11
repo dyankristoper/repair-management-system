@@ -87,6 +87,9 @@ function CreateCustomerForm({
           onSuccess: () => {
             nextStep();
           },
+          onError: (error) => {
+            toast.error("Failed to update customer:", error);
+          }
         }
       );
     } else {
@@ -139,9 +142,9 @@ function CreateCustomerForm({
           disabled={isWorking}
         />
       </FormRow>
-      <ButtonGroup>
+      <ButtonGroup className="mt-10">
         <Button disabled={isWorking} variation="primary" size="small">
-          {isEditSession ? "Edit details" : "Add customer"}
+          {isEditSession ? "Update Details" : "Add Customer"}
         </Button>
       </ButtonGroup>
     </StyledForm>

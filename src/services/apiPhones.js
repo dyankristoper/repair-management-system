@@ -57,9 +57,6 @@ export async function createEditPhone(newPhone, id) {
       .update(payload)
       .eq("id", id)
       .select());
-
-    data = result.data;
-    error = result.error;
   }
 
   if (error) throw new Error(error.message);
