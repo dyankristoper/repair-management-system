@@ -29,7 +29,7 @@ const renderChecklist = ( register, handleCheckboxChange, type='accessories' ) =
       const { name, label } = checklistItem;
 
       return (
-        <div className="flex">
+        <div className="flex justify-between" key={ name }>
           <label htmlFor={ name }>{`With ${label}`}</label>
           <Switcher 
             id={ name }
@@ -44,16 +44,16 @@ const renderChecklist = ( register, handleCheckboxChange, type='accessories' ) =
 
 function CreateChecklist({ handleCheckboxChange, register }) {
   return (
-    <StyledCheckList>
-      <CheckList>
-        <h3 className="text-2xl mb-4">Accesssories</h3>
+    <div className="flex flex-col wrap flex-1">
+      <section>
+        <h3 className="text-2xl font-medium  mb-4 text-center">Accesssories</h3>
         { renderChecklist( register, handleCheckboxChange, 'accessories' ) }
-      </CheckList>
-      <CheckList>
-        <h3 className="text-2xl mb-4">Physical Condition</h3>
+      </section>
+      <section className="mt-10">
+        <h3 className="text-2xl font-medium mb-4 text-center">Physical Condition</h3>
         { renderChecklist( register, handleCheckboxChange, 'condition' ) }
-      </CheckList>
-    </StyledCheckList>
+      </section>
+    </div>
   );
 }
 

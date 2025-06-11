@@ -9,6 +9,8 @@ import Input from "../ui/Input";
 import CreateChecklist from "./CreateChecklist";
 import styled from "styled-components";
 
+import { useAssignee } from '../assignee/useAssignee';
+
 const StyledSelect = styled.select`
   background-color: var(--color-grey-100);
 `;
@@ -25,6 +27,7 @@ const Textarea = styled.textarea`
 
 const Wrapper = styled.div`
   display: flex;
+  gap: 20rem;
   width: 100%;
 `;
 
@@ -46,6 +49,20 @@ function PhoneForm({
   setError,
   clearErrors,
 }) {
+  const { technicians } = useAssignee();
+
+  const renderTechnicianSelection = () => {
+    if( technicians ){
+      return technicians.map(( technician, _ind ) => {
+        const { id, name } = technician;
+  
+        return <option value={id} key={`${id}-${name}-option`} >{ name }</option>
+      });
+    }
+
+    return null;
+  }
+
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)} type={"modal"}>
       <Wrapper>
@@ -106,13 +123,8 @@ function PhoneForm({
                 required: "This field is required",
               })}
             >
-              <option value="">Select technician</option>
-              <option value="550e8400-e29b-41d4-a716-446655440000">
-                Tech-001
-              </option>
-              <option value="550e8400-e29b-41d4-a716-556655440000">
-                Tech-002
-              </option>
+              <option value={ null }>Select technician</option>
+              { renderTechnicianSelection() }
             </StyledSelect>
           </FormRow>
           <FormRow label="Image (Optional)" error={errors?.image?.message}>
@@ -134,7 +146,7 @@ function PhoneForm({
           variation="primary"
           size="small"
         >
-          {isEditSession ? "Edit details" : "Add phone"}
+          {isEditSession ? "Update Details" : "Add Job Order"}
         </Button>
       </FormRow>
     </Form>

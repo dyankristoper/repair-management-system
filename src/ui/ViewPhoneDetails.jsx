@@ -82,6 +82,8 @@ function ViewPhoneDetails({
   customerToEdit = {},
   isEditSession,
 }) {
+  const phoneDetailSource = phoneDetails ?? phoneToEdit;
+
   const {
     created_at,
     image,
@@ -98,7 +100,7 @@ function ViewPhoneDetails({
     brokenChargingpin,
     status,
     customers
-  } = phoneDetails;
+  } = phoneDetailSource;
 
   return (
     <a className="flex flex-col gap-10 items-center bg-white rounded-lg md:flex-row ">
