@@ -1,0 +1,42 @@
+name: Notify Discord on Push or PR
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    types: [opened, closed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Format and Send Webhook to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.YOUR_DISCORD_WEBHOOK_URL }}
+        run: |
+          EVENT_TYPE="${{ github.event_name }}"
+          REPO="${{ github.repository }}"
+          COMMITTER="${{ github.actor }}"
+          COMMIT_URL="${{ github.event.head_commit.url }}"
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          PR_STATE="${{ github.event.pull_request.state }}"
+
+          if [[ "$EVENT_TYPE" == "push" ]]; then
+            CONTENT=":rocket: **New Push in [$REPO](${{ github.server_url }}/${REPO})**
+                    Commit by **$COMMITTER**: [$COMMIT_MSG]($COMMIT_URL)"
+          elif [[ "$EVENT_TYPE" == "pull_request" ]]; then
+            CONTENT=":twisted_rightwards_arrows: **Pull Request [$PR_STATE] in [$REPO](${{ github.server_url }}/${REPO})**
+                      **$PR_TITLE** by **$COMMITTER**
+                      <$PR_URL>"
+          else
+            CONTENT="Unhandled event type: $EVENT_TYPE"
+          fi
+
+          PAYLOAD=$(jq -n --arg content "$CONTENT" '{content: $content}')
+
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "$PAYLOAD" \
+               "$DISCORD_WEBHOOK_URL"
