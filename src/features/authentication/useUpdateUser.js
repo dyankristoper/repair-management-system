@@ -9,9 +9,6 @@ export function useUpdateUser() {
     mutationFn: updateCurrentUser,
     onSuccess: () => {
       toast.success("User account successfully updated");
-
-      // queryClient.setQueryData(["user"], user);
-      //removed setQueryFunction that's causing the issue.
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (err) => toast.error(err.message),
