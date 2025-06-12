@@ -139,22 +139,22 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           id: editId,
         },
         {
-          onSuccess: (updatedPhone) => {
+          onSuccess: ([updatedPhone]) => {
             setNewPhoneData(updatedPhone);
             nextStep();
           },
           onError: (error) => {
-            toast.error("Failed to edit phone:", error);
+            toast.error(`Failed to edit phone: ${error}`);
           },
         }
       );
     }
-    else
+    else{
       createPhone(
         { ...data, image: image, customer_id: customerID },
         {
-          onSuccess: (createdPhone) => {
-            setNewPhoneData(createdPhone);
+          onSuccess: (jobOrder) => {
+            setNewPhoneData(jobOrder);
             reset();
             nextStep();
           },
@@ -163,6 +163,7 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           },
         }
       );
+    }
   }
 
   return (
@@ -215,17 +216,24 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
       )}
 
       {step === 3 && !isEditSession && (
-        <Button
-          type="primary"
-          onClick={() => {
-            reset();
-            setNewPhoneData(null);
-            setStep(1);
-            setCustomerID(null);
-          }}
-        >
-          Create new
-        </Button>
+        <div className="w-full flex justify-end">
+          <Button
+            type="primary"
+            onClick={() => {
+              reset();
+              setNewPhoneData(null);
+              setCustomerID(null);
+              setStep(1);
+            }}
+          >
+            New Job Order
+          </Button>
+          <Button
+            type="secondary"
+            >
+            Close
+          </Button>
+        </div>
       )}
     </StyledFormContainer>
   );

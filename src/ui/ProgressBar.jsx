@@ -72,9 +72,9 @@ const CircleContainer = styled.div`
 
 function ProgressBar({ step, isEditSession }) {
   const stepLabels = [
-    isEditSession ? "Edit customer info" : "Create customer info",
-    isEditSession ? "Edit phone details" : "Create phone details",
-    isEditSession ? "Preview details" : "Preview details",
+    isEditSession ? "Customer Information" : "Create Customer Information",
+    isEditSession ? "Phone Details" : "Create Phone Details",
+    isEditSession ? "Preview Details" : "Preview Details",
   ];
 
   return (

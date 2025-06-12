@@ -33,10 +33,10 @@ const renderChecklist = (
       const { name, label } = checklistItem;
 
       return (
-        <div className="flex">
-          <label htmlFor={name}>{`With ${label}`}</label>
-          <Switcher
-            id={name}
+        <div className="flex justify-between" key={ name }>
+          <label htmlFor={ name }>{`With ${label}`}</label>
+          <Switcher 
+            id={ name }
             name
             {...register(name)}
             onChange={handleCheckboxChange}
