@@ -83,7 +83,7 @@ export async function deletePhone(id) {
     .select();
 
   if (error || data.length === 0) {
-    return await onError( error, 'Unable to delete resource.')
+    return await onError( error, 'Permission denied! Unable to delete resource.')
   }
 
   return;
