@@ -8,10 +8,13 @@ export default function useUser() {
   });
 
   if( data ){
+    const role = data.user?.role || data.role;
+    const user = data.user || data;
+
     return {
       isLoading,
-      user: data.user, 
-      isAuthenticated: data.user.role === "authenticated",
+      user: user, 
+      isAuthenticated: role === "authenticated",
       isAdmin: data.user_role !== 'user'
     }
   }
