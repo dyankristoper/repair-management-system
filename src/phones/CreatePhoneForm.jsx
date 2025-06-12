@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { phoneModelOptions } from "../utilities/modelList";
 import { getDefaultCheckValues } from "../utilities/defaultCheckValues";
 
-import onError from "../utilities/formError";
+import { onError } from "../utilities/formError";
 import styled from "styled-components";
 import ProgressBar from "../ui/ProgressBar";
 import ViewPhoneDetails from "../ui/ViewPhoneDetails";

@@ -13,7 +13,7 @@ import ModalWindow from "../ui/ModalWindow";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import ColorPicker from "./ColorPicker";
 import CompanySettings from "./CompanySettings";
-import onError from "../utilities/formError";
+import { onError } from "../utilities/formError";
 
 const Wrapper = styled.div`
   height: 100%;

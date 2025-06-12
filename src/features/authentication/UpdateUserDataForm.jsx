@@ -8,6 +8,7 @@ import Input from "../../ui/Input";
 
 import useUser from "./useUser";
 import { useUpdateUser } from "./useUpdateUser";
+import { onEvent } from "../../utilities/formError";
 
 function UpdateUserDataForm() {
   // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
@@ -26,10 +27,13 @@ function UpdateUserDataForm() {
   function handleSubmit(e) {
     e.preventDefault();
     if (!fullName) return;
+    
     updateUser(
       { fullName, avatar },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await onEvent({ type: 'profile_updated', metadata: { fullName, avatar } });
+
           setAvatar(null);
           e.target.reset();
         },

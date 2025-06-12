@@ -1,11 +1,17 @@
-import useLogs from "../hooks/useLogs"
+import useLogs from "../hooks/useLogs";
 
-export default async function onError( error, customErrorMessage = '' ) {
+export async function onError( type, source, error ) {
   const { createLog } = useLogs();
-  const onErrorMessage = customErrorMessage || error || error?.message || '';
 
-  console.error( onErrorMessage )
+  await createLog({ type, source, eventError: error });
+  
+  console.error(`[${ new Date }] Error: ${ error }`);
+  throw new Error(`Error: ${ error?.message || error }`);
+}
 
-  await createLog( onErrorMessage, 'error' );
-  throw new Error(`Error: ${ onErrorMessage }`);
+export async function onEvent( onEventPayload ){
+  const { createLog } = useLogs();
+  const { type, source = '', metadata = {} } = onEventPayload;
+
+  await createLog({ type, source, eventError: metadata });
 }
