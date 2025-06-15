@@ -2,12 +2,16 @@ import styled from "styled-components";
 import Filter from "../ui/Filter";
 import SortBy from "../ui/SortBy";
 
+import { useAssignee } from "../assignee/useAssignee";
+
 const StyledTableOperations = styled.div`
   display: flex;
   gap: 1.6rem;
 `;
 
 function PhonetableOperation() {
+  const { technicians } = useAssignee();
+
   return (
     <StyledTableOperations>
       <Filter
@@ -22,10 +26,12 @@ function PhonetableOperation() {
       <SortBy
         options={[
           { value: "all", label: "Assigned to all" },
-
-          /* FIXME: Should not be static */
-          { value: "Tech-001", label: "Assigned to Tech-001" },
-          { value: "Tech-002", label: "Assigned to Tech-002" },
+          ...(technicians
+            ? technicians.map(({ id, name }) => ({
+                value: id,
+                label: `Assigned to ${name}`,
+              }))
+            : []),
         ]}
       />
     </StyledTableOperations>
