@@ -1,6 +1,5 @@
 import { Controller } from "react-hook-form";
 import { phoneModelOptions } from "../utilities/modelList";
-import { useAssignee } from "../assignee/useAssignee";
 
 import CreatableSelect from "react-select/creatable";
 import Button from "../ui/Button";
