@@ -1,4 +1,6 @@
 import { Controller } from "react-hook-form";
+import { phoneModelOptions } from "../utilities/modelList";
+import { useAssignee } from "../assignee/useAssignee";
 
 import CreatableSelect from "react-select/creatable";
 import Button from "../ui/Button";
@@ -36,7 +38,6 @@ function PhoneForm({
   onError,
   errors,
   isWorking,
-  phoneModelOptions,
   handleSubmit,
   control,
   register,
@@ -52,11 +53,15 @@ function PhoneForm({
   const { technicians } = useAssignee();
 
   const renderTechnicianSelection = () => {
-    if( technicians ){
-      return technicians.map(( technician, _ind ) => {
+    if (technicians) {
+      return technicians.map((technician, _ind) => {
         const { id, name } = technician;
-  
-        return <option value={id} key={`${id}-${name}-option`} >{ name }</option>
+
+        return (
+          <option value={id} key={`${id}-${name}-option`}>
+            {name}
+          </option>
+        );
       });
     }
 
@@ -76,6 +81,9 @@ function PhoneForm({
                 <CreatableSelect
                   isDisabled={isWorking}
                   options={phoneModelOptions}
+                  value={phoneModelOptions.find(
+                    (phoneModel) => phoneModel.value === field.value
+                  )}
                   onChange={(val) => field.onChange(val?.value)}
                 />
               )}
