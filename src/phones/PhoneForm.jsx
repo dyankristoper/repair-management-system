@@ -11,6 +11,8 @@ import Input from "../ui/Input";
 import CreateChecklist from "./CreateChecklist";
 import styled from "styled-components";
 
+import { useAssignee } from '../assignee/useAssignee';
+
 const StyledSelect = styled.select`
   background-color: var(--color-grey-100);
 `;
@@ -64,7 +66,7 @@ function PhoneForm({
     }
 
     return null;
-  };
+  }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)} type={"modal"}>
@@ -129,8 +131,8 @@ function PhoneForm({
                 required: "This field is required",
               })}
             >
-              <option value={null}>Select technician</option>
-              {renderTechnicianSelection()}
+              <option value={ null }>Select technician</option>
+              { renderTechnicianSelection() }
             </StyledSelect>
           </FormRow>
           <FormRow label="Image (Optional)" error={errors?.image?.message}>

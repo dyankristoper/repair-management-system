@@ -142,7 +142,12 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           },
         }
       );
+<<<<<<< Fix/Update-Job-Order-Form
     } else {
+=======
+    }
+    else{
+>>>>>>> staging
       createPhone(
         { ...data, image: image, customer_id: customerID },
         {
@@ -220,7 +225,15 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           >
             New Job Order
           </Button>
+<<<<<<< Fix/Update-Job-Order-Form
           <Button type="secondary">Close</Button>
+=======
+          <Button
+            type="secondary"
+            >
+            Close
+          </Button>
+>>>>>>> staging
         </div>
       )}
     </StyledFormContainer>
