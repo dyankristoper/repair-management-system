@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUpdateUser } from "./useUpdateUser";
 
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
@@ -7,6 +6,9 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import useUser from "./useUser";
+
+import { useUpdateUser } from "./useUpdateUser";
+import { onEvent } from "../../utilities/formError";
 import UpdatePasswordForm from "./UpdatePasswordForm";
 
 function UpdateUserDataForm({ onCloseModal }) {
@@ -26,10 +28,13 @@ function UpdateUserDataForm({ onCloseModal }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (!fullName) return;
+    
     updateUser(
       { fullName, avatar },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await onEvent({ type: 'profile_updated', metadata: { fullName, avatar } });
+
           setAvatar(null);
           e.target.reset();
           onCloseModal?.();
