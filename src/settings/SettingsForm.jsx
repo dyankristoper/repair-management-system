@@ -14,6 +14,7 @@ import ModalWindow from "../ui/ModalWindow";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import ColorPicker from "./ColorPicker";
 import CompanySettings from "./CompanySettings";
+
 import { onError, onEvent } from "../utilities/formError";
 import toast from "react-hot-toast";
 
@@ -164,7 +165,6 @@ function SettingsForm() {
           },
           onError: async (error) => {
             await onError('error_server', 'SettingsForm', error);
-
             toast.error("Failed to create company settings:", error);
           },
         }
