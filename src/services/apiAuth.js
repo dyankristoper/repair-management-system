@@ -1,6 +1,5 @@
 import supabase, { supabaseUrl } from "./supabase";
 import { jwtDecode } from 'jwt-decode';
-import onError from "../utilities/formError";
 
 export async function signup({ fullName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
@@ -39,7 +38,7 @@ export async function getCurrentUser() {
 
     return { user: data?.user, user_role: decoded?.user_role }
   } catch (error) {
-    onError( error );
+    throw new Error( error );
   }
 }
 

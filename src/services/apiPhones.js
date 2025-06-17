@@ -3,7 +3,7 @@ import supabase, { supabaseUrl } from "./supabase";
 import { getToday } from "../helpers/getToday";
 import { PAGE_SIZE } from "../utilities/constants";
 
-import onError from "../utilities/formError";
+import { onError } from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
   let query = supabase
