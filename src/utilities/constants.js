@@ -1,6 +1,7 @@
 import Logo from '/logo.png';
 
 const PAGE_SIZE = 10;
+const MIN_JOB_ORDER_COST = 0;
 
 const LOG_TYPES = {
   default: 'default',
@@ -142,5 +143,6 @@ export {
   jobOrderChecklist,
   PAGE_SIZE,
   LOG_TYPES, 
-  EVENT_TYPES
+  EVENT_TYPES, 
+  MIN_JOB_ORDER_COST
 }
