@@ -1,6 +1,5 @@
 import { Controller } from "react-hook-form";
 import { phoneModelOptions } from "../utilities/modelList";
-import { useAssignee } from "../assignee/useAssignee";
 
 import CreatableSelect from "react-select/creatable";
 import Button from "../ui/Button";
@@ -11,7 +10,7 @@ import Input from "../ui/Input";
 import CreateChecklist from "./CreateChecklist";
 import styled from "styled-components";
 
-// import { useAssignee } from '../assignee/useAssignee';
+import { useAssignee } from "../assignee/useAssignee";
 
 const StyledSelect = styled.select`
   background-color: var(--color-grey-100);

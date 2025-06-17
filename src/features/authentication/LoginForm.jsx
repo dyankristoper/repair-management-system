@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useLogin } from "./useLogin";
 
 import styled from "styled-components";
 import LogoComponent from "../../ui/Logo";
@@ -8,6 +7,9 @@ import SpinnerMini from "../../ui/SpinnerMini";
 import Input from "../../ui/Input";
 import Heading from "../../ui/Heading";
 import ButtonSecondary from "../../ui/ButtonSecondary";
+
+import { useLogin } from "./useLogin";
+import { onEvent } from "../../utilities/formError";
 
 const StyledLoginForm = styled.div`
   width: 100%;
@@ -66,7 +68,9 @@ function LoginForm() {
     login(
       { email, password },
       {
-        onSettled: () => {
+        onSettled: async () => {
+          await onEvent({ type: 'login_success' });
+
           setEmail("");
           setPassword("");
         },

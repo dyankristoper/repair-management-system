@@ -22,7 +22,6 @@ const CheckList = styled.div`
     margin-bottom: 0.5em;
   }
 `;
-
 const ChecklistItem = styled.div`
   width: 100%;
   display: flex;
@@ -64,7 +63,7 @@ function CreateChecklist({ handleCheckboxChange, register, errors }) {
   return (
     <StyledCheckList>
       <CheckList>
-        <h3 className="text-2xl mb-4">Accesssories</h3>
+        <h3 className="text-2xl mb-4">Accessories</h3>
         {renderChecklist(register, handleCheckboxChange, "accessories")}
         {errors.checklistGroup && (
           <Error>{errors?.checklistGroup?.message}</Error>

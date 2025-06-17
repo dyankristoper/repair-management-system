@@ -3,7 +3,7 @@ import { useUpdatePhone } from "./useUpdatePhone";
 import { useMemo, useState } from "react";
 import { getDefaultCheckValues } from "../utilities/defaultCheckValues";
 
-import onError from "../utilities/formError";
+import { onError, onEvent } from "../utilities/formError";
 import styled from "styled-components";
 import ProgressBar from "../ui/ProgressBar";
 import ViewPhoneDetails from "../ui/ViewPhoneDetails";
@@ -133,11 +133,18 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           id: editId,
         },
         {
-          onSuccess: ([updatedPhone]) => {
+          onSuccess: async ([updatedPhone]) => {
+            await onEvent({
+              type: "resource_updated",
+              source: "CreatePhoneForm",
+              metadata: updatedPhone,
+            });
+
             setNewPhoneData(updatedPhone);
             nextStep();
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError("error_server", "CreatePhoneForm", error);
             toast.error(`Failed to edit phone: ${error}`);
           },
         }
@@ -146,12 +153,19 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
       createPhone(
         { ...data, image: image, customer_id: customerID },
         {
-          onSuccess: (jobOrder) => {
+          onSuccess: async (jobOrder) => {
+            await onEvent({
+              type: "resource_created",
+              source: "CreatePhoneForm",
+              metadata: jobOrder,
+            });
+
             setNewPhoneData(jobOrder);
             reset();
             nextStep();
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError("error_server", "CreatePhoneForm", error);
             toast.error("Failed to create phone:", error);
           },
         }
@@ -221,9 +235,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             New Job Order
           </Button>
 
-          <Button type="secondary" onClick={() => onCloseModal?.()}>
-            Close
-          </Button>
+          <Button type="secondary" onClick={() => onCloseModal?.()}></Button>
         </div>
       )}
     </StyledFormContainer>
