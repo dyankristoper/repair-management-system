@@ -22,7 +22,7 @@ const StyledFormContainer = styled.div`
   width: 1200px;
 `;
 
-function CreatePhoneForm({ phoneToEdit = {} }) {
+function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const [customerID, setCustomerID] = useState(null);
 
   const [step, setStep] = useState(1);
@@ -142,12 +142,7 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           },
         }
       );
-<<<<<<< Fix/Update-Job-Order-Form
     } else {
-=======
-    }
-    else{
->>>>>>> staging
       createPhone(
         { ...data, image: image, customer_id: customerID },
         {
@@ -225,15 +220,10 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           >
             New Job Order
           </Button>
-<<<<<<< Fix/Update-Job-Order-Form
-          <Button type="secondary">Close</Button>
-=======
-          <Button
-            type="secondary"
-            >
+
+          <Button type="secondary" onClick={() => onCloseModal?.()}>
             Close
           </Button>
->>>>>>> staging
         </div>
       )}
     </StyledFormContainer>
