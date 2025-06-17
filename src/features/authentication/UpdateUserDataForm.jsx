@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUpdateUser } from "./useUpdateUser";
 
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
