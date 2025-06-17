@@ -8,6 +8,8 @@ import Button from "../ui/Button";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 
+import { onError, onEvent } from "../utilities/formError";
+
 const StyledForm = styled.form`
   width: 100%;
   max-width: 80rem;
@@ -84,10 +86,12 @@ function CreateCustomerForm({
           id: customerId,
         },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
+            await onEvent({ type: 'resource_updated', source: 'CreateCustomerForm', metadata: data });
             nextStep();
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError('error_server', 'CreateCustomerForm', error );
             toast.error("Failed to update customer:", error);
           }
         }
@@ -96,11 +100,13 @@ function CreateCustomerForm({
       createCustomer(
         { ...data },
         {
-          onSuccess: (customerData) => {
+          onSuccess: async (customerData) => {
+            await onEvent({ type: 'resource_created', source: 'CreateCustomerForm', metadata: data });
             setCustomerID(customerData.id);
             nextStep();
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError('error_server', 'CreateCustomerForm', error );
             toast.error("Failed to create customer:", error);
           },
         }
