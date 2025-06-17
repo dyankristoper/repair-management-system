@@ -19,10 +19,10 @@ export default function useUser() {
     }
   }
 
-  return { 
-    isLoading, 
-    user: null, 
+  return {
+    isLoading,
+    user: null,
     isAuthenticated: false,
-    isAdmin: false
+    isAdmin: false,
   };
 }

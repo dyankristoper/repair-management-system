@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSettings } from "./useSettings";
 import { useUpdateSettings } from "./useUpdateSettings";
+import { useEffect, useMemo } from "react";
 
 import styled from "styled-components";
 import FormRow from "../ui/FormRow";
@@ -13,7 +14,8 @@ import ModalWindow from "../ui/ModalWindow";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import ColorPicker from "./ColorPicker";
 import CompanySettings from "./CompanySettings";
-import { onError } from "../utilities/formError";
+import onError from "../utilities/formError";
+import toast from "react-hot-toast";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -76,23 +78,36 @@ const ButtonGroup = styled.div`
 `;
 
 function SettingsForm() {
-  const location = useLocation();
-  const settingsToEdit = location.state?.settings ?? {};
-
   const { settings } = useSettings();
   const { id: settingsId, company_logo } = settings ?? {};
-
-  const { id: editId, ...editValues } = settingsToEdit;
-  const isEditSession =
-    settingsToEdit && Object.keys(settingsToEdit).length > 0;
-
   const navigate = useNavigate();
 
-  const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues: isEditSession ? editValues : {},
-  });
+  const location = useLocation();
 
-  const { errors } = formState;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const settingsToEdit = useMemo(() => {
+    return location.state?.settings ?? {};
+  }, [location.state?.settings]);
+
+  const editId = settingsToEdit?.id;
+  const isEditSession = Boolean(editId);
+
+  const editValues = useMemo(() => {
+    const { ...valuesToEdit } = settingsToEdit ?? {};
+    return valuesToEdit;
+  }, [settingsToEdit]);
+
+  useEffect(() => {
+    if (isEditSession && Object.keys(editValues).length > 0) {
+      reset(editValues);
+    }
+  }, [isEditSession, editValues, reset]);
 
   const { mutate: editSettings, isLoading: isEditing } = useUpdateSettings(
     "edit",
@@ -128,7 +143,10 @@ function SettingsForm() {
         },
         {
           onSuccess: () => {
-            reset(), navigate("/settings");
+            navigate("/settings");
+          },
+          onError: (error) => {
+            toast.error("Failed to edit company settings:", error);
           },
         }
       );
@@ -140,11 +158,12 @@ function SettingsForm() {
         },
         {
           onSuccess: () => {},
+          onError: (error) => {
+            toast.error("Failed to create company settings:", error);
+          },
         }
       );
   }
-
-  onError(errors);
 
   return (
     <Wrapper>
