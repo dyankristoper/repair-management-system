@@ -3,7 +3,9 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+
 import { useSignup } from "./useSignup";
+import toast from "react-hot-toast";
 
 // Email regex: /\S+@\S+\.\S+/
 
@@ -16,6 +18,12 @@ function SignupForm() {
     signup(
       { fullName, email, password },
       {
+        onSuccess: () => {
+          toast.success(`User has been created successfully.`);
+        },
+        onError: (error) => {
+          toast.error(`Unable to create new user.`, error);
+        },
         onSettled: () => reset(),
       }
     );
