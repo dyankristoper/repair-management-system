@@ -1,29 +1,23 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useReducer } from "react";
 import { useSignup } from "./useSignup";
+import { initialState, toggleReducer } from "./useShowPassword";
 
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import styled from "styled-components";
 import PasswordShow from "./PasswordShow";
+import ShowPasswordWrapper from "../../ui/ShowPasswordWrapper";
 
 // Email regex: /\S+@\S+\.\S+/
 
-const ShowPasswordWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2em;
-`;
-
 function SignupForm() {
+  const [state, dispatch] = useReducer(toggleReducer, initialState);
+  const { password, confirmPassword } = state;
   const { signup, isLoading } = useSignup();
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   function onSubmit({ fullName, email, password }) {
     signup(
@@ -66,7 +60,7 @@ function SignupForm() {
       >
         <ShowPasswordWrapper>
           <Input
-            type={showPassword ? "text" : "password"}
+            type={password ? "text" : "password"}
             id="password"
             disabled={isLoading}
             {...register("password", {
@@ -77,14 +71,17 @@ function SignupForm() {
               },
             })}
           />
-          <PasswordShow argument={showPassword} setter={setShowPassword} />
+          <PasswordShow
+            isShown={password}
+            onToggle={() => dispatch({ type: "TOGGLE_PASSWORD" })}
+          />
         </ShowPasswordWrapper>
       </FormRow>
 
       <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
         <ShowPasswordWrapper>
           <Input
-            type={showConfirmPassword ? "text" : "password"}
+            type={confirmPassword ? "text" : "password"}
             id="passwordConfirm"
             disabled={isLoading}
             {...register("passwordConfirm", {
@@ -94,8 +91,8 @@ function SignupForm() {
             })}
           />
           <PasswordShow
-            argument={showConfirmPassword}
-            setter={setShowConfirmPassword}
+            isShown={confirmPassword}
+            onToggle={() => dispatch({ type: "TOGGLE_CONFIRM_PASSWORD" })}
           />
         </ShowPasswordWrapper>
       </FormRow>

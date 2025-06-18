@@ -15,13 +15,13 @@ const PasswordShowIcons = styled.span`
   }
 `;
 
-function PasswordShow({ argument, setter }) {
+function PasswordShow({ isShown, onToggle }) {
   return (
     <PasswordShowIcons>
-      {argument ? (
-        <MdOutlineRemoveRedEye onClick={() => setter(false)} />
+      {isShown ? (
+        <MdOutlineRemoveRedEye onClick={onToggle} />
       ) : (
-        <LuEyeClosed onClick={() => setter(true)} />
+        <LuEyeClosed onClick={onToggle} />
       )}
     </PasswordShowIcons>
   );
