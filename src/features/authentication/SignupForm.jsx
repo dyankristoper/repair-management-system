@@ -1,16 +1,29 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useSignup } from "./useSignup";
+
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import { useSignup } from "./useSignup";
+import styled from "styled-components";
+import PasswordShow from "./PasswordShow";
 
 // Email regex: /\S+@\S+\.\S+/
+
+const ShowPasswordWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2em;
+`;
 
 function SignupForm() {
   const { signup, isLoading } = useSignup();
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   function onSubmit({ fullName, email, password }) {
     signup(
@@ -51,31 +64,40 @@ function SignupForm() {
         label="Password (min 8 characters)"
         error={errors?.password?.message}
       >
-        <Input
-          type="password"
-          id="password"
-          disabled={isLoading}
-          {...register("password", {
-            required: "This field isRequired",
-            minLength: {
-              value: 8,
-              message: "Password needs a minimum 8 characters",
-            },
-          })}
-        />
+        <ShowPasswordWrapper>
+          <Input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            disabled={isLoading}
+            {...register("password", {
+              required: "This field isRequired",
+              minLength: {
+                value: 8,
+                message: "Password needs a minimum 8 characters",
+              },
+            })}
+          />
+          <PasswordShow argument={showPassword} setter={setShowPassword} />
+        </ShowPasswordWrapper>
       </FormRow>
 
       <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
-        <Input
-          type="password"
-          id="passwordConfirm"
-          disabled={isLoading}
-          {...register("passwordConfirm", {
-            required: "This field is required",
-            validate: (value) =>
-              value === getValues().password || "Password needs to match",
-          })}
-        />
+        <ShowPasswordWrapper>
+          <Input
+            type={showConfirmPassword ? "text" : "password"}
+            id="passwordConfirm"
+            disabled={isLoading}
+            {...register("passwordConfirm", {
+              required: "This field is required",
+              validate: (value) =>
+                value === getValues().password || "Password needs to match",
+            })}
+          />
+          <PasswordShow
+            argument={showConfirmPassword}
+            setter={setShowConfirmPassword}
+          />
+        </ShowPasswordWrapper>
       </FormRow>
 
       <FormRow>
