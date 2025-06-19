@@ -66,7 +66,28 @@ function Modal({ children }) {
 function Open({ children, opens: opensWindowName }) {
   const { open } = useContext(ModalWindowContext);
 
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
+  if (!children || typeof children !== "object") return null;
+
+  const existingOnClick = children.props?.onClick;
+
+  const mergedOnClick = (e) => {
+    if (children.type === "a" && e.preventDefault) {
+      e.preventDefault();
+    }
+
+    // Open modal first
+    open(opensWindowName);
+
+    // Call existing onClick
+    if (typeof existingOnClick === "function") {
+      existingOnClick(e);
+    }
+  };
+
+  return cloneElement(children, {
+    ...children.props,
+    onClick: mergedOnClick,
+  });
 }
 
 function Window({ children, name }) {

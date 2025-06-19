@@ -9,7 +9,9 @@ import toast from "react-hot-toast";
 
 // Email regex: /\S+@\S+\.\S+/
 
-function SignupForm() {
+function SignupForm({
+  onCloseModal
+}) {
   const { signup, isLoading } = useSignup();
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
@@ -24,7 +26,10 @@ function SignupForm() {
         onError: (error) => {
           toast.error(`Unable to create new user.`, error);
         },
-        onSettled: () => reset(),
+        onSettled: () => {
+          reset();
+          onCloseModal();
+        },
       }
     );
   }
@@ -86,14 +91,14 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow>
+      <FormRow className="mt-5">
         {/* type is an HTML attribute! */}
 
         <Button
           variation="secondary"
           type="reset"
           disabled={isLoading}
-          onClick={reset}
+          onClick={onCloseModal}
         >
           Cancel
         </Button>

@@ -14,4 +14,10 @@ const displayPhoneDiagnosticStatus = (status) => {
   return status ? "✅" : "❌";
 }
 
-export { statusToTagName, displayPhoneDiagnosticStatus }
+const checkIfNullOrEmpty = (value) => {
+  const isInvalid = value === null || value === undefined || value === '';
+
+  if( isInvalid ) return new Error(`Data is invalid. Must not be empty, null or undefined.`);
+}
+
+export { statusToTagName, displayPhoneDiagnosticStatus, checkIfNullOrEmpty }

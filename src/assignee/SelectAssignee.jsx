@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import styled from "styled-components";
 
 import { useSearchParams } from "react-router-dom";
@@ -30,22 +31,27 @@ const Button = styled.button`
 
 function SelectAssignee() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { technicians } = useAssignee();
+  const { technicians, isLoading } = useAssignee(); 
 
   const filterField = "assignee";
-  const options = technicians && technicians.length && technicians.map((technician, techIndex) => ({
-    value: technician.id,
-    label: technician.name || `Technician 00${techIndex}`
-  }));
+
+  const options = useMemo(() => (
+    (technicians).map((technician, techIndex) => ({
+      value: technician.id,
+      label: technician.name || `Technician 00${techIndex}`,
+    }))
+  ), [technicians]);
 
   function handleClick(value) {
     searchParams.set(filterField, value);
     setSearchParams(searchParams);
   }
+
   return (
     <TechnicianOptions>
       <StyledButtonGroup>
         {
+          !isLoading && 
           options.map((option) => (
             <Button key={option.value} onClick={() => handleClick(option.value)}>
               {option.label}
