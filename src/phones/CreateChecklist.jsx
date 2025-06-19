@@ -50,10 +50,8 @@ const renderChecklist = (
           <label htmlFor={name}>{`With ${label}`}</label>
           <Switcher
             id={name}
-            name
-            {...register(name, {
-              required: "This field is required",
-            })}
+            name={name}
+            {...register(name)}
             onChange={handleCheckboxChange}
           />
         </ChecklistItem>
@@ -61,16 +59,22 @@ const renderChecklist = (
     });
 };
 
-function CreateChecklist({ handleCheckboxChange, register }) {
+function CreateChecklist({ handleCheckboxChange, register, errors }) {
   return (
     <StyledCheckList>
       <CheckList>
         <h3 className="text-2xl mb-4">Accessories</h3>
         {renderChecklist(register, handleCheckboxChange, "accessories")}
+        {errors.checklistGroup && (
+          <Error>{errors?.checklistGroup?.message}</Error>
+        )}
       </CheckList>
       <CheckList>
         <h3 className="text-2xl mb-4">Physical Condition</h3>
         {renderChecklist(register, handleCheckboxChange, "condition")}
+        {errors.checklistGroup && (
+          <Error>{errors?.checklistGroup?.message}</Error>
+        )}
       </CheckList>
     </StyledCheckList>
   );

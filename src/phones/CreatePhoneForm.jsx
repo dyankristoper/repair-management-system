@@ -22,7 +22,7 @@ const StyledFormContainer = styled.div`
   width: 1200px;
 `;
 
-function CreatePhoneForm({ phoneToEdit = {} }) {
+function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const [customerID, setCustomerID] = useState(null);
 
   const [step, setStep] = useState(1);
@@ -134,13 +134,17 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
         },
         {
           onSuccess: async ([updatedPhone]) => {
-            await onEvent({ type: 'resource_updated', source: 'CreatePhoneForm', metadata: updatedPhone });
+            await onEvent({
+              type: "resource_updated",
+              source: "CreatePhoneForm",
+              metadata: updatedPhone,
+            });
 
             setNewPhoneData(updatedPhone);
             nextStep();
           },
           onError: async (error) => {
-            await onError('error_server', 'CreatePhoneForm', error);
+            await onError("error_server", "CreatePhoneForm", error);
             toast.error(`Failed to edit phone: ${error}`);
           },
         }
@@ -150,14 +154,18 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
         { ...data, image: image, customer_id: customerID },
         {
           onSuccess: async (jobOrder) => {
-            await onEvent({ type: 'resource_created', source: 'CreatePhoneForm', metadata: jobOrder });
+            await onEvent({
+              type: "resource_created",
+              source: "CreatePhoneForm",
+              metadata: jobOrder,
+            });
 
             setNewPhoneData(jobOrder);
             reset();
             nextStep();
           },
           onError: async (error) => {
-            await onError('error_server', 'CreatePhoneForm', error);
+            await onError("error_server", "CreatePhoneForm", error);
             toast.error("Failed to create phone:", error);
           },
         }
@@ -226,12 +234,8 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           >
             New Job Order
           </Button>
-          <Button
-            className="ml-2"
-            type="secondary"
-            >
-            Close
-          </Button>
+
+          <Button type="secondary" onClick={() => onCloseModal?.()}></Button>
         </div>
       )}
     </StyledFormContainer>
