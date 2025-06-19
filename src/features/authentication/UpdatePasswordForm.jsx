@@ -9,6 +9,7 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import PasswordShow from "./PasswordShow";
 import ShowPasswordWrapper from "../../ui/ShowPasswordWrapper";
+import ButtonGroupWrapper from "../../ui/ButtonGroupWrapper";
 
 function UpdatePasswordForm() {
   const [state, dispatch] = useReducer(toggleReducer, initialState);
@@ -71,14 +72,14 @@ function UpdatePasswordForm() {
           />
         </ShowPasswordWrapper>
       </FormRow>
-      <FormRow>
+      <ButtonGroupWrapper>
         <Button onClick={reset} type="reset" variation="secondary">
           Cancel
         </Button>
         <Button variation="primary" disabled={isUpdating}>
           Update password
         </Button>
-      </FormRow>
+      </ButtonGroupWrapper>
     </Form>
   );
 }

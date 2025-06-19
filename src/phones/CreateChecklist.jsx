@@ -5,7 +5,6 @@ import { jobOrderChecklist } from "../utilities/constants";
 
 const StyledCheckList = styled.div`
   width: 80rem;
-  height: 35rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -16,6 +15,8 @@ const CheckList = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0.2rem;
+  height: 20rem;
+
   h3 {
     font-weight: 600;
     font-size: 1.8rem;

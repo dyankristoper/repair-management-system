@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import Tag from "./Tag";
-import { formatTimestamp } from '../helpers/formatTime';
-import { statusToTagName, displayPhoneDiagnosticStatus } from '../utilities/helpers';
+import { formatTimestamp } from "../helpers/formatTime";
+import {
+  statusToTagName,
+  displayPhoneDiagnosticStatus,
+} from "../utilities/helpers";
 
 const StyledPhoneDetails = styled.div`
   width: 60rem;
@@ -76,12 +79,7 @@ const Table = styled.table`
   }
 `;
 
-function ViewPhoneDetails({
-  phoneDetails = {},
-  phoneToEdit = {},
-  customerToEdit = {},
-  isEditSession,
-}) {
+function ViewPhoneDetails({ phoneDetails = {}, phoneToEdit = {} }) {
   const phoneDetailSource = phoneDetails ?? phoneToEdit;
 
   const {
@@ -99,35 +97,41 @@ function ViewPhoneDetails({
     bulgedBattery,
     brokenChargingpin,
     status,
-    customers
+    customers,
   } = phoneDetailSource;
 
   return (
     <a className="flex flex-col gap-10 items-center bg-white rounded-lg md:flex-row ">
-      <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-2/4 md:rounded-none md:rounded-s-lg" src={ image } alt="" />
+      <img
+        className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-2/4 md:rounded-none md:rounded-s-lg"
+        src={image}
+        alt=""
+      />
       <div className="flex flex-col justify-between p-4 leading-normal">
-        <Tag 
-          className="mb-5"
-          type={statusToTagName(status)}>
-          { status }
+        <Tag className="mb-5" type={statusToTagName(status)}>
+          {status}
         </Tag>
-        <h2 className="mb-2 text-4xl font-bold tracking-tight text-gray-900">{ phoneModel }</h2>
-        <p className="text-base">IMEI: { imei }</p>
+        <h2 className="mb-2 text-4xl font-bold tracking-tight text-gray-900">
+          {phoneModel}
+        </h2>
+        <p className="text-base">IMEI: {imei}</p>
         <p className="text-base">Created on: {formatTimestamp(created_at)}</p>
-        <p 
-          className="my-10 font-normal text-gray-700 dark:text-gray-400">
-          { phoneCondition }
+        <p className="my-10 font-normal text-gray-700 dark:text-gray-400">
+          {phoneCondition}
         </p>
 
         <div>
-          <p>SIM Tray: { displayPhoneDiagnosticStatus(simtray) }</p>
-          <p>SIM Card: { displayPhoneDiagnosticStatus(simcard) }</p>
-          <p>Memory Card: { displayPhoneDiagnosticStatus(memorycard) }</p>
-          <p>SPEN: { displayPhoneDiagnosticStatus(spen) }</p>
-          <p>Charger: { displayPhoneDiagnosticStatus(charger) }</p>
-          <p>Broken Screen: { displayPhoneDiagnosticStatus(brokenScreen) }</p>
-          <p>Bulged Battery: { displayPhoneDiagnosticStatus(bulgedBattery) }</p>
-          <p>Broken Charging Pin: { displayPhoneDiagnosticStatus(brokenChargingpin) }</p>
+          <p>SIM Tray: {displayPhoneDiagnosticStatus(simtray)}</p>
+          <p>SIM Card: {displayPhoneDiagnosticStatus(simcard)}</p>
+          <p>Memory Card: {displayPhoneDiagnosticStatus(memorycard)}</p>
+          <p>SPEN: {displayPhoneDiagnosticStatus(spen)}</p>
+          <p>Charger: {displayPhoneDiagnosticStatus(charger)}</p>
+          <p>Broken Screen: {displayPhoneDiagnosticStatus(brokenScreen)}</p>
+          <p>Bulged Battery: {displayPhoneDiagnosticStatus(bulgedBattery)}</p>
+          <p>
+            Broken Charging Pin:{" "}
+            {displayPhoneDiagnosticStatus(brokenChargingpin)}
+          </p>
         </div>
 
         <div className="py-2 my-5">
@@ -137,7 +141,7 @@ function ViewPhoneDetails({
         </div>
       </div>
     </a>
-  )
+  );
 }
 
 export default ViewPhoneDetails;

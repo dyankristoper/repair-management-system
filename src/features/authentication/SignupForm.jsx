@@ -9,6 +9,7 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import PasswordShow from "./PasswordShow";
 import ShowPasswordWrapper from "../../ui/ShowPasswordWrapper";
+import ButtonGroupWrapper from "../../ui/ButtonGroupWrapper";
 
 // Email regex: /\S+@\S+\.\S+/
 
@@ -97,7 +98,7 @@ function SignupForm() {
         </ShowPasswordWrapper>
       </FormRow>
 
-      <FormRow>
+      <ButtonGroupWrapper>
         {/* type is an HTML attribute! */}
 
         <Button
@@ -111,7 +112,7 @@ function SignupForm() {
         <Button variation="primary" disabled={isLoading}>
           Create new user
         </Button>
-      </FormRow>
+      </ButtonGroupWrapper>
     </Form>
   );
 }

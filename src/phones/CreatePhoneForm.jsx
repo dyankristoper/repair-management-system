@@ -57,7 +57,8 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
     watch,
   } = useForm({
     defaultValues: isEditSession ? defaultCheckValues || phoneToEdit : {},
-    mode: "onChange",
+    mode: "onTouched",
+    reValidateMode: "onChange",
   });
 
   const checklistFields = useMemo(
@@ -235,7 +236,9 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             New Job Order
           </Button>
 
-          <Button type="secondary" onClick={() => onCloseModal?.()}></Button>
+          <Button type="secondary" onClick={() => onCloseModal?.()}>
+            Close
+          </Button>
         </div>
       )}
     </StyledFormContainer>
