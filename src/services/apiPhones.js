@@ -92,7 +92,8 @@ export async function deletePhone(id) {
 export async function getTechnicians(){
   const { data, error } = await supabase
     .from("user_profiles")
-    .select();
+    .select("*")
+    .eq("isActive", true);
 
   if (error || data.length === 0) {
     return await onError( error, 'Unable to fetch list of technicians.')
