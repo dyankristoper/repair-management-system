@@ -5,7 +5,6 @@ import { getCurrentUser } from "../services/apiAuth";
 import { EVENT_TYPES } from "../utilities/constants";
 
 const useLogs = () => {
-
   const createLog = async ( eventLogPayload ) => {
     const userInfo = await getCurrentUser();
     const { getUserIP } = useLocalUser();
@@ -25,10 +24,10 @@ const useLogs = () => {
     const { label, description, category } = event;
     const { user } = userInfo;
     const userIP = await getUserIP();
-    
-    try {      
+
+    try {
       const { data } = await supabase
-        .from('event_logs')
+        .from("event_logs")
         .insert([
           {
             user_id: user?.id || null,
@@ -42,13 +41,12 @@ const useLogs = () => {
         .select();
 
       if( data.length > 0 ) return;
-
     } catch (error) {
       throw new Error(`${ error }`);
     }
-  }
+  };
 
-  return { createLog }
-}
+  return { createLog };
+};
 
 export default useLogs;

@@ -9,6 +9,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  height: 45rem;
 `;
 
 const StyledSelect = styled.select`

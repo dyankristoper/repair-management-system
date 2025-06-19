@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 const sizes = {
   large: css`
     width: 180px;
+    display: flex;
+    justify-content: center;
     font-size: 1.2rem;
     padding: 0.6rem 1rem;
     text-transform: uppercase;
@@ -11,6 +13,8 @@ const sizes = {
     border: none;
     outline: none;
     border-radius: 5px;
+    background-color: var(--color-green-700);
+    color: #fff;
   `,
 };
 

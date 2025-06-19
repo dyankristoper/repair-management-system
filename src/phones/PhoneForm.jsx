@@ -15,7 +15,13 @@ import { MIN_JOB_ORDER_COST } from "../utilities/constants";
 import { useAssignee } from '../assignee/useAssignee';
 
 const StyledSelect = styled.select`
-  background-color: var(--color-grey-100);
+  font-size: 1.4rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius-lg);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+  border: 1px solid var(--color-grey-200);
 `;
 
 const Textarea = styled.textarea`
@@ -67,7 +73,7 @@ function PhoneForm({
     }
 
     return null;
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)} type={"modal"}>
@@ -133,8 +139,8 @@ function PhoneForm({
                 required: "This field is required",
               })}
             >
-              <option value={ null }>Select technician</option>
-              { renderTechnicianSelection() }
+              <option value={null}>Select technician</option>
+              {renderTechnicianSelection()}
             </StyledSelect>
           </FormRow>
           <FormRow label="Image (Optional)" error={errors?.image?.message}>

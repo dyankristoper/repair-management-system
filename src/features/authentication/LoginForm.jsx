@@ -13,7 +13,7 @@ import { onEvent } from "../../utilities/formError";
 
 const StyledLoginForm = styled.div`
   width: 100%;
-  max-width: 100%;
+  max-width: 800px;
   height: 420px;
 
   display: flex;
@@ -22,7 +22,7 @@ const StyledLoginForm = styled.div`
 
 const FormSection = styled.div`
   width: 100%;
-  height: 100%;
+  max-width: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,15 +109,10 @@ function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
             disabled={isPending}
           />
-          <div className="w-100">
-            <ButtonSecondary
-              className="bg-green-800 text-white"
-              size="large"
-              disabled={isPending}
-            >
-              {!isPending ? "Log in" : <SpinnerMini />}
-            </ButtonSecondary>
-          </div>
+
+          <ButtonSecondary size="large" disabled={isPending}>
+            {!isPending ? "Log in" : <SpinnerMini />}
+          </ButtonSecondary>
         </StyledForm>
       </FormSection>
 
