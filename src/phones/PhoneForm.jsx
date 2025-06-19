@@ -13,7 +13,13 @@ import styled from "styled-components";
 import { useAssignee } from "../assignee/useAssignee";
 
 const StyledSelect = styled.select`
-  background-color: var(--color-grey-100);
+  font-size: 1.4rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius-lg);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+  border: 1px solid var(--color-grey-200);
 `;
 
 const Textarea = styled.textarea`
