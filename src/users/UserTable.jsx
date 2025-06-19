@@ -4,6 +4,7 @@ import { useUpdateUser } from "../features/authentication/useUpdateUser";
 
 import ModalWindow from '../ui/ModalWindow';
 import ConfirmDelete from "../ui/ConfirmDelete";
+import UserUpdateForm from "./UserUpdateForm";
 import UserTableHeader from "./UserTableHeader";
 import UserTableBody from "./UserTableBody";
 
@@ -28,6 +29,11 @@ const UserTable = () => {
             onConfirm={() => suspendUser(selectedUser.id)}
           />
         )}
+      </ModalWindow.Window>
+
+      
+      <ModalWindow.Window name="update-user">
+        <UserUpdateForm selectedUser={selectedUser} />
       </ModalWindow.Window>
     </>
   )

@@ -102,13 +102,31 @@ export async function getTechnicians(){
   return data;
 }
 
+export async function updateTechnician( technician ){
+  const { id, name } = technician;
+
+  try {
+    const { error } = await supabase
+                              .from('user_profiles')
+                              .update({ name })
+                              .eq("id", id)
+                              .select();
+
+    if(error) throw new Error( error );
+
+    return;
+  } catch (error) {
+    onError('error_server', 'updateTechnician', error);
+  }
+}
+
 export async function getPendingRepairs() {
   const { data, error } = await supabase
     .from("job_orders")
     .select("*")  
 
   if (error) {
-    return await onError( error, 'Unable to fetch pending repair resources.');
+    return await onError('error_server', 'getPendingRepairs', error);
   }
 
   return data;
@@ -124,7 +142,7 @@ export async function getAssignedRepairs({ filter }) {
   const { data, error } = await query;
 
   if (error) {
-    return await onError( error, 'Unable to load assigned repairs.');
+    return await onError('error_server', 'getAssignedRepairs', error);
   }
 
   return data;
@@ -138,7 +156,7 @@ export async function getAssigned(id) {
     .single();
 
   if (error) {
-    return await onError( error, 'Assigned not found.' );
+    return await onError( 'error_server', 'getAssigned', error );
   }
 
   return data;
@@ -152,7 +170,7 @@ export async function getSalesAfterDate(date) {
     .lte("created_at", getToday({ end: true }));
 
   if (error) {
-    return await onError( error, 'Unable to fetch sales after date.' );
+    return await onError( 'error_server', 'getSalesAfterDate', error );
   }
 
   return data;

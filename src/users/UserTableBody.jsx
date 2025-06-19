@@ -32,14 +32,24 @@ const UserTableBody = ({ data, setSelectedUser }) => {
       // Show suspend button if value is null and user is active
       if (content === undefined || content === null) {
         content = isActive ? (
-          <ModalWindow.Open opens="suspend-user">
-            <button
-              className="bg-red-500 hover:bg-red-600 text-white text-2xl uppercase rounded px-5 py-2"
-              onClick={() => setSelectedUser(row)}
-            >
-              Delete
-            </button>
-          </ModalWindow.Open>
+          <>          
+            <ModalWindow.Open opens="update-user">
+              <button
+                className="border border-green-800 hover:bg-green-600 hover:text-white text-2xl uppercase rounded px-5 py-2 mr-4"
+                onClick={() => setSelectedUser(row)}
+              >
+                Update
+              </button>
+            </ModalWindow.Open>
+            <ModalWindow.Open opens="suspend-user">
+              <button
+                className="border border-red-500 bg-red-500 hover:bg-red-600 text-white text-2xl uppercase rounded px-5 py-2"
+                onClick={() => setSelectedUser(row)}
+              >
+                Delete
+              </button>
+            </ModalWindow.Open>
+          </>
         ) : (
           "-"
         );

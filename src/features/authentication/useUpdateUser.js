@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import toast from "react-hot-toast";
 import { updateCurrentUser, suspendAuthUser } from "../../services/apiAuth";
+import { updateTechnician } from "../../services/apiPhones";
 
 export function useUpdateUser() {
   const queryClient = useQueryClient();
@@ -24,5 +25,14 @@ export function useUpdateUser() {
     onError: (error) => toast.error(error.message)
   });
 
-  return { updateUser, isUpdating, suspendUser, isSuspending };
+  const { mutate: updateCurrentTechnician, isLoading: isTechnicianUpdating } = useMutation({
+    mutationFn: updateTechnician,
+    onSuccess: () => {
+      toast.success(`Technician details has been updated.`);
+      queryClient.invalidateQueries({ queryKey: ["technicians"] })
+    },
+    onError: (error) => toast.error(error.message)
+  });
+
+  return { updateUser, isUpdating, suspendUser, isSuspending, updateCurrentTechnician, isTechnicianUpdating };
 }
