@@ -4,6 +4,8 @@ import Form from "../ui/Form";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Button from '../ui/Button';
+import ButtonGroupWrapper from '../ui/ButtonGroupWrapper';
+
 import toast from 'react-hot-toast';
 
 import { useUpdateUser } from '../features/authentication/useUpdateUser';
@@ -63,7 +65,7 @@ const UserUpdateForm = ({ selectedUser, onCloseModal }) => {
 					/>
 				</FormRow>
 
-				<FormRow className="mt-5">
+				<ButtonGroupWrapper className="mt-10">
 					<Button
 						type="reset"
 						variation="secondary"
@@ -75,7 +77,7 @@ const UserUpdateForm = ({ selectedUser, onCloseModal }) => {
 					<Button variation="primary" disabled={isTechnicianUpdating}>
 						Update
 					</Button>
-				</FormRow>
+				</ButtonGroupWrapper>
 			</Form>
 		</>
   )

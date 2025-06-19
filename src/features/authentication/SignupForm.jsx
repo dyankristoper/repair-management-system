@@ -8,7 +8,6 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 
-import { useSignup } from "./useSignup";
 import toast from "react-hot-toast";
 
 import PasswordShow from "./PasswordShow";
