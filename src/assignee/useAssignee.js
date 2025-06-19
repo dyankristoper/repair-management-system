@@ -4,19 +4,29 @@ import { getTechnicians, getAssignedRepairs } from "../services/apiPhones";
 
 export function useAssignee() {
   const [searchParams] = useSearchParams();
-  const filterValue = searchParams.get("assignee");
+  const assigneeParam = searchParams.get("assignee");
 
   const filter =
-    !filterValue || filterValue === "all"
+    !assigneeParam || assigneeParam === "all"
       ? null
-      : { field: "assignee", value: filterValue };
+      : { field: "assignee", value: assigneeParam };
 
-  const { data: assignedRepairs, isPending: isRepairsLoading, error: repairsError } = useQuery({
+  // Query: Assigned Repairs
+  const {
+    data: assignedRepairs,
+    isPending: isRepairsLoading,
+    error: repairsError,
+  } = useQuery({
     queryKey: ["assignedRepairs", filter],
     queryFn: () => getAssignedRepairs({ filter }),
   });
 
-  const { data: technicians, isPending: isTechniciansLoading, error: techniciansError } = useQuery({
+  // Query: Technicians
+  const {
+    data: technicians,
+    isPending: isTechniciansLoading,
+    error: techniciansError,
+  } = useQuery({
     queryKey: ["technicians"],
     queryFn: getTechnicians,
   });
@@ -28,3 +38,4 @@ export function useAssignee() {
     error: repairsError || techniciansError,
   };
 }
+

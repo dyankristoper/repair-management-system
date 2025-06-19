@@ -145,7 +145,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             nextStep();
           },
           onError: async (error) => {
-            await onError("error_server", "CreatePhoneForm", error);
+            await onError('error_server', 'CreatePhoneForm', error);
             toast.error(`Failed to edit phone: ${error}`);
           },
         }
@@ -166,7 +166,7 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
             nextStep();
           },
           onError: async (error) => {
-            await onError("error_server", "CreatePhoneForm", error);
+            await onError('error_server', 'CreatePhoneForm', error);
             toast.error("Failed to create phone:", error);
           },
         }
@@ -235,7 +235,6 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
           >
             New Job Order
           </Button>
-
           <Button type="secondary" onClick={() => onCloseModal?.()}>
             Close
           </Button>

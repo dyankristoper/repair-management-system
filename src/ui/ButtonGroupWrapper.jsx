@@ -6,8 +6,8 @@ const StyledButtonGroup = styled.div`
   justify-content: right;
 `;
 
-function ButtonGroupWrapper({ children }) {
-  return <StyledButtonGroup>{children}</StyledButtonGroup>;
+function ButtonGroupWrapper({ children, className = '' }) {
+  return <StyledButtonGroup className={className} >{children}</StyledButtonGroup>;
 }
 
 export default ButtonGroupWrapper;
