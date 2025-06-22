@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { useUpdatePhone } from "./useUpdatePhone";
 import { useMemo, useState } from "react";
 import { getDefaultCheckValues } from "../utilities/defaultCheckValues";
-
 import { onError, onEvent } from "../utilities/formError";
+
 import styled from "styled-components";
 import ProgressBar from "../ui/ProgressBar";
 import ViewPhoneDetails from "../ui/ViewPhoneDetails";
@@ -152,7 +152,12 @@ function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
       );
     } else {
       createPhone(
-        { ...data, image: image, customer_id: customerID },
+        {
+          ...data,
+          image: image,
+          customer_id: customerID,
+          status: "in_progress",
+        },
         {
           onSuccess: async (jobOrder) => {
             await onEvent({

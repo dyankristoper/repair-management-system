@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAssigned } from "./useAssigned";
-import { Logo } from '../utilities/constants';
+import { Logo } from "../utilities/constants";
 import styled from "styled-components";
 
 import Grid from "./Grid";
@@ -8,11 +8,9 @@ import Loader from "../ui/Loader";
 import Button from "../ui/Button";
 import ModalWindow from "../ui/ModalWindow";
 import UpdatePhoneForm from "./UpdatePhoneForm";
+import { useSettings } from "../settings/useSettings";
 
 const StyledAssigned = styled.div`
-  width: 100%;
-  max-width: 640px;
-  height: 500px;
   border-radius: 8px;
   padding: 1em 2em;
   background-color: var(--color-grey-50);
@@ -23,8 +21,11 @@ const StyledAssigned = styled.div`
 
 const LogoWrapper = styled.div`
   width: 100%;
+  max-width: 240px;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 0rem;
+  flex-direction: column;
 `;
 
 const ButtonGroup = styled.div`
@@ -35,6 +36,10 @@ const ButtonGroup = styled.div`
 
 function AssignedDetails() {
   const { assigned, isPending } = useAssigned();
+  const {
+    settings: { company_logo, company_name },
+  } = useSettings();
+
   const navigate = useNavigate();
 
   if (isPending) return <Loader />;
@@ -42,8 +47,8 @@ function AssignedDetails() {
   return (
     <StyledAssigned>
       <LogoWrapper>
-        <img src={Logo} width={56} />
-        <p>Job order #</p>
+        <img src={company_logo} width={56} />
+        <h2>{company_name}</h2>
       </LogoWrapper>
 
       <Grid assigned={assigned} isPending={isPending} />

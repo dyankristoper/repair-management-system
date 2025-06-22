@@ -1,7 +1,9 @@
 import styled from "styled-components";
 
 import { useSearchParams } from "react-router-dom";
-import { useAssignee } from '../assignee/useAssignee';
+import { useAssignee } from "../assignee/useAssignee";
+
+import Loader from "../ui/Loader";
 
 const TechnicianOptions = styled.div`
   display: flex;
@@ -30,28 +32,32 @@ const Button = styled.button`
 
 function SelectAssignee() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { technicians } = useAssignee();
+  const { technicians, isLoading } = useAssignee();
 
   const filterField = "assignee";
-  const options = technicians && technicians.length && technicians.map((technician, techIndex) => ({
-    value: technician.id,
-    label: technician.name || `Technician 00${techIndex}`
-  }));
+  const options =
+    technicians &&
+    technicians.length &&
+    technicians.map((technician, techIndex) => ({
+      value: technician.id,
+      label: technician.name || `Technician 00${techIndex}`,
+    }));
 
   function handleClick(value) {
     searchParams.set(filterField, value);
     setSearchParams(searchParams);
   }
+
+  if (isLoading) return <Loader />;
+
   return (
     <TechnicianOptions>
       <StyledButtonGroup>
-        {
-          options.map((option) => (
-            <Button key={option.value} onClick={() => handleClick(option.value)}>
-              {option.label}
-            </Button>
-          ))
-        }
+        {options?.map((option) => (
+          <Button key={option.value} onClick={() => handleClick(option.value)}>
+            {option.label}
+          </Button>
+        ))}
       </StyledButtonGroup>
     </TechnicianOptions>
   );
