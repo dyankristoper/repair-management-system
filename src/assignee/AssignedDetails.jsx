@@ -36,9 +36,9 @@ const ButtonGroup = styled.div`
 
 function AssignedDetails() {
   const { assigned, isPending } = useAssigned();
-  const {
-    settings: { company_logo, company_name },
-  } = useSettings();
+  const { settings } = useSettings();
+
+  const { company_logo, company_name } = settings ?? {};
 
   const navigate = useNavigate();
 

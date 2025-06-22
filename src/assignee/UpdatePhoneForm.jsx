@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { useUpdatePhone } from "../phones/useUpdatePhone";
 import { onError, onEvent } from "../utilities/formError";
-import { phoneStatus, repairResult } from "../utilities/constants";
+import { job_order_status } from "../utilities/constants";
 
 import styled from "styled-components";
 import Button from "../ui/Button";
@@ -51,7 +51,7 @@ function UpdatePhoneForm({ assignedToUpdate = {}, onCloseModal }) {
 
   const isEditSession = Boolean(editId);
 
-  const { register, handleSubmit, control, watch } = useForm({
+  const { register, handleSubmit, control } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
 
@@ -60,15 +60,12 @@ function UpdatePhoneForm({ assignedToUpdate = {}, onCloseModal }) {
     "Phone successfully edited"
   );
 
-  const currentStatus = watch("status");
-
   const onSubmit = (data) => {
     editPhone(
       {
         newPhoneData: {
           status: data.status,
-          result: data.result,
-          remarks: data.remarks,
+          job_order_status: data.job_order_status,
         },
         id: editId,
       },
@@ -102,30 +99,15 @@ function UpdatePhoneForm({ assignedToUpdate = {}, onCloseModal }) {
       <UpdateForm onSubmit={handleSubmit(onSubmit)}>
         <Controller
           control={control}
-          defaultValue={editValues?.status}
-          name="status"
+          name="job_order_status"
           render={({ field }) => (
-            <Select options={phoneStatus} id="status" {...field} />
+            <Select options={job_order_status} id="status" {...field} />
           )}
         />
-        {currentStatus === "completed" && (
-          <Controller
-            control={control}
-            defaultValue={editValues?.result}
-            name="result"
-            render={({ field }) => (
-              <Select options={repairResult} id="result" {...field} />
-            )}
-          />
-        )}
 
         <TextArea>
           <p>Add description if any</p>
-          <Input
-            id="remarks"
-            {...register("remarks")}
-            defaultValue={editValues?.remarks}
-          />
+          <Input id="remarks" {...register("remarks")} />
         </TextArea>
 
         <Button variation="quaternary">Done</Button>

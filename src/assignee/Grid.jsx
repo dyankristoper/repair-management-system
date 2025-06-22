@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Loader from "../ui/Loader";
 import EntityDetails from "../ui/EntityDetails";
 
-const StyledGrid = styled.ul`
+const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -12,7 +12,7 @@ const StyledGrid = styled.ul`
   padding: 2rem;
 `;
 
-const BoxOne = styled.li`
+const BoxOne = styled.ul`
   grid-column: span 3 / span 3;
   grid-row: span 2 / span 2;
 
@@ -20,14 +20,14 @@ const BoxOne = styled.li`
   flex-direction: column;
 `;
 
-const BoxTwo = styled.li`
+const BoxTwo = styled.ul`
   grid-column: span 3 / span 3;
   grid-row: span 2 / span 2;
   grid-column-start: 1;
   grid-row-start: 3;
 `;
 
-const BoxThree = styled.li`
+const BoxThree = styled.div`
   grid-column: span 2 / span 2;
   grid-row: span 4 / span 4;
   grid-column-start: 4;

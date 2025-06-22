@@ -171,7 +171,7 @@ export async function getAssigned(id) {
 export async function getSalesAfterDate(date) {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("created_at,cost,success,failed,serviceFee")
+    .select("created_at,cost,job_order_status")
     .gte("created_at", date)
     .lte("created_at", getToday({ end: true }));
 
