@@ -69,7 +69,7 @@ function LoginForm() {
       { email, password },
       {
         onSettled: async () => {
-          await onEvent({ type: "login_success" });
+          await onEvent({ type: 'login_success' });
 
           setEmail("");
           setPassword("");

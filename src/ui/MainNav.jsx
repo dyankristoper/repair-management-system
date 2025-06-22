@@ -42,7 +42,7 @@ function MainNav() {
           (
             <>
               <li>
-                <StyledNavLink to="/createUser">
+                <StyledNavLink to="/users">
                   <HiOutlineUser />
                   <span>Users</span>
                 </StyledNavLink>

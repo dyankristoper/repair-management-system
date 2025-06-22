@@ -13,7 +13,7 @@ import Phones from "./pages/Phones";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
-import CreateUser from "./pages/CreateUser";
+import Users from "./pages/Users";
 import Assigned from "./pages/Assigned";
 import PageNotFound from "./pages/PageNotFound";
 
@@ -45,7 +45,7 @@ function App() {
 
               <Route path="assignee/:assignedId" element={<Assigned />} />
               <Route path="job-orders" element={<Phones />} />
-              <Route path="createUser" element={<CreateUser />} />
+              <Route path="users" element={<Users />} />
               <Route path="settings" element={<Settings />} />
             </Route>
 

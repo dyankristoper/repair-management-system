@@ -7,13 +7,18 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+
+import toast from "react-hot-toast";
+
 import PasswordShow from "./PasswordShow";
 import ShowPasswordWrapper from "../../ui/ShowPasswordWrapper";
 import ButtonGroupWrapper from "../../ui/ButtonGroupWrapper";
 
 // Email regex: /\S+@\S+\.\S+/
 
-function SignupForm() {
+function SignupForm({
+  onCloseModal
+}) {
   const [state, dispatch] = useReducer(toggleReducer, initialState);
   const { password, confirmPassword } = state;
   const { signup, isLoading } = useSignup();
@@ -24,7 +29,16 @@ function SignupForm() {
     signup(
       { fullName, email, password },
       {
-        onSettled: () => reset(),
+        onSuccess: () => {
+          toast.success(`User has been created successfully.`);
+        },
+        onError: (error) => {
+          toast.error(`Unable to create new user.`, error);
+        },
+        onSettled: () => {
+          reset();
+          onCloseModal();
+        },
       }
     );
   }
@@ -105,7 +119,7 @@ function SignupForm() {
           variation="secondary"
           type="reset"
           disabled={isLoading}
-          onClick={reset}
+          onClick={onCloseModal}
         >
           Cancel
         </Button>

@@ -5,16 +5,20 @@ import { getCurrentUser } from "../services/apiAuth";
 import { EVENT_TYPES } from "../utilities/constants";
 
 const useLogs = () => {
-  const createLog = async (eventLogPayload) => {
+  const createLog = async ( eventLogPayload ) => {
     const userInfo = await getCurrentUser();
     const { getUserIP } = useLocalUser();
 
-    const { type, source, eventError } = eventLogPayload;
+    const {
+      type,
+      source,
+      eventError
+    } = eventLogPayload;
 
     const event = EVENT_TYPES[type] || {
-      label: "Unknown Event",
-      description: "No description available.",
-      category: "Uncategorized",
+      label: 'Unknown Event',
+      description: 'No description available.',
+      category: 'Uncategorized'
     };
 
     const { label, description, category } = event;
@@ -36,9 +40,9 @@ const useLogs = () => {
         ])
         .select();
 
-      if (data.length > 0) return;
+      if( data.length > 0 ) return;
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new Error(`${ error }`);
     }
   };
 

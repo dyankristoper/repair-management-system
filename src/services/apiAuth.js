@@ -1,5 +1,7 @@
 import supabase, { supabaseUrl } from "./supabase";
 import { jwtDecode } from 'jwt-decode';
+import { onError } from "../utilities/formError";
+import { checkIfNullOrEmpty } from "../utilities/helpers";
 
 export async function signup({ fullName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
@@ -82,4 +84,20 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   if (error2) throw new Error(error2.message);
 
   return updatedUser;
+}
+
+export async function suspendAuthUser( userId ){
+  try {    
+    checkIfNullOrEmpty(userId);
+
+    const { data, error } = await supabase
+                      .from("user_profiles")
+                      .update({"isActive": false})
+                      .eq('id', userId)
+                      .select();
+
+    if( error ) throw new Error( error );
+  } catch (error) {
+    await onError('error_server', 'suspendUser', error );
+  }
 }

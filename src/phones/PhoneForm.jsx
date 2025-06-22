@@ -10,7 +10,9 @@ import Input from "../ui/Input";
 import CreateChecklist from "./CreateChecklist";
 import styled from "styled-components";
 
-import { useAssignee } from "../assignee/useAssignee";
+import { MIN_JOB_ORDER_COST } from "../utilities/constants";
+
+import { useAssignee } from '../assignee/useAssignee';
 
 const StyledSelect = styled.select`
   font-size: 1.4rem;
@@ -120,8 +122,9 @@ function PhoneForm({
           </FormRow>
           <FormRow label="Cost (Php)" error={errors?.cost?.message}>
             <Input
-              type="text"
+              type="number"
               id="cost"
+              min={ MIN_JOB_ORDER_COST }
               disabled={isWorking}
               {...register("cost", {
                 required: "This field is required",
