@@ -18,6 +18,7 @@ const StyledLoginForm = styled.div`
 
   display: flex;
   align-items: center;
+  gap: 20px;
 `;
 
 const FormSection = styled.div`
