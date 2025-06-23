@@ -46,7 +46,8 @@ const CloseButton = styled.button`
   border-radius: 50%;
   border: none;
   margin: 0.2em;
-  background-color: var(--color-grey-100);
+  background-color: var(--color-red-100);
+  color: var(--color-red-800);
 `;
 
 const ModalWindowContext = createContext();
@@ -99,7 +100,8 @@ function Window({ children, name }) {
   return createPortal(
     <Overlay>
       <StyledModal>
-        <CloseButton onClick={close}>
+        <CloseButton 
+          onClick={close}>
           <RiCloseFill />
         </CloseButton>
         <div>{cloneElement(children, { onCloseModal: close })}</div>
