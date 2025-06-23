@@ -17,18 +17,18 @@ const PieChartBox = styled.div`
 `;
 
 function PieChartComponent() {
-  const { pendingRepairs } = usePendingRepairs();
+  const { job_orders } = usePendingRepairs();
   const { isDarkMode } = useDarkMode();
 
-  const completedCount = (pendingRepairs ?? []).filter(
+  const completedCount = (job_orders ?? []).filter(
     (pending) => pending.completed
   ).length;
 
-  const pendingCount = (pendingRepairs ?? []).filter(
+  const pendingCount = (job_orders ?? []).filter(
     (pending) => !pending.completed
   ).length;
 
-  const confirmationCount = (pendingRepairs ?? []).filter(
+  const confirmationCount = (job_orders ?? []).filter(
     (pending) => pending.waitingForConfirmation
   ).length;
 

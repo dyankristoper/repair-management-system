@@ -1,36 +1,35 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { useUpdatePhone } from "../phones/useUpdatePhone";
+import { onError, onEvent } from "../utilities/formError";
+import { job_order_status } from "../utilities/constants";
 
 import styled from "styled-components";
 import Button from "../ui/Button";
-import { useUpdatePhone } from "../phones/useUpdatePhone";
+import Select from "../ui/Select";
+import toast from "react-hot-toast";
+import Input from "../ui/Input";
 
 const StyledUpdatePhoneForm = styled.div`
-  width: 100%;
-  max-width: 380px;
+  width: 580px;
+  min-height: 380px;
 `;
 
 const UpdateForm = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
-`;
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 0.2em;
-
-  &:hover {
-    background-color: var(--color-grey-100);
-  }
+  gap: 1.5em;
+  margin-top: 1em;
 `;
 
 const Header = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  background-color: var(--color-grey-100);
+  padding: 1em;
 
-  p {
+  h3 {
     font-size: 1.8rem;
     font-weight: 500;
   }
@@ -43,142 +42,72 @@ const Header = styled.div`
 const TextArea = styled.div`
   display: flex;
   flex-direction: column;
-
-  textarea {
-    width: 100%;
-    height: 140px;
-  }
 `;
 
-function UpdatePhoneForm({ assignedToUpdate = {} }) {
-  const handleCheckboxChange = (e) => {
-    if (e.target.value) {
-      setValue(e.target.name, e.target.checked);
-    }
-  };
+function UpdatePhoneForm({ assignedToUpdate = {}, onCloseModal }) {
+  const { id: editId, ...editValues } = assignedToUpdate ?? {};
 
-  const { phoneModel, imei } = assignedToUpdate;
-  const { id: editId, ...editValues } = assignedToUpdate ?? [];
+  const { phoneModel, imei } = editValues;
 
   const isEditSession = Boolean(editId);
 
-  const defaultCheckValues = isEditSession
-    ? {
-        ...editValues,
-        success: editValues.success ?? false,
-        failed: editValues.failed ?? false,
-        completed: editValues.completed ?? false,
-        waitingForConfirmation: editValues.waitingForConfirmation ?? false,
-      }
-    : {
-        success: false,
-        failed: false,
-        completed: false,
-        waitingForConfirmation: false,
-      };
-
-  const { register, handleSubmit, reset, setValue } = useForm({
-    defaultValues: isEditSession ? editValues && defaultCheckValues : {},
+  const { register, handleSubmit, control } = useForm({
+    defaultValues: isEditSession ? editValues : {},
   });
 
-  const { mutate: createPhone, isLoading: isCreating } = useUpdatePhone(
-    "create",
-    "Phone successfully created"
-  );
-
-  const { mutate: editPhone, isLoading: isEditing } = useUpdatePhone(
+  const { mutate: editPhone } = useUpdatePhone(
     "edit",
     "Phone successfully edited"
   );
 
-  function onSubmit(data) {
-    if (isEditSession)
-      editPhone(
-        {
-          newPhoneData: {
-            ...data,
-          },
-          id: editId,
+  const onSubmit = (data) => {
+    editPhone(
+      {
+        newPhoneData: {
+          status: data.status,
+          job_order_status: data.job_order_status,
         },
-        {
-          onSuccess: () => reset(),
-        }
-      );
-    else
-      createPhone({
-        onSuccess: () => {
-          reset();
+        id: editId,
+      },
+      {
+        onSuccess: async ([updatedPhone]) => {
+          await onEvent({
+            type: "resource_updated",
+            source: "UpdatePhoneForm",
+            metadata: updatedPhone,
+          });
+          onCloseModal?.();
         },
-      });
-  }
+        onError: async (error) => {
+          await onError("error_server", "UpdatePhoneForm", error);
+          toast.error(`Failed to edit phone: ${error}`);
+        },
+      }
+    );
+  };
 
   return (
     <StyledUpdatePhoneForm>
       <Header>
-        <h1>update details for job order #</h1>
+        <h2>Update details for job order #</h2>
         <div>
           <h3>{phoneModel}</h3>
           <p>{imei}</p>
         </div>
       </Header>
+
       <UpdateForm onSubmit={handleSubmit(onSubmit)}>
-        <Row>
-          <label htmlFor="success">Success</label>
-          <input
-            name="success"
-            id="success"
-            type="checkbox"
-            {...register("success")}
-            onChange={handleCheckboxChange}
-            disabled={isCreating || isEditing}
-          />
-        </Row>
-
-        <Row>
-          <label htmlFor="failed">Failed</label>
-          <input
-            name="failed"
-            id="failed"
-            type="checkbox"
-            {...register("failed")}
-            onChange={handleCheckboxChange}
-            disabled={isCreating || isEditing}
-          />
-        </Row>
-
-        <Row>
-          <label htmlFor="waitingForConfirmation">
-            Waiting for confirmation
-          </label>
-          <input
-            name="waitingForConfirmation"
-            id="waitingForConfirmation"
-            type="checkbox"
-            {...register("waitingForConfirmation")}
-            onChange={handleCheckboxChange}
-            disabled={isCreating || isEditing}
-          />
-        </Row>
-        <Row>
-          <label htmlFor="success">Completed</label>
-          <input
-            name="completed"
-            id="completed"
-            type="checkbox"
-            {...register("completed")}
-            onChange={handleCheckboxChange}
-            disabled={isCreating || isEditing}
-          />
-        </Row>
+        <Controller
+          control={control}
+          name="job_order_status"
+          render={({ field }) => (
+            <Select options={job_order_status} id="status" {...field} />
+          )}
+        />
 
         <TextArea>
-          <label htmlFor="remarks">Remarks:</label>
-          <textarea
-            id="remarks"
-            type="text"
-            {...register("remarks")}
-            disabled={isCreating || isEditing}
-          />
+          <p>Add description if any</p>
+          <Input id="remarks" {...register("remarks")} />
         </TextArea>
 
         <Button variation="quaternary">Done</Button>

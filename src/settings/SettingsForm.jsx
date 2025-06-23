@@ -14,7 +14,8 @@ import ModalWindow from "../ui/ModalWindow";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import ColorPicker from "./ColorPicker";
 import CompanySettings from "./CompanySettings";
-import onError from "../utilities/formError";
+
+import { onError, onEvent } from "../utilities/formError";
 import toast from "react-hot-toast";
 
 const Wrapper = styled.div`
@@ -142,10 +143,12 @@ function SettingsForm() {
           id: editId,
         },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
+            await onEvent({ type: 'resource_updated', source: 'SettingsForm', metadata: {...data, company_logo}});
             navigate("/settings");
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError('error_server', 'SettingsForm', error);
             toast.error("Failed to edit company settings:", error);
           },
         }
@@ -157,8 +160,11 @@ function SettingsForm() {
           company_logo,
         },
         {
-          onSuccess: () => {},
-          onError: (error) => {
+          onSuccess: async () => {
+            await onEvent({ type: 'resource_created', source: 'SettingsForm', metadata: {...data, company_logo}});
+          },
+          onError: async (error) => {
+            await onError('error_server', 'SettingsForm', error);
             toast.error("Failed to create company settings:", error);
           },
         }

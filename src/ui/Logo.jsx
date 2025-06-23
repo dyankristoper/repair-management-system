@@ -35,19 +35,13 @@ function Logo() {
 
   return (
     <StyledLogo>
-      <Img 
-        className="mb-4"
-        src={company_logo} 
-        alt="Your Company Logo Here" />
+      <Img className="mb-4" src={company_logo} alt="Your Company Logo Here" />
       <TitleLogo>
         <h1>{company_name || `Your company name`}</h1>
-        {
-          isAuthenticated && 
-          isAdmin && 
-          settings && 
-          Object.keys(settings).length > 0 && 
-          <EditIcon />
-        }
+        {isAuthenticated &&
+          isAdmin &&
+          settings &&
+          Object.keys(settings).length > 0 && <EditIcon />}
       </TitleLogo>
     </StyledLogo>
   );

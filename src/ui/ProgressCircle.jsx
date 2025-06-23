@@ -83,17 +83,16 @@ function ProgressCircleComponent() {
   const { completionPercentage, progressStrokeDasharray } =
     calcPercentage(assignedRepairs);
 
-  // tried to use nullish coalescing rather than optional chaining because sometimes the data is undefined or null;
   const completedCount = (assignedRepairs ?? []).filter(
     (pending) => pending.isCompleted
   ).length;
 
   const pendingCount = (assignedRepairs ?? []).filter(
-    (pending) => pending.status === 'pending'
+    (pending) => pending.status === "pending"
   ).length;
 
   const confirmationCount = (assignedRepairs ?? []).filter(
-    (pending) => pending.status === 'forConfirmation'
+    (pending) => pending.status === "forConfirmation"
   ).length;
 
   return (

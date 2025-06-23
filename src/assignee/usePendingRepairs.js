@@ -3,7 +3,7 @@ import { getPendingRepairs } from "../services/apiPhones";
 
 export function usePendingRepairs() {
   const { isPending, data: pendingRepairs } = useQuery({
-    queryKey: ["pendingRepairs"],
+    queryKey: ["job_orders"],
     queryFn: getPendingRepairs,
   });
 

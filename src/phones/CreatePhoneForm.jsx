@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { useUpdatePhone } from "./useUpdatePhone";
 import { useMemo, useState } from "react";
 import { getDefaultCheckValues } from "../utilities/defaultCheckValues";
+import { onError, onEvent } from "../utilities/formError";
 
-import onError from "../utilities/formError";
 import styled from "styled-components";
 import ProgressBar from "../ui/ProgressBar";
 import ViewPhoneDetails from "../ui/ViewPhoneDetails";
@@ -22,7 +22,7 @@ const StyledFormContainer = styled.div`
   width: 1200px;
 `;
 
-function CreatePhoneForm({ phoneToEdit = {} }) {
+function CreatePhoneForm({ phoneToEdit = {}, onCloseModal }) {
   const [customerID, setCustomerID] = useState(null);
 
   const [step, setStep] = useState(1);
@@ -57,7 +57,8 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
     watch,
   } = useForm({
     defaultValues: isEditSession ? defaultCheckValues || phoneToEdit : {},
-    mode: "onChange",
+    mode: "onTouched",
+    reValidateMode: "onChange",
   });
 
   const checklistFields = useMemo(
@@ -133,30 +134,44 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           id: editId,
         },
         {
-          onSuccess: ([updatedPhone]) => {
+          onSuccess: async ([updatedPhone]) => {
+            await onEvent({
+              type: "resource_updated",
+              source: "CreatePhoneForm",
+              metadata: updatedPhone,
+            });
+
             setNewPhoneData(updatedPhone);
             nextStep();
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError('error_server', 'CreatePhoneForm', error);
             toast.error(`Failed to edit phone: ${error}`);
           },
         }
       );
-<<<<<<< Fix/Update-Job-Order-Form
     } else {
-=======
-    }
-    else{
->>>>>>> staging
       createPhone(
-        { ...data, image: image, customer_id: customerID },
         {
-          onSuccess: (jobOrder) => {
+          ...data,
+          image: image,
+          customer_id: customerID,
+          status: "in_progress",
+        },
+        {
+          onSuccess: async (jobOrder) => {
+            await onEvent({
+              type: "resource_created",
+              source: "CreatePhoneForm",
+              metadata: jobOrder,
+            });
+
             setNewPhoneData(jobOrder);
             reset();
             nextStep();
           },
-          onError: (error) => {
+          onError: async (error) => {
+            await onError('error_server', 'CreatePhoneForm', error);
             toast.error("Failed to create phone:", error);
           },
         }
@@ -225,15 +240,9 @@ function CreatePhoneForm({ phoneToEdit = {} }) {
           >
             New Job Order
           </Button>
-<<<<<<< Fix/Update-Job-Order-Form
-          <Button type="secondary">Close</Button>
-=======
-          <Button
-            type="secondary"
-            >
+          <Button type="secondary" onClick={() => onCloseModal?.()}>
             Close
           </Button>
->>>>>>> staging
         </div>
       )}
     </StyledFormContainer>

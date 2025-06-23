@@ -1,6 +1,5 @@
 import { Controller } from "react-hook-form";
 import { phoneModelOptions } from "../utilities/modelList";
-import { useAssignee } from "../assignee/useAssignee";
 
 import CreatableSelect from "react-select/creatable";
 import Button from "../ui/Button";
@@ -11,10 +10,18 @@ import Input from "../ui/Input";
 import CreateChecklist from "./CreateChecklist";
 import styled from "styled-components";
 
+import { MIN_JOB_ORDER_COST } from "../utilities/constants";
+
 import { useAssignee } from '../assignee/useAssignee';
 
 const StyledSelect = styled.select`
-  background-color: var(--color-grey-100);
+  font-size: 1.4rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius-lg);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+  border: 1px solid var(--color-grey-200);
 `;
 
 const Textarea = styled.textarea`
@@ -66,7 +73,7 @@ function PhoneForm({
     }
 
     return null;
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)} type={"modal"}>
@@ -115,8 +122,9 @@ function PhoneForm({
           </FormRow>
           <FormRow label="Cost (Php)" error={errors?.cost?.message}>
             <Input
-              type="text"
+              type="number"
               id="cost"
+              min={ MIN_JOB_ORDER_COST }
               disabled={isWorking}
               {...register("cost", {
                 required: "This field is required",
@@ -131,8 +139,8 @@ function PhoneForm({
                 required: "This field is required",
               })}
             >
-              <option value={ null }>Select technician</option>
-              { renderTechnicianSelection() }
+              <option value={null}>Select technician</option>
+              {renderTechnicianSelection()}
             </StyledSelect>
           </FormRow>
           <FormRow label="Image (Optional)" error={errors?.image?.message}>

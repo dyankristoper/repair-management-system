@@ -1,13 +1,26 @@
 import { useForm } from "react-hook-form";
+import { useReducer } from "react";
+import { useSignup } from "./useSignup";
+import { initialState, toggleReducer } from "./useShowPassword";
+
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import { useSignup } from "./useSignup";
+
+import toast from "react-hot-toast";
+
+import PasswordShow from "./PasswordShow";
+import ShowPasswordWrapper from "../../ui/ShowPasswordWrapper";
+import ButtonGroupWrapper from "../../ui/ButtonGroupWrapper";
 
 // Email regex: /\S+@\S+\.\S+/
 
-function SignupForm() {
+function SignupForm({
+  onCloseModal
+}) {
+  const [state, dispatch] = useReducer(toggleReducer, initialState);
+  const { password, confirmPassword } = state;
   const { signup, isLoading } = useSignup();
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
@@ -16,7 +29,16 @@ function SignupForm() {
     signup(
       { fullName, email, password },
       {
-        onSettled: () => reset(),
+        onSuccess: () => {
+          toast.success(`User has been created successfully.`);
+        },
+        onError: (error) => {
+          toast.error(`Unable to create new user.`, error);
+        },
+        onSettled: () => {
+          reset();
+          onCloseModal();
+        },
       }
     );
   }
@@ -51,48 +73,60 @@ function SignupForm() {
         label="Password (min 8 characters)"
         error={errors?.password?.message}
       >
-        <Input
-          type="password"
-          id="password"
-          disabled={isLoading}
-          {...register("password", {
-            required: "This field isRequired",
-            minLength: {
-              value: 8,
-              message: "Password needs a minimum 8 characters",
-            },
-          })}
-        />
+        <ShowPasswordWrapper>
+          <Input
+            type={password ? "text" : "password"}
+            id="password"
+            disabled={isLoading}
+            {...register("password", {
+              required: "This field isRequired",
+              minLength: {
+                value: 8,
+                message: "Password needs a minimum 8 characters",
+              },
+            })}
+          />
+          <PasswordShow
+            isShown={password}
+            onToggle={() => dispatch({ type: "TOGGLE_PASSWORD" })}
+          />
+        </ShowPasswordWrapper>
       </FormRow>
 
       <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
-        <Input
-          type="password"
-          id="passwordConfirm"
-          disabled={isLoading}
-          {...register("passwordConfirm", {
-            required: "This field is required",
-            validate: (value) =>
-              value === getValues().password || "Password needs to match",
-          })}
-        />
+        <ShowPasswordWrapper>
+          <Input
+            type={confirmPassword ? "text" : "password"}
+            id="passwordConfirm"
+            disabled={isLoading}
+            {...register("passwordConfirm", {
+              required: "This field is required",
+              validate: (value) =>
+                value === getValues().password || "Password needs to match",
+            })}
+          />
+          <PasswordShow
+            isShown={confirmPassword}
+            onToggle={() => dispatch({ type: "TOGGLE_CONFIRM_PASSWORD" })}
+          />
+        </ShowPasswordWrapper>
       </FormRow>
 
-      <FormRow>
+      <ButtonGroupWrapper>
         {/* type is an HTML attribute! */}
 
         <Button
           variation="secondary"
           type="reset"
           disabled={isLoading}
-          onClick={reset}
+          onClick={onCloseModal}
         >
           Cancel
         </Button>
         <Button variation="primary" disabled={isLoading}>
           Create new user
         </Button>
-      </FormRow>
+      </ButtonGroupWrapper>
     </Form>
   );
 }

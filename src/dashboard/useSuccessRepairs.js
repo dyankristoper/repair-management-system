@@ -12,10 +12,10 @@ export function useSuccessRepairs() {
 
   const queryDate = subDays(new Date(), numDays).toISOString();
 
-  const { isPending, data: phones } = useQuery({
+  const { isPending, data: job_orders } = useQuery({
     queryFn: () => getSalesAfterDate(queryDate),
-    queryKey: ["phones", `last-${numDays}`],
+    queryKey: ["job_orders", `last-${numDays}`],
   });
 
-  return { isPending, phones, numDays };
+  return { isPending, job_orders, numDays };
 }
