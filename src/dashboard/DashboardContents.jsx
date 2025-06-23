@@ -36,14 +36,13 @@ const GraphWrapper = styled.div`
 `;
 
 function DashboardContents() {
-  const { isPending, phones, numDays } = useSuccessRepairs();
+  const { isPending, job_orders } = useSuccessRepairs();
 
   if (isPending) return <Loader />;
   return (
     <StyledDashboardContent>
-      <StatWrapper
-        className="mt-10">
-        <DashboardStats phones={phones} />
+      <StatWrapper className="mt-10">
+        <DashboardStats job_orders={job_orders} />
       </StatWrapper>
 
       {/* 

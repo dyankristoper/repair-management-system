@@ -9,10 +9,10 @@ const StyledDashboardStats = styled.div`
   height: 15rem;
 `;
 
-function DashboardStats({ phones }) {
-  const numPhones = (phones ?? []).length;
-  const sales = (phones ?? [])
-    .filter((phone) => phone.success === true)
+function DashboardStats({ job_orders }) {
+  const numPhones = (job_orders ?? []).length;
+  const sales = (job_orders ?? [])
+    .filter((job_order) => job_order.job_order_status === "success")
     .reduce((acc, cur) => acc + cur.cost, 0);
 
   return (

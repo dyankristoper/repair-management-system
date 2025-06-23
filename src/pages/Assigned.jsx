@@ -2,10 +2,8 @@ import styled from "styled-components";
 import AssignedDetails from "../assignee/AssignedDetails";
 
 const StyledAssigned = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
+  height: 100%;
 `;
 
 function Assigned() {

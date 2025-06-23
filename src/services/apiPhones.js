@@ -7,8 +7,8 @@ import { onError } from "../utilities/formError";
 
 export async function getPhones({ filter, sortBy, page }) {
   let query = supabase
-                .from("job_orders")
-                .select("*, customers(*)", { count: "exact" });
+    .from("job_orders")
+    .select("*, customers(*)", { count: "exact" });
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
   if (sortBy) query = query[sortBy.method || "eq"](sortBy.field, sortBy.value);
@@ -22,7 +22,7 @@ export async function getPhones({ filter, sortBy, page }) {
   const { data, error, count } = await query;
 
   if (error) {
-    return await onError( error, 'Unable to fetch job order records.')
+    return await onError(error, "Unable to fetch job order records.");
   }
 
   return { data, count };
@@ -53,10 +53,7 @@ export async function createEditPhone(newPhone, id) {
       .select("*, customers:customer_id(id, name, email, address, phoneNumber)")
       .single());
   } else {
-    ({ data, error } = await query
-      .update(payload)
-      .eq("id", id)
-      .select());
+    ({ data, error } = await query.update(payload).eq("id", id).select());
   }
 
   if (error) throw new Error(error.message);
@@ -83,11 +80,15 @@ export async function deletePhone(id) {
     .select();
 
   if (error || data.length === 0) {
-    return await onError( error, 'Permission denied! Unable to delete resource.')
+    return await onError(
+      error,
+      "Permission denied! Unable to delete resource."
+    );
   }
 
   return;
 }
+
 
 export async function getTechnicians(){
   const { data, error } = await supabase
@@ -95,8 +96,9 @@ export async function getTechnicians(){
     .select("*")
     .eq("isActive", true);
 
+
   if (error || data.length === 0) {
-    return await onError( error, 'Unable to fetch list of technicians.')
+    return await onError(error, "Unable to fetch list of technicians.");
   }
 
   return data;
@@ -121,12 +123,12 @@ export async function updateTechnician( technician ){
 }
 
 export async function getPendingRepairs() {
-  const { data, error } = await supabase
-    .from("job_orders")
-    .select("*")  
+  const { data, error } = await supabase.from("job_orders").select("*");
 
   if (error) {
+
     return await onError('error_server', 'getPendingRepairs', error);
+
   }
 
   return data;
@@ -134,15 +136,17 @@ export async function getPendingRepairs() {
 
 export async function getAssignedRepairs({ filter }) {
   let query = supabase
-                .from("job_orders")
-                .select("*")
-                .not("assignee", "is", null);
+    .from("job_orders")
+    .select("*")
+    .not("assignee", "is", null);
 
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
   const { data, error } = await query;
 
   if (error) {
+
     return await onError('error_server', 'getAssignedRepairs', error);
+
   }
 
   return data;
@@ -151,12 +155,14 @@ export async function getAssignedRepairs({ filter }) {
 export async function getAssigned(id) {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("*")
+    .select("*,customers(*)")
     .eq("id", id)
     .single();
 
   if (error) {
+
     return await onError( 'error_server', 'getAssigned', error );
+
   }
 
   return data;
@@ -165,12 +171,14 @@ export async function getAssigned(id) {
 export async function getSalesAfterDate(date) {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("created_at,cost,success,failed,serviceFee")
+    .select("created_at,cost,job_order_status")
     .gte("created_at", date)
     .lte("created_at", getToday({ end: true }));
 
   if (error) {
+
     return await onError( 'error_server', 'getSalesAfterDate', error );
+
   }
 
   return data;
