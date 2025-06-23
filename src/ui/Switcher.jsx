@@ -3,7 +3,7 @@ const Switcher = ( props ) => {
     <input 
       {...props} 
       type="checkbox" 
-      className="toggle" />
+      className="toggle border-gray-600 bg-gray-500 checked:border-blue-500 checked:bg-blue-400 checked:text-blue-800y" />
   )
 }
 
