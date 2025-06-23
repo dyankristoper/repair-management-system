@@ -22,6 +22,7 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
   transition: all 0.3s;
   border: 1px solid var(--color-grey-200);
+  background-color: white;
 `;
 
 const Textarea = styled.textarea`

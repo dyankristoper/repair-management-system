@@ -155,7 +155,7 @@ export async function getAssignedRepairs({ filter }) {
 export async function getAssigned(id) {
   const { data, error } = await supabase
     .from("job_orders")
-    .select("*,customers(*)")
+    .select("*, customers(*), assignee(*)")
     .eq("id", id)
     .single();
 

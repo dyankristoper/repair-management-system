@@ -80,7 +80,7 @@ function Grid({ assigned, isPending }) {
     { label: "Repair status", value: status },
     {
       label: "Assigned to",
-      value: assignee,
+      value: assignee.name,
     },
   ];
   return (

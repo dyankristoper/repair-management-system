@@ -59,12 +59,12 @@ function AssignedDetails() {
           onClick={() => navigate("/assignee")}
           replace={true}
         >
-          &larr;back
+          &larr; Back
         </Button>
 
         <ModalWindow>
           <ModalWindow.Open opens="update-form">
-            <Button variation="quaternary">update</Button>
+            <Button variation="quaternary">Update</Button>
           </ModalWindow.Open>
 
           <ModalWindow.Window name="update-form">
